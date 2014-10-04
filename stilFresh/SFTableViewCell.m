@@ -28,6 +28,7 @@
 @synthesize itemId;
 @synthesize box;
 @synthesize bottomLine;
+@synthesize number;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -96,7 +97,6 @@
             self.status.backgroundColor = [UIColor clearColor];
             break;
     }
-    
     if (!self.isForCardView) {
         if (!self.bottomLine) {
             CGFloat h1 = 0.5f;
@@ -104,21 +104,46 @@
             self.bottomLine.backgroundColor = [UIColor whiteColor];
             [self.status addSubview:self.bottomLine];
         }
-    } else {
+        if (!self.number) {
+            CGFloat gap = 10.0f;
+            CGFloat w = 44.0f;
+            self.number = [[UILabel alloc] initWithFrame:CGRectMake(gap, gap, w, self.contentView.frame.size.height - gap * 2.0f)];
+            self.number.backgroundColor = [UIColor clearColor];
+            self.number.textColor = [UIColor whiteColor];
+            self.number.textAlignment = NSTextAlignmentRight;
+            self.number.font = [UIFont systemFontOfSize:self.box.fontSizeL * 2];
+            self.number.lineBreakMode = NSLineBreakByCharWrapping;
+            [self.contentView addSubview:self.number];
+        }
         if (!self.notes) {
-            self.notes = [[UITextView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, self.appRect.size.width - 20.0f, 80.0f)];
+            CGFloat gap = 10.0f;
+            self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.number.frame.origin.x + self.number.frame.size.width + gap, gap, self.contentView.frame.size.width - gap * 3.0f - self.number.frame.size.width, self.number.frame.size.height)];
+            self.notes.backgroundColor = [UIColor clearColor];
+            self.notes.textColor = [UIColor whiteColor];
+            self.notes.textAlignment = NSTextAlignmentLeft;
+            self.notes.userInteractionEnabled = NO;
+            self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
+            [self.contentView addSubview:self.notes];
+        }
+    } else {
+        CGFloat gap1 = 10.0f;
+        if (!self.notes) {
+            self.notes = [[UITextView alloc] initWithFrame:CGRectMake(gap1, gap1, self.appRect.size.width - gap1 * 2.0f, 80.0f)];
             self.notes.backgroundColor = self.textBackGroundColor;
             self.notes.alpha = self.textBackGroundAlpha;
             self.notes.userInteractionEnabled = NO;
+            self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2.0f];
+            self.notes.textColor = [UIColor whiteColor];
             [self addSubview:self.notes];
         }
         if (!self.dateAdded) {
-            self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 100.0f, self.appRect.size.width - 20.0f, 44.0f)];
+            self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + gap1, self.notes.frame.size.width, 44.0f)];
             [self setupTextField:self.dateAdded];
+            
             [self.contentView addSubview:self.dateAdded];
         }
         if (!self.bestBefore) {
-            self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, self.dateAdded.frame.origin.y + self.dateAdded.frame.size.height + 10.0f, self.appRect.size.width - 20.0f, 44.0f)];
+            self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(gap1, self.dateAdded.frame.origin.y + self.dateAdded.frame.size.height + gap1, self.dateAdded.frame.size.width, self.dateAdded.frame.size.height)];
             [self setupTextField:self.bestBefore];
             [self.contentView addSubview:self.bestBefore];
         }
@@ -132,8 +157,10 @@
             [self.deleteBtn addGestureRecognizer:self.deleteTap];
         }
         if (!self.daysLeft) {
-            self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake((self.frame.size.width - 70.0f) / 2, self.frame.size.height / 2, 70.0f, self.frame.size.height / 2 - self.deleteBtn.frame.size.height - 20.0f * 2)];
+            
+            self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.frame.size.height / 2.0f, self.bestBefore.frame.size.width, self.frame.size.height / 2.0f - self.deleteBtn.frame.size.height - 20.0f * 2)];
             [self setupTextField:self.daysLeft];
+            self.daysLeft.font = [UIFont systemFontOfSize:90.0f];
             [self.contentView addSubview:self.daysLeft];
         }
     }
@@ -156,7 +183,7 @@
 - (void)setupTextField:(UITextField *)f
 {
     f.backgroundColor = [UIColor clearColor];
-    f.font = [UIFont systemFontOfSize:self.box.fontSizeL];
+    f.font = [UIFont systemFontOfSize:34.0f];
     f.textAlignment = NSTextAlignmentCenter;
     f.textColor = [UIColor whiteColor];
     f.userInteractionEnabled = NO;

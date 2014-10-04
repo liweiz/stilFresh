@@ -102,7 +102,8 @@
         cell.daysLeft.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     } else {
-        cell.textLabel.text = [managedObject valueForKey:@"notes"];
+        cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
+        cell.notes.text = [managedObject valueForKey:@"notes"];
     }
 
     return cell;
