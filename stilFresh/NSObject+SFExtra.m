@@ -20,7 +20,7 @@
         CALayer *bottomLine = [CALayer layer];
         CGFloat lineHeight = 1.0f;
         bottomLine.frame = CGRectMake(0.0f, layer.bounds.size.height - lineHeight, layer.bounds.size.width, lineHeight);
-        bottomLine.backgroundColor = b.SFGreen0.CGColor;
+        bottomLine.backgroundColor = b.sfGreen0.CGColor;
         [layer addSublayer:bottomLine];
     } else {
         layer.cornerRadius = 3.0f;

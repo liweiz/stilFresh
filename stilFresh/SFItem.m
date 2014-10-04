@@ -17,6 +17,7 @@
 @dynamic timeAdded;
 @dynamic daysLeft;
 @dynamic freshness;
+@dynamic itemId;
 
 //- (NSNumber *)daysLeft
 //{

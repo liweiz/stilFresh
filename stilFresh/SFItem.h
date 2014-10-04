@@ -14,6 +14,7 @@
 
 @property (nonatomic, retain) NSDate * bestBefore;
 @property (nonatomic, retain) NSString * notes;
+@property (nonatomic, retain) NSString * itemId;
 @property (nonatomic, retain) NSData * pic;
 @property (nonatomic, retain) NSDate * timeAdded;
 @property (nonatomic, retain) NSNumber * daysLeft;

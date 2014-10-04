@@ -99,8 +99,8 @@
         cell.notes.text = [managedObject valueForKey:@"notes"];
         cell.dateAdded.text = [self dateToString:[managedObject valueForKey:@"timeAdded"]];
         cell.bestBefore.text = [self dateToString:[managedObject valueForKey:@"bestBefore"]];
-        cell.daysLeft.text = [NSString stringWithFormat:@"%d", [[managedObject valueForKey:@"daysLeft"] integerValue]];
-        cell.objId = managedObject.objectID;
+        cell.daysLeft.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
+        [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     } else {
         cell.textLabel.text = [managedObject valueForKey:@"notes"];
     }

@@ -23,10 +23,10 @@
 @synthesize oneLineHeight;
 @synthesize width;
 @synthesize gap;
-@synthesize SFGreen0;
-@synthesize SFGreen1;
-@synthesize SFGreen2;
-@synthesize SFGray;
+@synthesize sfGreen0;
+@synthesize sfGreen1;
+@synthesize sfGreen2;
+@synthesize sfGray;
 
 - (id)init
 {
@@ -43,10 +43,10 @@
         self.oneLineHeight = 40.0f;
         self.fontSizeL = 16.0f;
         self.fontSizeM = 14.0f;
-        self.SFGreen0 = [UIColor colorWithRed:157.0f/255.0f green:225.0f/255.0f blue:63.0f/255.0f alpha:1.0f];
-        self.SFGreen1 = [UIColor colorWithRed:150.0f/255.0f green:206.0f/255.0f blue:107.0f/255.0f alpha:1.0f];
-        self.SFGreen2 = [UIColor colorWithRed:152.0f/255.0f green:189.0f/255.0f blue:93.0f/255.0f alpha:1.0f];
-        self.SFGray = [UIColor colorWithRed:130.0f/255.0f green:131.0f/255.0f blue:126.0f/255.0f alpha:1.0f];
+        self.sfGreen0 = [UIColor colorWithRed:157.0f/255.0f green:225.0f/255.0f blue:63.0f/255.0f alpha:1.0f];
+        self.sfGreen1 = [UIColor colorWithRed:150.0f/255.0f green:206.0f/255.0f blue:107.0f/255.0f alpha:1.0f];
+        self.sfGreen2 = [UIColor colorWithRed:152.0f/255.0f green:189.0f/255.0f blue:93.0f/255.0f alpha:1.0f];
+        self.sfGray = [UIColor colorWithRed:130.0f/255.0f green:131.0f/255.0f blue:126.0f/255.0f alpha:1.0f];
     }
     return self;
 }

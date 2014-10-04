@@ -4,11 +4,12 @@
         <attribute name="bestBefore" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="daysLeft" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="freshness" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="itemId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pic" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="timeAdded" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <elements>
-        <element name="SFItem" positionX="-36" positionY="9" width="128" height="135"/>
+        <element name="SFItem" positionX="-36" positionY="9" width="128" height="150"/>
     </elements>
 </model>

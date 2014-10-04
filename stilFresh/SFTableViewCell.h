@@ -32,6 +32,6 @@
 @property (strong, nonatomic) UITextField *dateAdded;
 @property (strong, nonatomic) UIView *deleteBtn;
 @property (strong, nonatomic) UITapGestureRecognizer *deleteTap;
-@property (strong, nonatomic) NSManagedObjectID *objId;
+@property (strong, nonatomic) NSMutableString *itemId;
 
 @end

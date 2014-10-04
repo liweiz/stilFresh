@@ -25,7 +25,7 @@
 @synthesize dateAdded;
 @synthesize deleteBtn;
 @synthesize deleteTap;
-@synthesize objId;
+@synthesize itemId;
 @synthesize box;
 @synthesize bottomLine;
 
@@ -40,14 +40,12 @@
             self.isForCardView = YES;
         }
         self.appRect = [(SFRootViewCtl *)[UIApplication sharedApplication].keyWindow.rootViewController appRect];
-        self.textBackGroundColor = [UIColor lightGrayColor];
+        self.textBackGroundColor = [UIColor clearColor];
         self.textBackGroundAlpha = 0.7f;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        CGFloat red;
-        CGFloat green;
-        CGFloat blue;
-        CGFloat alpha;
-        [self.backgroundColor getRed:&red green:&green blue:&blue alpha:&alpha];
+        if (!self.itemId) {
+            self.itemId = [[NSMutableString alloc] init];
+        }
     }
     return self;
 }
@@ -77,27 +75,28 @@
     }
     if (!self.status) {
         self.status = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height)];
+        [self.contentView addSubview:self.status];
+        [self.contentView sendSubviewToBack:self.status];
     }
     // Change color for freshness
     switch (self.statusCode) {
         case 0:
-            self.status.backgroundColor = self.box.SFGreen0;
+            self.status.backgroundColor = self.box.sfGreen0;
             break;
         case 1:
-            self.status.backgroundColor = self.box.SFGreen1;
+            self.status.backgroundColor = self.box.sfGreen1;
             break;
         case 2:
-            self.status.backgroundColor = self.box.SFGreen2;
+            self.status.backgroundColor = self.box.sfGreen2;
             break;
         case 3:
-            self.status.backgroundColor = self.box.SFGray;
+            self.status.backgroundColor = self.box.sfGray;
             break;
         default:
             self.status.backgroundColor = [UIColor clearColor];
             break;
     }
-    self.status.userInteractionEnabled = NO;
-    [self.contentView addSubview:self.status];
+    
     if (!self.isForCardView) {
         if (!self.bottomLine) {
             CGFloat h1 = 0.5f;
@@ -115,22 +114,18 @@
         }
         if (!self.dateAdded) {
             self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 100.0f, self.appRect.size.width - 20.0f, 44.0f)];
-            self.dateAdded.backgroundColor = self.textBackGroundColor;
-            self.dateAdded.alpha = self.textBackGroundAlpha;
-            self.dateAdded.userInteractionEnabled = NO;
+            [self setupTextField:self.dateAdded];
             [self.contentView addSubview:self.dateAdded];
         }
         if (!self.bestBefore) {
             self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, self.dateAdded.frame.origin.y + self.dateAdded.frame.size.height + 10.0f, self.appRect.size.width - 20.0f, 44.0f)];
-            self.bestBefore.backgroundColor = self.textBackGroundColor;
-            self.bestBefore.alpha = self.textBackGroundAlpha;
-            self.bestBefore.userInteractionEnabled = NO;
+            [self setupTextField:self.bestBefore];
             [self.contentView addSubview:self.bestBefore];
         }
         
         if (!self.deleteBtn) {
             self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width - 44.0f) / 2, self.frame.size.height - 20.0f - 44.0f, 44.0f, 44.0f)];
-            self.deleteBtn.backgroundColor = self.textBackGroundColor;
+            self.deleteBtn.backgroundColor = [UIColor redColor];
             self.deleteBtn.alpha = self.textBackGroundAlpha;
             [self.contentView addSubview:self.deleteBtn];
             self.deleteTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callForDeletion)];
@@ -138,9 +133,7 @@
         }
         if (!self.daysLeft) {
             self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake((self.frame.size.width - 70.0f) / 2, self.frame.size.height / 2, 70.0f, self.frame.size.height / 2 - self.deleteBtn.frame.size.height - 20.0f * 2)];
-            self.daysLeft.backgroundColor = self.textBackGroundColor;
-            self.daysLeft.alpha = self.textBackGroundAlpha;
-            self.daysLeft.userInteractionEnabled = NO;
+            [self setupTextField:self.daysLeft];
             [self.contentView addSubview:self.daysLeft];
         }
     }
@@ -155,11 +148,18 @@
 - (void)callForDeletion
 {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
-    [d setValue:objId forKey:@"objId"];
+    [d setValue:self.itemId forKey:@"itemId"];
     NSNotification *n = [[NSNotification alloc] initWithName:@"deleteItem" object:self userInfo:d];
     [[NSNotificationCenter defaultCenter] postNotification:n];
 }
 
-
+- (void)setupTextField:(UITextField *)f
+{
+    f.backgroundColor = [UIColor clearColor];
+    f.font = [UIFont systemFontOfSize:self.box.fontSizeL];
+    f.textAlignment = NSTextAlignmentCenter;
+    f.textColor = [UIColor whiteColor];
+    f.userInteractionEnabled = NO;
+}
 
 @end

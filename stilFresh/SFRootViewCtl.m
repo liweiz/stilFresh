@@ -92,7 +92,7 @@
     // AddBtn
     self.addBtn = [[UIView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.box.originY, 54.0f, self.bestBefore.frame.size.height)];
     [self configLayer:self.addBtn.layer box:self.box isClear:NO];
-    self.addBtn.backgroundColor = self.box.SFGreen0;
+    self.addBtn.backgroundColor = self.box.sfGreen0;
     self.addTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(saveItem)];
     [self.addBtn addGestureRecognizer:self.addTap];
     [self.inputView addSubview:self.addBtn];
@@ -121,7 +121,7 @@
     
     [self.dayAddedSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
     [self.inputView addSubview:self.dayAddedSwitch];
-    self.dayAddedSwitch.onTintColor = self.box.SFGreen0;
+    self.dayAddedSwitch.onTintColor = self.box.sfGreen0;
     self.dayAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54.0f, 44.0f)];
     [self configLayer:self.dayAdded.layer box:self.box isClear:YES];
     self.dayAdded.backgroundColor = [UIColor clearColor];
@@ -181,12 +181,14 @@
                 [i setValue:d forKey:@"bestBefore"];
                 if (self.dayAddedSwitch.on) {
                     [i setValue:[NSDate date] forKey:@"timeAdded"];
+                    [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
                 } else {
                     NSDate *d1 = [self stringToDate:self.dayAdded.text];
                     if (d1) {
                         [i setValue:d1 forKey:@"timeAdded"];
                         [self resetDaysLeft:i];
                         [self resetFreshness:i];
+                        [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
                     } else {
                         errOccured = YES;
                         [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
@@ -214,14 +216,17 @@
     }
 }
 
+
 - (void)deleteItem:(NSNotification *)n
 {
     BOOL errOccured = YES;
-    NSManagedObject *x = [self.box.ctx objectWithID:[n.userInfo valueForKey:@"objId"]];
-    if (x) {
-        [self.box.ctx deleteObject:x];
-        if ([self.box saveToDb]) {
-            errOccured = NO;
+    for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
+        if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
+            [self.box.ctx deleteObject:i];
+            if ([self.box saveToDb]) {
+                errOccured = NO;
+            }
+            break;
         }
     }
     if (errOccured) {
@@ -314,7 +319,7 @@
         self.warning.textAlignment = NSTextAlignmentCenter;
         self.warning.lineBreakMode = NSLineBreakByWordWrapping;
         self.warning.numberOfLines = 0;
-        self.warning.backgroundColor = self.box.SFGray;
+        self.warning.backgroundColor = self.box.sfGray;
     }
     if ([notificationName isEqualToString:@"generalError"]) {
         self.warning.text = @"Something went wrong, please try later.";
