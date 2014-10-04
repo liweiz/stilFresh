@@ -20,14 +20,16 @@
 
 // Shared view
 @property (strong, nonatomic) UIImageView *pic;
-@property (strong, nonatomic) UITextView *notes;
+
 
 // For list
 @property (assign, nonatomic) NSInteger statusCode;
 @property (strong, nonatomic) UIView *status;
 @property (strong, nonatomic) UIView *bottomLine;
 @property (strong, nonatomic) UILabel *number;
+@property (strong, nonatomic) UILabel *text;
 // For item detail
+@property (strong, nonatomic) UITextView *notes;
 @property (strong, nonatomic) UITextField *bestBefore;
 @property (strong, nonatomic) UITextField *daysLeft;
 @property (strong, nonatomic) UITextField *dateAdded;

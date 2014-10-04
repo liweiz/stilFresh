@@ -129,6 +129,14 @@
     return c.day;
 }
 
+- (NSString *)addHyphensToDateString:(NSString *)date
+{
+    NSMutableString *s = [NSMutableString stringWithString:date];
+    [s insertString:@"-" atIndex:4];
+    [s insertString:@"-" atIndex:7];
+    return s;
+}
+
 #pragma mark - validate input
 - (BOOL)validateDateInput:(NSString *)input
 {

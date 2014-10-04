@@ -25,5 +25,6 @@
 
 // Four scales correspond to four colors: 0: green0, 1: green1, 2: green2, 3: gray.
 - (void)resetFreshness:(SFItem *)obj;
+- (NSString *)addHyphensToDateString:(NSString *)date;
 
 @end

@@ -29,6 +29,7 @@
 @synthesize box;
 @synthesize bottomLine;
 @synthesize number;
+@synthesize text;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -111,19 +112,21 @@
             self.number.backgroundColor = [UIColor clearColor];
             self.number.textColor = [UIColor whiteColor];
             self.number.textAlignment = NSTextAlignmentRight;
-            self.number.font = [UIFont systemFontOfSize:self.box.fontSizeL * 2];
+            self.number.font = [UIFont boldSystemFontOfSize:self.box.fontSizeL * 2];
             self.number.lineBreakMode = NSLineBreakByCharWrapping;
             [self.contentView addSubview:self.number];
         }
-        if (!self.notes) {
+        if (!self.text) {
             CGFloat gap = 10.0f;
-            self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.number.frame.origin.x + self.number.frame.size.width + gap, gap, self.contentView.frame.size.width - gap * 3.0f - self.number.frame.size.width, self.number.frame.size.height)];
-            self.notes.backgroundColor = [UIColor clearColor];
-            self.notes.textColor = [UIColor whiteColor];
-            self.notes.textAlignment = NSTextAlignmentLeft;
-            self.notes.userInteractionEnabled = NO;
-            self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
-            [self.contentView addSubview:self.notes];
+            self.text = [[UILabel alloc] initWithFrame:CGRectMake(self.number.frame.origin.x + self.number.frame.size.width + gap, gap, self.contentView.frame.size.width - gap * 3.0f - self.number.frame.size.width, self.number.frame.size.height)];
+            self.text.backgroundColor = [UIColor clearColor];
+            self.text.textColor = [UIColor whiteColor];
+            self.text.textAlignment = NSTextAlignmentLeft;
+            self.text.userInteractionEnabled = NO;
+            self.text.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
+            self.text.lineBreakMode = NSLineBreakByCharWrapping;
+            self.text.numberOfLines = 2;
+            [self.contentView addSubview:self.text];
         }
     } else {
         CGFloat gap1 = 10.0f;
@@ -133,6 +136,7 @@
             self.notes.alpha = self.textBackGroundAlpha;
             self.notes.userInteractionEnabled = NO;
             self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2.0f];
+            self.notes.textAlignment = NSTextAlignmentCenter;
             self.notes.textColor = [UIColor whiteColor];
             [self addSubview:self.notes];
         }
@@ -160,7 +164,7 @@
             
             self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.frame.size.height / 2.0f, self.bestBefore.frame.size.width, self.frame.size.height / 2.0f - self.deleteBtn.frame.size.height - 20.0f * 2)];
             [self setupTextField:self.daysLeft];
-            self.daysLeft.font = [UIFont systemFontOfSize:90.0f];
+            self.daysLeft.font = [UIFont boldSystemFontOfSize:90.0f];
             [self.contentView addSubview:self.daysLeft];
         }
     }
