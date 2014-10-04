@@ -1,0 +1,457 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EE3EC78919DF98C400CA09F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78819DF98C400CA09F8 /* main.m */; };
+		EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */; };
+		EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE3EC79619DF98C400CA09F8 /* Images.xcassets */; };
+		EE3EC7A619DF98C400CA09F8 /* stilFreshTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7A519DF98C400CA09F8 /* stilFreshTests.m */; };
+		EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */; };
+		EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7B619DF995100CA09F8 /* NSObject+SFExtra.m */; };
+		EE3EC7C419DF995100CA09F8 /* SFBox.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7B819DF995100CA09F8 /* SFBox.m */; };
+		EE3EC7C519DF995100CA09F8 /* SFItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7BA19DF995100CA09F8 /* SFItem.m */; };
+		EE3EC7C619DF995100CA09F8 /* SFRootViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7BC19DF995100CA09F8 /* SFRootViewCtl.m */; };
+		EE3EC7C719DF995100CA09F8 /* SFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */; };
+		EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */; };
+		EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C219DF995100CA09F8 /* SFView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EE3EC7A019DF98C400CA09F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EE3EC77B19DF98C300CA09F8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EE3EC78219DF98C400CA09F8;
+			remoteInfo = stilFresh;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		EE3EC78319DF98C400CA09F8 /* stilFresh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stilFresh.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE3EC78719DF98C400CA09F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE3EC78819DF98C400CA09F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		EE3EC78E19DF98C400CA09F8 /* stilFresh.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = stilFresh.xcdatamodel; sourceTree = "<group>"; };
+		EE3EC79619DF98C400CA09F8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		EE3EC79F19DF98C400CA09F8 /* stilFreshTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = stilFreshTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE3EC7A419DF98C400CA09F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE3EC7A519DF98C400CA09F8 /* stilFreshTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stilFreshTests.m; sourceTree = "<group>"; };
+		EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		EE3EC7B219DF994700CA09F8 /* KFCam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KFCam.h; sourceTree = "<group>"; };
+		EE3EC7B319DF994700CA09F8 /* KFCam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KFCam.m; sourceTree = "<group>"; };
+		EE3EC7B519DF995100CA09F8 /* NSObject+SFExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SFExtra.h"; sourceTree = "<group>"; };
+		EE3EC7B619DF995100CA09F8 /* NSObject+SFExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SFExtra.m"; sourceTree = "<group>"; };
+		EE3EC7B719DF995100CA09F8 /* SFBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBox.h; sourceTree = "<group>"; };
+		EE3EC7B819DF995100CA09F8 /* SFBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFBox.m; sourceTree = "<group>"; };
+		EE3EC7B919DF995100CA09F8 /* SFItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFItem.h; sourceTree = "<group>"; };
+		EE3EC7BA19DF995100CA09F8 /* SFItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFItem.m; sourceTree = "<group>"; };
+		EE3EC7BB19DF995100CA09F8 /* SFRootViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFRootViewCtl.h; sourceTree = "<group>"; };
+		EE3EC7BC19DF995100CA09F8 /* SFRootViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFRootViewCtl.m; sourceTree = "<group>"; };
+		EE3EC7BD19DF995100CA09F8 /* SFTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTableViewCell.h; sourceTree = "<group>"; };
+		EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTableViewCell.m; sourceTree = "<group>"; };
+		EE3EC7BF19DF995100CA09F8 /* SFTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTableViewController.h; sourceTree = "<group>"; };
+		EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTableViewController.m; sourceTree = "<group>"; };
+		EE3EC7C119DF995100CA09F8 /* SFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFView.h; sourceTree = "<group>"; };
+		EE3EC7C219DF995100CA09F8 /* SFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EE3EC78019DF98C400CA09F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE3EC79C19DF98C400CA09F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EE3EC77A19DF98C300CA09F8 = {
+			isa = PBXGroup;
+			children = (
+				EE3EC78519DF98C400CA09F8 /* stilFresh */,
+				EE3EC7A219DF98C400CA09F8 /* stilFreshTests */,
+				EE3EC78419DF98C400CA09F8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EE3EC78419DF98C400CA09F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EE3EC78319DF98C400CA09F8 /* stilFresh.app */,
+				EE3EC79F19DF98C400CA09F8 /* stilFreshTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EE3EC78519DF98C400CA09F8 /* stilFresh */ = {
+			isa = PBXGroup;
+			children = (
+				EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */,
+				EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */,
+				EE3EC7B219DF994700CA09F8 /* KFCam.h */,
+				EE3EC7B319DF994700CA09F8 /* KFCam.m */,
+				EE3EC7B519DF995100CA09F8 /* NSObject+SFExtra.h */,
+				EE3EC7B619DF995100CA09F8 /* NSObject+SFExtra.m */,
+				EE3EC7B719DF995100CA09F8 /* SFBox.h */,
+				EE3EC7B819DF995100CA09F8 /* SFBox.m */,
+				EE3EC7B919DF995100CA09F8 /* SFItem.h */,
+				EE3EC7BA19DF995100CA09F8 /* SFItem.m */,
+				EE3EC7BB19DF995100CA09F8 /* SFRootViewCtl.h */,
+				EE3EC7BC19DF995100CA09F8 /* SFRootViewCtl.m */,
+				EE3EC7BD19DF995100CA09F8 /* SFTableViewCell.h */,
+				EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */,
+				EE3EC7BF19DF995100CA09F8 /* SFTableViewController.h */,
+				EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */,
+				EE3EC7C119DF995100CA09F8 /* SFView.h */,
+				EE3EC7C219DF995100CA09F8 /* SFView.m */,
+				EE3EC79619DF98C400CA09F8 /* Images.xcassets */,
+				EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */,
+				EE3EC78619DF98C400CA09F8 /* Supporting Files */,
+			);
+			path = stilFresh;
+			sourceTree = "<group>";
+		};
+		EE3EC78619DF98C400CA09F8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EE3EC78719DF98C400CA09F8 /* Info.plist */,
+				EE3EC78819DF98C400CA09F8 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EE3EC7A219DF98C400CA09F8 /* stilFreshTests */ = {
+			isa = PBXGroup;
+			children = (
+				EE3EC7A519DF98C400CA09F8 /* stilFreshTests.m */,
+				EE3EC7A319DF98C400CA09F8 /* Supporting Files */,
+			);
+			path = stilFreshTests;
+			sourceTree = "<group>";
+		};
+		EE3EC7A319DF98C400CA09F8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EE3EC7A419DF98C400CA09F8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EE3EC78219DF98C400CA09F8 /* stilFresh */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE3EC7A919DF98C400CA09F8 /* Build configuration list for PBXNativeTarget "stilFresh" */;
+			buildPhases = (
+				EE3EC77F19DF98C400CA09F8 /* Sources */,
+				EE3EC78019DF98C400CA09F8 /* Frameworks */,
+				EE3EC78119DF98C400CA09F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = stilFresh;
+			productName = stilFresh;
+			productReference = EE3EC78319DF98C400CA09F8 /* stilFresh.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EE3EC79E19DF98C400CA09F8 /* stilFreshTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE3EC7AC19DF98C400CA09F8 /* Build configuration list for PBXNativeTarget "stilFreshTests" */;
+			buildPhases = (
+				EE3EC79B19DF98C400CA09F8 /* Sources */,
+				EE3EC79C19DF98C400CA09F8 /* Frameworks */,
+				EE3EC79D19DF98C400CA09F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EE3EC7A119DF98C400CA09F8 /* PBXTargetDependency */,
+			);
+			name = stilFreshTests;
+			productName = stilFreshTests;
+			productReference = EE3EC79F19DF98C400CA09F8 /* stilFreshTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EE3EC77B19DF98C300CA09F8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Liwei Zhang";
+				TargetAttributes = {
+					EE3EC78219DF98C400CA09F8 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					EE3EC79E19DF98C400CA09F8 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = EE3EC78219DF98C400CA09F8;
+					};
+				};
+			};
+			buildConfigurationList = EE3EC77E19DF98C300CA09F8 /* Build configuration list for PBXProject "stilFresh" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EE3EC77A19DF98C300CA09F8;
+			productRefGroup = EE3EC78419DF98C400CA09F8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EE3EC78219DF98C400CA09F8 /* stilFresh */,
+				EE3EC79E19DF98C400CA09F8 /* stilFreshTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EE3EC78119DF98C400CA09F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE3EC79D19DF98C400CA09F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EE3EC77F19DF98C400CA09F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE3EC7C419DF995100CA09F8 /* SFBox.m in Sources */,
+				EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */,
+				EE3EC7C719DF995100CA09F8 /* SFTableViewCell.m in Sources */,
+				EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */,
+				EE3EC7C519DF995100CA09F8 /* SFItem.m in Sources */,
+				EE3EC78919DF98C400CA09F8 /* main.m in Sources */,
+				EE3EC7C619DF995100CA09F8 /* SFRootViewCtl.m in Sources */,
+				EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */,
+				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
+				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE3EC79B19DF98C400CA09F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE3EC7A619DF98C400CA09F8 /* stilFreshTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EE3EC7A119DF98C400CA09F8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EE3EC78219DF98C400CA09F8 /* stilFresh */;
+			targetProxy = EE3EC7A019DF98C400CA09F8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		EE3EC7A719DF98C400CA09F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		EE3EC7A819DF98C400CA09F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EE3EC7AA19DF98C400CA09F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = stilFresh/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EE3EC7AB19DF98C400CA09F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = stilFresh/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		EE3EC7AD19DF98C400CA09F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = stilFreshTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/stilFresh.app/stilFresh";
+			};
+			name = Debug;
+		};
+		EE3EC7AE19DF98C400CA09F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = stilFreshTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/stilFresh.app/stilFresh";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EE3EC77E19DF98C300CA09F8 /* Build configuration list for PBXProject "stilFresh" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE3EC7A719DF98C400CA09F8 /* Debug */,
+				EE3EC7A819DF98C400CA09F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EE3EC7A919DF98C400CA09F8 /* Build configuration list for PBXNativeTarget "stilFresh" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE3EC7AA19DF98C400CA09F8 /* Debug */,
+				EE3EC7AB19DF98C400CA09F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		EE3EC7AC19DF98C400CA09F8 /* Build configuration list for PBXNativeTarget "stilFreshTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE3EC7AD19DF98C400CA09F8 /* Debug */,
+				EE3EC7AE19DF98C400CA09F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				EE3EC78E19DF98C400CA09F8 /* stilFresh.xcdatamodel */,
+			);
+			currentVersion = EE3EC78E19DF98C400CA09F8 /* stilFresh.xcdatamodel */;
+			path = stilFresh.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = EE3EC77B19DF98C300CA09F8 /* Project object */;
+}
