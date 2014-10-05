@@ -26,7 +26,7 @@
 @synthesize notes;
 @synthesize notesPlaceHolder;
 @synthesize purchasedOn;
-@synthesize camView;
+@synthesize camViewCtl;
 @synthesize listViewCtl;
 @synthesize cardViewCtl;
 @synthesize menuView;
@@ -70,9 +70,11 @@
     
     [self.view addSubview:self.interfaceBase];
     
-//    self.camView = [[UIView alloc] initWithFrame:self.appRect];
-//    self.camView.backgroundColor = [UIColor redColor];
-//    [self.interfaceBase addSubview:self.camView];
+    self.camViewCtl = [[SFCamViewCtl alloc] init];
+    self.camViewCtl.box = self.box;
+    [self addChildViewController:self.camViewCtl];
+    [self.interfaceBase addSubview:self.camViewCtl.view];
+    [self.camViewCtl didMoveToParentViewController:self];
     
     // InputView
     self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width, 0.0f, self.appRect.size.width, self.appRect.size.height)];

@@ -19,6 +19,7 @@
 		EE3EC7C719DF995100CA09F8 /* SFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */; };
 		EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */; };
 		EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C219DF995100CA09F8 /* SFView.m */; };
+		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,8 +43,8 @@
 		EE3EC7A519DF98C400CA09F8 /* stilFreshTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stilFreshTests.m; sourceTree = "<group>"; };
 		EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		EE3EC7B219DF994700CA09F8 /* KFCam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KFCam.h; sourceTree = "<group>"; };
-		EE3EC7B319DF994700CA09F8 /* KFCam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KFCam.m; sourceTree = "<group>"; };
+		EE3EC7B219DF994700CA09F8 /* xFCam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xFCam.h; sourceTree = "<group>"; };
+		EE3EC7B319DF994700CA09F8 /* xFCam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = xFCam.m; sourceTree = "<group>"; };
 		EE3EC7B519DF995100CA09F8 /* NSObject+SFExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SFExtra.h"; sourceTree = "<group>"; };
 		EE3EC7B619DF995100CA09F8 /* NSObject+SFExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SFExtra.m"; sourceTree = "<group>"; };
 		EE3EC7B719DF995100CA09F8 /* SFBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBox.h; sourceTree = "<group>"; };
@@ -58,6 +59,8 @@
 		EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTableViewController.m; sourceTree = "<group>"; };
 		EE3EC7C119DF995100CA09F8 /* SFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFView.h; sourceTree = "<group>"; };
 		EE3EC7C219DF995100CA09F8 /* SFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFView.m; sourceTree = "<group>"; };
+		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
+		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +104,10 @@
 			children = (
 				EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */,
 				EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */,
-				EE3EC7B219DF994700CA09F8 /* KFCam.h */,
-				EE3EC7B319DF994700CA09F8 /* KFCam.m */,
+				EE3EC7B219DF994700CA09F8 /* xFCam.h */,
+				EE3EC7B319DF994700CA09F8 /* xFCam.m */,
+				EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */,
+				EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */,
 				EE3EC7B519DF995100CA09F8 /* NSObject+SFExtra.h */,
 				EE3EC7B619DF995100CA09F8 /* NSObject+SFExtra.m */,
 				EE3EC7B719DF995100CA09F8 /* SFBox.h */,
@@ -199,6 +204,7 @@
 				TargetAttributes = {
 					EE3EC78219DF98C400CA09F8 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 4LRPEBVABG;
 					};
 					EE3EC79E19DF98C400CA09F8 = {
 						CreatedOnToolsVersion = 6.1;
@@ -252,6 +258,7 @@
 				EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */,
 				EE3EC7C719DF995100CA09F8 /* SFTableViewCell.m in Sources */,
 				EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */,
+				EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */,
 				EE3EC7C519DF995100CA09F8 /* SFItem.m in Sources */,
 				EE3EC78919DF98C400CA09F8 /* main.m in Sources */,
 				EE3EC7C619DF995100CA09F8 /* SFRootViewCtl.m in Sources */,

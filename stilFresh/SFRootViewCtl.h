@@ -10,6 +10,7 @@
 #import "SFBox.h"
 #import "SFTableViewController.h"
 #import "SFView.h"
+#import "SFCamViewCtl.h"
 
 @interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate>
 
@@ -17,7 +18,7 @@
 @property (strong, nonatomic) SFBox *box;
 @property (strong, nonatomic) UIScrollView *interfaceBase;
 
-@property (strong, nonatomic) UIView *camView;
+@property (strong, nonatomic) SFCamViewCtl *camViewCtl;
 
 @property (strong, nonatomic) SFView *inputView;
 @property (strong, nonatomic) UITextField *bestBefore;
