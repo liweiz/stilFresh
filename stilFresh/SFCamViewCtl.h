@@ -22,4 +22,6 @@
 @property (strong, nonatomic) UIButton *captureBtn;
 @property (assign, nonatomic) BOOL isCapturing;
 
+@property (strong, nonatomic) UIImage *img;
+
 @end

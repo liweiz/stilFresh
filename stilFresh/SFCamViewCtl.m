@@ -21,6 +21,7 @@
 @synthesize box;
 @synthesize captureBtn;
 @synthesize isCapturing;
+@synthesize img;
 
 - (void)loadView
 {
@@ -112,9 +113,9 @@
 
     [self.output captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
          NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
-         UIImage * capturedImage = [[UIImage alloc] initWithData:imageData scale:1];
+         self.img = [[UIImage alloc] initWithData:imageData scale:1];
          self.isCapturing = NO;
-        [self loadPreview:capturedImage];
+        [self loadPreview:self.img];
         
          // If we have disabled the photo preview directly fire the delegate callback, otherwise, show user a preview
 //         _disablePhotoPreview ? [self photoCaptured] : [self drawControls];
@@ -137,6 +138,9 @@
     [base addSubview:picTaken];
     [self.view addSubview:base];
 }
+
+
+
 
 //- (void) photoCaptured {
 //    [_delegate simpleCam:self didFinishWithImage:_capturedImageV.image];
@@ -165,6 +169,7 @@
 
 - (void)showCaptureBtn
 {
+    self.img = nil;
     CABasicAnimation *show = [CABasicAnimation animationWithKeyPath:@"opacity"];
     show.fromValue = [NSNumber numberWithFloat:0];
     show.toValue = [NSNumber numberWithFloat:1];

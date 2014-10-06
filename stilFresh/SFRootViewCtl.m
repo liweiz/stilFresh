@@ -167,50 +167,61 @@
 - (void)saveItem
 {
     BOOL errOccured = NO;
-    if (!self.dayAddedSwitch.isOn) {
-        NSDate *p = [self stringToDate:self.dayAdded.text];
-        if (!p) {
-            errOccured = YES;
-            [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+    if (!self.camViewCtl.img && self.notes.text.length == 0) {
+        errOccured = YES;
+        [self.box.warningText setString:@"A picture or a few words is helpful to remember what the item is."];
+    } else {
+        if (!self.dayAddedSwitch.isOn) {
+            NSDate *p = [self stringToDate:self.dayAdded.text];
+            if (!p) {
+                errOccured = YES;
+                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+            }
         }
-    }
-    if (!errOccured) {
-        NSDate *d = [self stringToDate:self.bestBefore.text];
-        if (d) {
-            if ([self validateNotesInput:self.notes.text]) {
-                SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
-                [i setValue:self.notes.text forKey:@"notes"];
-                [i setValue:d forKey:@"bestBefore"];
-                if (self.dayAddedSwitch.on) {
-                    [i setValue:[NSDate date] forKey:@"timeAdded"];
-                    [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
-                } else {
-                    NSDate *d1 = [self stringToDate:self.dayAdded.text];
-                    if (d1) {
-                        [i setValue:d1 forKey:@"timeAdded"];
-                        [self resetDaysLeft:i];
-                        [self resetFreshness:i];
+        if (!errOccured) {
+            NSDate *d = [self stringToDate:self.bestBefore.text];
+            if (d) {
+                if ([self validateNotesInput:self.notes.text]) {
+                    SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
+                    [i setValue:self.notes.text forKey:@"notes"];
+                    [i setValue:d forKey:@"bestBefore"];
+                    if (self.dayAddedSwitch.on) {
+                        [i setValue:[NSDate date] forKey:@"timeAdded"];
                         [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
                     } else {
-                        errOccured = YES;
-                        [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+                        NSDate *d1 = [self stringToDate:self.dayAdded.text];
+                        if (d1) {
+                            [i setValue:d1 forKey:@"timeAdded"];
+                            [self resetDaysLeft:i];
+                            [self resetFreshness:i];
+                            [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
+                        } else {
+                            errOccured = YES;
+                            [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+                        }
                     }
-                }
-                if (!errOccured) {
-                    if ([self.box saveToDb]) {
-                        [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
-                    } else {
-                        errOccured = YES;
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
+                    if (!errOccured) {
+                        if ([self.box saveToDb]) {
+                            if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
+                                [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
+                                self.camViewCtl.img = nil;
+                            } else {
+                                errOccured = YES;
+                                [self.box.warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
+                            }
+                        } else {
+                            errOccured = YES;
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
+                        }
                     }
+                } else {
+                    errOccured = YES;
+                    [self.box.warningText setString:@"Max: 144 characters"];
                 }
             } else {
                 errOccured = YES;
-                [self.box.warningText setString:@"Max: 144 characters"];
+                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
             }
-        } else {
-            errOccured = YES;
-            [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
         }
     }
     if (errOccured) {
@@ -218,6 +229,18 @@
     }
 }
 
+- (BOOL)saveImage:(UIImage *)img fileName:(NSString *)name
+{
+    // Save file name to Core Data. Don't store absolute paths.
+    NSError *err;
+    NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
+    if (err) {
+        return NO;
+    }
+    NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
+    NSData *data = UIImagePNGRepresentation(img);
+    return [data writeToURL:path atomically:YES];
+}
 
 - (void)deleteItem:(NSNotification *)n
 {
