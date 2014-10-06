@@ -188,6 +188,8 @@
                     if (self.dayAddedSwitch.on) {
                         [i setValue:[NSDate date] forKey:@"timeAdded"];
                         [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
+                        [self resetDaysLeft:i];
+                        [self resetFreshness:i];
                     } else {
                         NSDate *d1 = [self stringToDate:self.dayAdded.text];
                         if (d1) {
@@ -200,14 +202,17 @@
                             [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
                         }
                     }
+                    NSLog(@"i: %@", i);
                     if (!errOccured) {
                         if ([self.box saveToDb]) {
-                            if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
-                                [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
-                                self.camViewCtl.img = nil;
-                            } else {
-                                errOccured = YES;
-                                [self.box.warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
+                            if (self.camViewCtl.img) {
+                                if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
+                                    [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
+                                    self.camViewCtl.img = nil;
+                                } else {
+                                    errOccured = YES;
+                                    [self.box.warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
+                                }
                             }
                         } else {
                             errOccured = YES;
@@ -238,7 +243,8 @@
         return NO;
     }
     NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
-    NSData *data = UIImagePNGRepresentation(img);
+    NSData *data = UIImageJPEGRepresentation(img, 0.6);
+    NSLog(@"picSize: %f MB", data.length / 1024 / 1024.0);
     return [data writeToURL:path atomically:YES];
 }
 

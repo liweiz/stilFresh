@@ -91,6 +91,17 @@
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.box = self.box;
     NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
+    cell.imageView.image = nil;
+    NSError *err;
+    NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
+    if (!err) {
+        NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
+        NSData *dImg = [NSData dataWithContentsOfURL:path];
+        UIImage *i = [UIImage imageWithData:dImg];
+        if (i) {
+            cell.imageView.image = i;
+        }
+    }
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
     [cell layoutIfNeeded];
@@ -105,7 +116,6 @@
         cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         cell.text.text = [managedObject valueForKey:@"notes"];
     }
-
     return cell;
 }
 

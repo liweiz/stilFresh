@@ -43,8 +43,6 @@
 		EE3EC7A519DF98C400CA09F8 /* stilFreshTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stilFreshTests.m; sourceTree = "<group>"; };
 		EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		EE3EC7B219DF994700CA09F8 /* xFCam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xFCam.h; sourceTree = "<group>"; };
-		EE3EC7B319DF994700CA09F8 /* xFCam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = xFCam.m; sourceTree = "<group>"; };
 		EE3EC7B519DF995100CA09F8 /* NSObject+SFExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SFExtra.h"; sourceTree = "<group>"; };
 		EE3EC7B619DF995100CA09F8 /* NSObject+SFExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SFExtra.m"; sourceTree = "<group>"; };
 		EE3EC7B719DF995100CA09F8 /* SFBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBox.h; sourceTree = "<group>"; };
@@ -104,8 +102,6 @@
 			children = (
 				EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */,
 				EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */,
-				EE3EC7B219DF994700CA09F8 /* xFCam.h */,
-				EE3EC7B319DF994700CA09F8 /* xFCam.m */,
 				EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */,
 				EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */,
 				EE3EC7B519DF995100CA09F8 /* NSObject+SFExtra.h */,
