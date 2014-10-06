@@ -48,6 +48,7 @@
         if (!self.itemId) {
             self.itemId = [[NSMutableString alloc] init];
         }
+        self.pic.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
     }
     return self;
 }
@@ -68,17 +69,13 @@
         self.backgroundView.backgroundColor = [UIColor clearColor];
     }
     if (!self.pic) {
-        self.pic = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height)];
-    }
-    if (self.pic.image) {
-        [self.backgroundView addSubview:self.pic];
-    } else {
-        [self.pic removeFromSuperview];
+        self.pic = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        self.pic.clipsToBounds = YES;
+        self.pic.contentMode = UIViewContentModeScaleAspectFill;
     }
     if (!self.status) {
         self.status = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height)];
         [self.contentView addSubview:self.status];
-        [self.contentView sendSubviewToBack:self.status];
     }
     // Change color for freshness
     switch (self.statusCode) {
@@ -114,7 +111,7 @@
             self.number.textAlignment = NSTextAlignmentRight;
             self.number.font = [UIFont boldSystemFontOfSize:self.box.fontSizeL * 2];
             self.number.lineBreakMode = NSLineBreakByCharWrapping;
-            [self.contentView addSubview:self.number];
+            [self.status addSubview:self.number];
         }
         if (!self.text) {
             CGFloat gap = 10;
@@ -126,7 +123,7 @@
             self.text.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
             self.text.lineBreakMode = NSLineBreakByCharWrapping;
             self.text.numberOfLines = 2;
-            [self.contentView addSubview:self.text];
+            [self.status addSubview:self.text];
         }
     } else {
         CGFloat gap1 = 10;
@@ -138,25 +135,25 @@
             self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
             self.notes.textAlignment = NSTextAlignmentCenter;
             self.notes.textColor = [UIColor whiteColor];
-            [self addSubview:self.notes];
+            [self.status addSubview:self.notes];
         }
         if (!self.dateAdded) {
             self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + gap1, self.notes.frame.size.width, 44)];
             [self setupTextField:self.dateAdded];
             
-            [self.contentView addSubview:self.dateAdded];
+            [self.status addSubview:self.dateAdded];
         }
         if (!self.bestBefore) {
             self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(gap1, self.dateAdded.frame.origin.y + self.dateAdded.frame.size.height + gap1, self.dateAdded.frame.size.width, self.dateAdded.frame.size.height)];
             [self setupTextField:self.bestBefore];
-            [self.contentView addSubview:self.bestBefore];
+            [self.status addSubview:self.bestBefore];
         }
         
         if (!self.deleteBtn) {
             self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width - 44) / 2, self.frame.size.height - 20 - 44, 44, 44)];
             self.deleteBtn.backgroundColor = [UIColor redColor];
             self.deleteBtn.alpha = self.textBackGroundAlpha;
-            [self.contentView addSubview:self.deleteBtn];
+            [self.status addSubview:self.deleteBtn];
             self.deleteTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callForDeletion)];
             [self.deleteBtn addGestureRecognizer:self.deleteTap];
         }
@@ -165,7 +162,7 @@
             self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.frame.size.height / 2, self.bestBefore.frame.size.width, self.frame.size.height / 2 - self.deleteBtn.frame.size.height - 20 * 2)];
             [self setupTextField:self.daysLeft];
             self.daysLeft.font = [UIFont boldSystemFontOfSize:90];
-            [self.contentView addSubview:self.daysLeft];
+            [self.status addSubview:self.daysLeft];
         }
     }
     

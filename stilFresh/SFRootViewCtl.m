@@ -197,6 +197,11 @@
                             [self resetDaysLeft:i];
                             [self resetFreshness:i];
                             [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
+                            if (self.camViewCtl.img) {
+                                [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
+                            } else {
+                                [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
+                            }
                         } else {
                             errOccured = YES;
                             [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];

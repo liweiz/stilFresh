@@ -36,11 +36,11 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.allowsMultipleSelection = NO;
+    self.tableView.showsHorizontalScrollIndicator = NO;
+    self.tableView.showsVerticalScrollIndicator = NO;
     if (self.isForCard) {
         self.tableView.rowHeight = self.box.appRect.size.height;
         self.tableView.pagingEnabled = YES;
-        self.tableView.showsHorizontalScrollIndicator = NO;
-        self.tableView.showsVerticalScrollIndicator = NO;
         self.tableView.bounces = YES;
         self.tableView.allowsSelection = NO;
     } else {
@@ -92,14 +92,16 @@
     cell.box = self.box;
     NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
     cell.imageView.image = nil;
-    NSError *err;
-    NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
-    if (!err) {
-        NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
-        NSData *dImg = [NSData dataWithContentsOfURL:path];
-        UIImage *i = [UIImage imageWithData:dImg];
-        if (i) {
-            cell.imageView.image = i;
+    if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
+        NSError *err;
+        NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
+        if (!err) {
+            NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
+            NSData *dImg = [NSData dataWithContentsOfURL:path];
+            UIImage *i = [UIImage imageWithData:dImg];
+            if (i) {
+                cell.pic.image = i;
+            }
         }
     }
     // Make sure the layout is done before assigning any value from NSManagedObj.

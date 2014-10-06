@@ -41,8 +41,8 @@
 {
     NSInteger f = [[obj valueForKey:@"daysLeft"] integerValue];
     NSInteger d = [self getDaysLeftFrom:[obj valueForKey:@"timeAdded"] to:[obj valueForKey:@"bestBefore"]];
-    CGFloat r1 = d / 3;
-    CGFloat r2 = d * 2 / 3;
+    CGFloat r1 = d / 3.0;
+    CGFloat r2 = d * 2.0 / 3;
     NSNumber *n;
     if (f <= 0) {
         n = [NSNumber numberWithInteger:3];
@@ -124,8 +124,8 @@
 - (NSInteger)getDaysLeftFrom:(NSDate *)start to:(NSDate *)end
 {
     NSDateComponents *c = [[NSCalendar currentCalendar]
-                           components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay
-                           fromDate:start toDate:end options:NSCalendarWrapComponents];
+                           components:NSCalendarUnitDay
+                           fromDate:start toDate:end options:0];
     return c.day;
 }
 
