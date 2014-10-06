@@ -18,12 +18,12 @@
 {
     if (isClear) {
         CALayer *bottomLine = [CALayer layer];
-        CGFloat lineHeight = 1.0f;
-        bottomLine.frame = CGRectMake(0.0f, layer.bounds.size.height - lineHeight, layer.bounds.size.width, lineHeight);
+        CGFloat lineHeight = 1;
+        bottomLine.frame = CGRectMake(0, layer.bounds.size.height - lineHeight, layer.bounds.size.width, lineHeight);
         bottomLine.backgroundColor = b.sfGreen0.CGColor;
         [layer addSublayer:bottomLine];
     } else {
-        layer.cornerRadius = 3.0f;
+        layer.cornerRadius = 3;
     }
 }
 
@@ -41,8 +41,8 @@
 {
     NSInteger f = [[obj valueForKey:@"daysLeft"] integerValue];
     NSInteger d = [self getDaysLeftFrom:[obj valueForKey:@"timeAdded"] to:[obj valueForKey:@"bestBefore"]];
-    CGFloat r1 = d / 3.0f;
-    CGFloat r2 = d * 2.0f / 3.0f;
+    CGFloat r1 = d / 3;
+    CGFloat r2 = d * 2 / 3;
     NSNumber *n;
     if (f <= 0) {
         n = [NSNumber numberWithInteger:3];
@@ -97,9 +97,9 @@
 
 - (NSString *)combineToGetStringDate:(NSDateComponents *)c
 {
-    NSString *year = [NSString stringWithFormat:@"%d", c.year];
-    NSString *month = [NSString stringWithFormat:@"%d", c.month];
-    NSString *day = [NSString stringWithFormat:@"%d", c.day];
+    NSString *year = [NSString stringWithFormat:@"%li", (long)c.year];
+    NSString *month = [NSString stringWithFormat:@"%ld", (long)c.month];
+    NSString *day = [NSString stringWithFormat:@"%ld", (long)c.day];
     NSMutableString *s = [NSMutableString stringWithCapacity:0];
     [s appendString:year];
     if (c.month < 10) {

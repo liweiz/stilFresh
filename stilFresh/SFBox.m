@@ -37,16 +37,16 @@
         [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortDaysLeftA]];
 //        [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortCellTextAlphabetA]];
         self.warningText = [[NSMutableString alloc] init];
-        self.originX = 15.0f;
-        self.originY = 15.0f;
-        self.gap = 10.0f;
-        self.oneLineHeight = 40.0f;
-        self.fontSizeL = 16.0f;
-        self.fontSizeM = 14.0f;
-        self.sfGreen0 = [UIColor colorWithRed:157.0f/255.0f green:225.0f/255.0f blue:63.0f/255.0f alpha:1.0f];
-        self.sfGreen1 = [UIColor colorWithRed:150.0f/255.0f green:206.0f/255.0f blue:107.0f/255.0f alpha:1.0f];
-        self.sfGreen2 = [UIColor colorWithRed:152.0f/255.0f green:189.0f/255.0f blue:93.0f/255.0f alpha:1.0f];
-        self.sfGray = [UIColor colorWithRed:130.0f/255.0f green:131.0f/255.0f blue:126.0f/255.0f alpha:1.0f];
+        self.originX = 15;
+        self.originY = 15;
+        self.gap = 10;
+        self.oneLineHeight = 40;
+        self.fontSizeL = 16;
+        self.fontSizeM = 14;
+        self.sfGreen0 = [UIColor colorWithRed:157 / 255.0 green:225 / 255.0 blue:63 / 255.0 alpha:1];
+        self.sfGreen1 = [UIColor colorWithRed:150 / 255.0 green:206 / 255.0 blue:107 / 255.0 alpha:1];
+        self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:1];
+        self.sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:1];
     }
     return self;
 }

@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "SFBox.h"
 
-@interface SFCamViewCtl : UIViewController
+@interface SFCamViewCtl : UIViewController <UIScrollViewDelegate>
 
 @property (strong, nonatomic) AVCaptureSession *session;
 @property (strong, nonatomic) AVCaptureVideoPreviewLayer *preview;
@@ -20,5 +20,6 @@
 @property (strong, nonatomic) SFBox *box;
 
 @property (strong, nonatomic) UIButton *captureBtn;
+@property (assign, nonatomic) BOOL isCapturing;
 
 @end

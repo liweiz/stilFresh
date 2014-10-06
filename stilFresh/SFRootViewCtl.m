@@ -61,7 +61,7 @@
     // Four views, from left to right: 1. cam 2. input 3. list 4. menu/card
     CGSize theContentSize = CGSizeMake(self.box.appRect.size.width * 4, self.box.appRect.size.height);
     self.interfaceBase.contentSize = theContentSize;
-    self.interfaceBase.contentOffset = CGPointMake(self.appRect.size.width * 2, 0.0f);
+    self.interfaceBase.contentOffset = CGPointMake(self.appRect.size.width * 2, 0);
     self.interfaceBase.bounces = NO;
     self.interfaceBase.showsVerticalScrollIndicator = NO;
     self.interfaceBase.showsHorizontalScrollIndicator = NO;
@@ -77,12 +77,12 @@
     [self.camViewCtl didMoveToParentViewController:self];
     
     // InputView
-    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width, 0.0f, self.appRect.size.width, self.appRect.size.height)];
+    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width, 0, self.appRect.size.width, self.appRect.size.height)];
     self.inputView.touchToDismissKeyboardIsOn = YES;
     self.inputView.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.inputView];
     // BestBefore
-    self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.originY, self.box.width - self.box.gap - 54.0f, 44.0f)];
+    self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.originY, self.box.width - self.box.gap - 54, 44)];
     
     self.bestBefore.backgroundColor = [UIColor clearColor];
     self.bestBefore.placeholder = @"Best before: YYYYMMDD";
@@ -92,7 +92,7 @@
     [self configLayer:self.bestBefore.layer box:self.box isClear:YES];
     [self.inputView addSubview:self.bestBefore];
     // AddBtn
-    self.addBtn = [[UIView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.box.originY, 54.0f, self.bestBefore.frame.size.height)];
+    self.addBtn = [[UIView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.box.originY, 54, self.bestBefore.frame.size.height)];
     [self configLayer:self.addBtn.layer box:self.box isClear:NO];
     self.addBtn.backgroundColor = self.box.sfGreen0;
     self.addTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(saveItem)];
@@ -106,7 +106,7 @@
     self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     self.notes.text = @"";
     [self.inputView addSubview:self.notes];
-    self.notesPlaceHolder = [[UITextField alloc] initWithFrame:CGRectMake(0.0f, -4.0f, self.box.width - self.box.gap - 54.0f, 44.0f)];
+    self.notesPlaceHolder = [[UITextField alloc] initWithFrame:CGRectMake(0, -4, self.box.width - self.box.gap - 54, 44)];
     self.notesPlaceHolder.backgroundColor = [UIColor clearColor];
     self.notesPlaceHolder.placeholder = @"Info for this item";
     self.notesPlaceHolder.userInteractionEnabled = NO;
@@ -118,13 +118,13 @@
     self.dayAddedLabel.text = @"Purchased today";
     self.dayAddedLabel.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     [self.inputView addSubview:self.dayAddedLabel];
-    self.dayAddedSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.addBtn.frame.origin.x, self.dayAddedLabel.frame.origin.y + 7.0f, self.addBtn.frame.size.width, self.addBtn.frame.size.height)];
+    self.dayAddedSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.addBtn.frame.origin.x, self.dayAddedLabel.frame.origin.y + 7, self.addBtn.frame.size.width, self.addBtn.frame.size.height)];
     self.dayAddedSwitch.on = YES;
     
     [self.dayAddedSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
     [self.inputView addSubview:self.dayAddedSwitch];
     self.dayAddedSwitch.onTintColor = self.box.sfGreen0;
-    self.dayAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54.0f, 44.0f)];
+    self.dayAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54, 44)];
     [self configLayer:self.dayAdded.layer box:self.box isClear:YES];
     self.dayAdded.backgroundColor = [UIColor clearColor];
     self.dayAdded.placeholder = @"Date purchased: YYYYMMDD";
@@ -198,7 +198,7 @@
                 }
                 if (!errOccured) {
                     if ([self.box saveToDb]) {
-                        [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0.0f) animated:YES];
+                        [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
                     } else {
                         errOccured = YES;
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
@@ -247,7 +247,7 @@
     [self.cardViewCtl.tableView scrollToRowAtIndexPath:self.listViewCtl.tableView.indexPathForSelectedRow atScrollPosition:UITableViewScrollPositionTop animated:NO];
     self.cardViewCtl.tableView.hidden = NO;
     [self.cardViewCtl.tableView.superview bringSubviewToFront:self.cardViewCtl.tableView];
-    [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0.0f) animated:YES];
+    [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
 }
 
 
@@ -312,9 +312,9 @@
 - (void)showWarningWithName:(NSString *)notificationName
 {
     if (!self.warning) {
-        CGFloat w = 220.0f;
-        CGFloat h = 75.0f;
-        self.warning = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width - w) * 0.5f, (self.view.frame.size.height - h) * 0.5f - 30.0f, w, h)];
+        CGFloat w = 220;
+        CGFloat h = 75;
+        self.warning = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width - w) * 0.5, (self.view.frame.size.height - h) * 0.5 - 30, w, h)];
         [self.view addSubview:self.warning];
         self.warning.font = [self.warning.font fontWithSize:self.box.fontSizeM];
         self.warning.textColor = [UIColor whiteColor];
@@ -328,10 +328,10 @@
     } else {
         self.warning.text = self.box.warningText;
     }
-    self.warning.alpha = 1.0f;
+    self.warning.alpha = 1;
     [self.view bringSubviewToFront:self.warning];
     [UIView animateWithDuration:4 animations:^{
-        self.warning.alpha = 0.0f;
+        self.warning.alpha = 0;
     } completion:^(BOOL finished){
 //        self.warning.text = nil;
     }];
@@ -340,8 +340,8 @@
 - (void)hideWarning
 {
 //    self.warning.text = nil;
-    if (self.warning.alpha == 1.0f) {
-        self.warning.alpha = 0.0f;
+    if (self.warning.alpha == 1) {
+        self.warning.alpha = 0;
     }
 }
 

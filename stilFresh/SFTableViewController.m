@@ -29,7 +29,7 @@
     } else {
         x = self.box.appRect.size.width * 2;
     }
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0.0f, self.box.appRect.size.width, self.box.appRect.size.height) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, self.box.appRect.size.width, self.box.appRect.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsMultipleSelection = NO;
