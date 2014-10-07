@@ -18,8 +18,8 @@
 		EE3EC7C719DF995100CA09F8 /* SFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */; };
 		EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */; };
 		EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C219DF995100CA09F8 /* SFView.m */; };
+		EE63B26519E384A200C871C0 /* SFItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE63B26419E384A200C871C0 /* SFItem.m */; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
-		EED0C99A19E25B11006E7ADC /* SFItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EED0C99919E25B11006E7ADC /* SFItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,10 +55,10 @@
 		EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTableViewController.m; sourceTree = "<group>"; };
 		EE3EC7C119DF995100CA09F8 /* SFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFView.h; sourceTree = "<group>"; };
 		EE3EC7C219DF995100CA09F8 /* SFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFView.m; sourceTree = "<group>"; };
+		EE63B26319E384A200C871C0 /* SFItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFItem.h; sourceTree = "<group>"; };
+		EE63B26419E384A200C871C0 /* SFItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFItem.m; sourceTree = "<group>"; };
 		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
 		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
-		EED0C99819E25B11006E7ADC /* SFItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFItem.h; sourceTree = "<group>"; };
-		EED0C99919E25B11006E7ADC /* SFItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,14 +110,14 @@
 				EE3EC7B819DF995100CA09F8 /* SFBox.m */,
 				EE3EC7BB19DF995100CA09F8 /* SFRootViewCtl.h */,
 				EE3EC7BC19DF995100CA09F8 /* SFRootViewCtl.m */,
-				EED0C99819E25B11006E7ADC /* SFItem.h */,
-				EED0C99919E25B11006E7ADC /* SFItem.m */,
 				EE3EC7BD19DF995100CA09F8 /* SFTableViewCell.h */,
 				EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */,
 				EE3EC7BF19DF995100CA09F8 /* SFTableViewController.h */,
 				EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */,
 				EE3EC7C119DF995100CA09F8 /* SFView.h */,
 				EE3EC7C219DF995100CA09F8 /* SFView.m */,
+				EE63B26319E384A200C871C0 /* SFItem.h */,
+				EE63B26419E384A200C871C0 /* SFItem.m */,
 				EE3EC79619DF98C400CA09F8 /* Images.xcassets */,
 				EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */,
 				EE3EC78619DF98C400CA09F8 /* Supporting Files */,
@@ -255,7 +255,7 @@
 				EE3EC7C719DF995100CA09F8 /* SFTableViewCell.m in Sources */,
 				EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */,
 				EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */,
-				EED0C99A19E25B11006E7ADC /* SFItem.m in Sources */,
+				EE63B26519E384A200C871C0 /* SFItem.m in Sources */,
 				EE3EC78919DF98C400CA09F8 /* main.m in Sources */,
 				EE3EC7C619DF995100CA09F8 /* SFRootViewCtl.m in Sources */,
 				EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */,

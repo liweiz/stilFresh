@@ -127,9 +127,9 @@
         case SFSortDaysLeftD:
             return [[NSSortDescriptor alloc] initWithKey:@"daysLeft" ascending:NO];
         case SFSortTimeCreatedA:
-            return [[NSSortDescriptor alloc] initWithKey:@"timeAdded" ascending:YES];
+            return [[NSSortDescriptor alloc] initWithKey:@"dateAdded" ascending:YES];
         case SFSortTimeCreatedD:
-            return [[NSSortDescriptor alloc] initWithKey:@"timeAdded" ascending:NO];
+            return [[NSSortDescriptor alloc] initWithKey:@"dateAdded" ascending:NO];
         case SFSortFreshnessA:
             return [[NSSortDescriptor alloc] initWithKey:@"freshness" ascending:YES];
         case SFSortFreshnessD:

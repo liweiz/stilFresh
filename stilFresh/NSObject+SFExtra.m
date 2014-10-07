@@ -31,7 +31,7 @@
 
 - (void)resetDaysLeft:(SFItem *)obj
 {
-    NSInteger d = [self getDaysLeftFrom:[NSDate date] to:[obj valueForKey:@"bestBefore"]];
+    NSInteger d = [self getDaysLeftFrom:[NSDate date] to:[self stringToDate:[obj valueForKey:@"bestBefore"]]];
     NSNumber *n = [NSNumber numberWithInteger:d];
     [obj setValue:n forKey:@"daysLeft"];
 }
@@ -40,7 +40,7 @@
 - (void)resetFreshness:(SFItem *)obj
 {
     NSInteger f = [[obj valueForKey:@"daysLeft"] integerValue];
-    NSInteger d = [self getDaysLeftFrom:[obj valueForKey:@"timeAdded"] to:[obj valueForKey:@"bestBefore"]];
+    NSInteger d = [self getDaysLeftFrom:[self stringToDate:[obj valueForKey:@"dateAdded"]] to:[self stringToDate:[obj valueForKey:@"bestBefore"]]];
     CGFloat r1 = d / 3.0;
     CGFloat r2 = d * 2.0 / 3;
     NSNumber *n;
@@ -60,10 +60,11 @@
 
 - (NSDate *)stringToDate:(NSString *)string
 {
-    NSArray *a = [self getDateFromString:string];
+    NSArray *a = [self getDateElemFromString:string];
     if (a) {
         NSDateComponents *c = [[NSDateComponents alloc] init];
-        [c setTimeZone:[NSTimeZone defaultTimeZone]];
+        [c setTimeZone:[NSTimeZone localTimeZone]];
+        NSLog(@"local time zone: %@", [[NSTimeZone localTimeZone] name]);
         [c setCalendar:[NSCalendar currentCalendar]];
         NSString *year = a[0];
         NSString *month = a[1];
@@ -76,7 +77,7 @@
     return nil;
 }
 
-- (NSArray *)getDateFromString:(NSString *)string
+- (NSArray *)getDateElemFromString:(NSString *)string
 {
     if ([self validateDateInput:string]) {
         NSString *year = [string substringWithRange:NSMakeRange(0, 4)];
@@ -86,7 +87,7 @@
             return nil;
         }
         NSString *day = [string substringWithRange:NSMakeRange(6, 2)];
-        if (month.integerValue < 1 || month.integerValue > 31) {
+        if (day.integerValue < 1 || day.integerValue > 31) {
             // Incorrect data
             return nil;
         }
@@ -153,6 +154,9 @@
             }
             if (!isNumber) {
                 break;
+            }
+            if ([[input substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
+                return NO;
             }
             if (isNumber && i == 7) {
                 return YES;

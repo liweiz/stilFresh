@@ -32,9 +32,9 @@
 @synthesize menuView;
 @synthesize itemViewCtl;
 @synthesize warning;
-@synthesize dayAddedLabel;
-@synthesize dayAddedSwitch;
-@synthesize dayAdded;
+@synthesize dateAddedLabel;
+@synthesize dateAddedSwitch;
+@synthesize dateAdded;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -113,26 +113,26 @@
     self.notesPlaceHolder.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     [self.notes addSubview:self.notesPlaceHolder];
     // DayAdded
-    self.dayAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.notes.frame.origin.y + self.notes.frame.size.height + self.box.gap, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
-    [self configLayer:self.dayAddedLabel.layer box:self.box isClear:NO];
-    self.dayAddedLabel.text = @"Purchased today";
-    self.dayAddedLabel.font = [UIFont systemFontOfSize:self.box.fontSizeL];
-    [self.inputView addSubview:self.dayAddedLabel];
-    self.dayAddedSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.addBtn.frame.origin.x, self.dayAddedLabel.frame.origin.y + 7, self.addBtn.frame.size.width, self.addBtn.frame.size.height)];
-    self.dayAddedSwitch.on = YES;
+    self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.notes.frame.origin.y + self.notes.frame.size.height + self.box.gap, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
+    [self configLayer:self.dateAddedLabel.layer box:self.box isClear:NO];
+    self.dateAddedLabel.text = @"Purchased today";
+    self.dateAddedLabel.font = [UIFont systemFontOfSize:self.box.fontSizeL];
+    [self.inputView addSubview:self.dateAddedLabel];
+    self.dateAddedSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.addBtn.frame.origin.x, self.dateAddedLabel.frame.origin.y + 7, self.addBtn.frame.size.width, self.addBtn.frame.size.height)];
+    self.dateAddedSwitch.on = YES;
     
-    [self.dayAddedSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
-    [self.inputView addSubview:self.dayAddedSwitch];
-    self.dayAddedSwitch.onTintColor = self.box.sfGreen0;
-    self.dayAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54, 44)];
-    [self configLayer:self.dayAdded.layer box:self.box isClear:YES];
-    self.dayAdded.backgroundColor = [UIColor clearColor];
-    self.dayAdded.placeholder = @"Date purchased: YYYYMMDD";
-    self.dayAdded.delegate = self;
-    self.dayAdded.keyboardType = UIKeyboardTypeNumberPad;
-    self.dayAdded.font = [UIFont systemFontOfSize:self.box.fontSizeL];
-    [self.inputView addSubview:self.dayAdded];
-    self.dayAdded.hidden = YES;
+    [self.dateAddedSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
+    [self.inputView addSubview:self.dateAddedSwitch];
+    self.dateAddedSwitch.onTintColor = self.box.sfGreen0;
+    self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54, 44)];
+    [self configLayer:self.dateAdded.layer box:self.box isClear:YES];
+    self.dateAdded.backgroundColor = [UIColor clearColor];
+    self.dateAdded.placeholder = @"Date purchased: YYYYMMDD";
+    self.dateAdded.delegate = self;
+    self.dateAdded.keyboardType = UIKeyboardTypeNumberPad;
+    self.dateAdded.font = [UIFont systemFontOfSize:self.box.fontSizeL];
+    [self.inputView addSubview:self.dateAdded];
+    self.dateAdded.hidden = YES;
     
     [self.box prepareDataSource];
     
@@ -164,37 +164,42 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"deleteItem" object:nil];
 }
 
+// Save calendar date as a string. Reason:http://stackoverflow.com/questions/7054411/determining-day-components-of-an-nsdate-object-time-zone-issues
 - (void)saveItem
 {
     BOOL errOccured = NO;
     SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
+    
     if (!self.camViewCtl.img && self.notes.text.length == 0) {
         // words or pic is a must.
         errOccured = YES;
         [self.box.warningText setString:@"A picture or a few words is helpful to remember what the item is."];
     } else {
         // valid dayAdded is needed.
-        if (!self.dayAddedSwitch.on) {
-            NSDate *p = [self stringToDate:self.dayAdded.text];
+        if (!self.dateAddedSwitch.on) {
+            NSDate *p = [self stringToDate:self.dateAdded.text];
             if (!p) {
                 errOccured = YES;
                 [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
             } else {
-                [i setValue:p forKey:@"timeAdded"];
-                [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
+                [i setValue:self.dateAdded.text forKey:@"dateAdded"];
             }
         } else {
-            [i setValue:[NSDate date] forKey:@"timeAdded"];
-            [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
-            
+            [i setValue:[self dateToString:[NSDate date]] forKey:@"dateAdded"];
         }
         if (!errOccured) {
             // valid bestBefore
             NSDate *d = [self stringToDate:self.bestBefore.text];
-            if (d) {
+            if (!d) {
+                errOccured = YES;
+                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+            } else {
+                [i setValue:self.bestBefore.text forKey:@"bestBefore"];
+            }
+            if (!errOccured) {
                 if ([self validateNotesInput:self.notes.text]) {
                     [i setValue:self.notes.text forKey:@"notes"];
-                    [i setValue:d forKey:@"bestBefore"];
+                    [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
                     [self resetDaysLeft:i];
                     [self resetFreshness:i];
                     if (self.camViewCtl.img) {
@@ -227,9 +232,6 @@
                     errOccured = YES;
                     [self.box.warningText setString:@"Max: 144 characters"];
                 }
-            } else {
-                errOccured = YES;
-                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
             }
         }
     }
@@ -288,12 +290,12 @@
 {
     if(sender.on){
         NSLog(@"Switch is ON");
-        self.dayAdded.hidden = YES;
-        self.dayAddedLabel.hidden = NO;
+        self.dateAdded.hidden = YES;
+        self.dateAddedLabel.hidden = NO;
     } else{
         NSLog(@"Switch is OFF");
-        self.dayAdded.hidden = NO;
-        self.dayAddedLabel.hidden = YES;
+        self.dateAdded.hidden = NO;
+        self.dateAddedLabel.hidden = YES;
     }
 }
 
@@ -307,12 +309,12 @@
             self.bestBefore.text = [self dateToString:dayAfter5];
         }
     }
-    if ([textField isEqual:self.dayAdded]) {
+    if ([textField isEqual:self.dateAdded]) {
         if (textField.text.length == 0) {
             NSDateComponents *c = [[NSDateComponents alloc] init];
             c.day = -5;
             NSDate *dayAfter5 = [[NSCalendar currentCalendar] dateByAddingComponents:c toDate:[NSDate date] options:0];
-            self.dayAdded.text = [self dateToString:dayAfter5];
+            self.dateAdded.text = [self dateToString:dayAfter5];
         }
     }
 }

@@ -13,7 +13,7 @@
 @interface NSObject (SFExtra)
 
 - (NSDate *)stringToDate:(NSString *)string;
-- (NSArray *)getDateFromString:(NSString *)string;
+- (NSArray *)getDateElemFromString:(NSString *)string;
 - (NSString *)combineToGetStringDate:(NSDateComponents *)c;
 - (NSString *)dateToString:(NSDate *)date;
 - (NSInteger)getDaysLeftFrom:(NSDate *)start to:(NSDate *)end;

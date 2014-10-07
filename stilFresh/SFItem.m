@@ -14,9 +14,9 @@
 @dynamic bestBefore;
 @dynamic daysLeft;
 @dynamic freshness;
+@dynamic hasPic;
 @dynamic itemId;
 @dynamic notes;
-@dynamic hasPic;
-@dynamic timeAdded;
+@dynamic dateAdded;
 
 @end
