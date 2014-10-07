@@ -64,7 +64,6 @@
     if (a) {
         NSDateComponents *c = [[NSDateComponents alloc] init];
         [c setTimeZone:[NSTimeZone localTimeZone]];
-        NSLog(@"local time zone: %@", [[NSTimeZone localTimeZone] name]);
         [c setCalendar:[NSCalendar currentCalendar]];
         NSString *year = a[0];
         NSString *month = a[1];
@@ -116,7 +115,10 @@
 
 - (NSString *)dateToString:(NSDate *)date
 {
-    NSDateComponents *c = [[NSCalendar currentCalendar]
+    NSCalendar *x = [NSCalendar currentCalendar];
+    // http://stackoverflow.com/questions/3385552/nsdatecomponents-componentsfromdate-and-time-zones
+    x.timeZone = [NSTimeZone localTimeZone];
+    NSDateComponents *c = [x
                            components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay
                            fromDate:date];
     return [self combineToGetStringDate:c];
