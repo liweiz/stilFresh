@@ -13,7 +13,7 @@
 @interface SFCamViewCtl : UIViewController <UIScrollViewDelegate>
 
 @property (strong, nonatomic) AVCaptureSession *session;
-@property (strong, nonatomic) AVCaptureVideoPreviewLayer *preview;
+@property (strong, nonatomic) AVCaptureVideoPreviewLayer *streamView;
 @property (strong, nonatomic) AVCaptureDevice *inputDevice;
 @property (strong, nonatomic) AVCaptureDeviceInput *input;
 @property (strong, nonatomic) AVCaptureStillImageOutput *output;

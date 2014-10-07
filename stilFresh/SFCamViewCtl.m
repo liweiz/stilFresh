@@ -15,7 +15,7 @@
 @implementation SFCamViewCtl
 
 @synthesize session;
-@synthesize preview;
+@synthesize streamView;
 @synthesize inputDevice;
 @synthesize input;
 @synthesize box;
@@ -36,11 +36,11 @@
     if (!self.session) {
         self.session = [[AVCaptureSession alloc] init];
     }
-    if (!self.preview) {
-        self.preview = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
-        self.preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        self.preview.frame = self.box.appRect;
-        [self.view.layer addSublayer:self.preview];
+    if (!self.streamView) {
+        self.streamView = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
+        self.streamView.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        self.streamView.frame = self.box.appRect;
+        [self.view.layer addSublayer:self.streamView];
     }
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     if (devices.count==0) {
@@ -125,7 +125,8 @@
 - (void)loadPreview:(UIImage *)image
 {
     self.captureBtn.hidden = YES;
-    UIScrollView *base = [[UIScrollView alloc] initWithFrame:self.preview.frame];
+    UIScrollView *base = [[UIScrollView alloc] initWithFrame:self.streamView.frame];
+    base.tag = 555;
     base.contentSize = CGSizeMake(base.frame.size.width, base.frame.size.height * 2);
     base.backgroundColor = [UIColor clearColor];
     base.pagingEnabled = YES;
@@ -133,7 +134,7 @@
     base.showsHorizontalScrollIndicator = NO;
     base.showsVerticalScrollIndicator = NO;
     base.delegate = self;
-    UIImageView *picTaken = [[UIImageView alloc] initWithFrame:self.preview.frame];
+    UIImageView *picTaken = [[UIImageView alloc] initWithFrame:self.streamView.frame];
     picTaken.image = image;
     [base addSubview:picTaken];
     [self.view addSubview:base];

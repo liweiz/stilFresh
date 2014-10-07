@@ -218,10 +218,14 @@
                                 if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
                                     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
                                     self.camViewCtl.img = nil;
+                                    [[self.camViewCtl.view viewWithTag:555] removeFromSuperview];
+                                    self.camViewCtl.captureBtn.hidden = NO;
                                 } else {
                                     errOccured = YES;
                                     [self.box.warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
                                 }
+                            } else {
+                                [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
                             }
                         } else {
                             errOccured = YES;
