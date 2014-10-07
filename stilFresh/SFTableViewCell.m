@@ -48,7 +48,6 @@
         if (!self.itemId) {
             self.itemId = [[NSMutableString alloc] init];
         }
-        self.pic.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
     }
     return self;
 }
@@ -74,7 +73,7 @@
         self.pic.contentMode = UIViewContentModeScaleAspectFill;
     }
     if (!self.status) {
-        self.status = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height)];
+        self.status = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
         [self.contentView addSubview:self.status];
     }
     // Change color for freshness
@@ -165,7 +164,6 @@
             [self.status addSubview:self.daysLeft];
         }
     }
-    
     if (self.pic.image) {
         [self.backgroundView addSubview:self.pic];
     } else {

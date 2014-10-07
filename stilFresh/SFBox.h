@@ -41,6 +41,9 @@ typedef NS_ENUM(NSInteger, SFSort) {
 @property (strong, nonatomic) NSFetchedResultsController *fResultsCtl;
 @property (strong, nonatomic) NSMutableArray *sortSelection;
 @property (strong, nonatomic) NSMutableString *warningText;
+// When a new image is saving to local, the tableView may already start to update. This leads to no image for the cell that needs the image since the local image has not yet been successfully saved. So we store the image to this property for the cell to use. 
+@property (strong, nonatomic) UIImage *imgJustSaved;
+@property (strong, nonatomic) NSString *imgNameJustSaved;
 
 - (void)prepareDataSource;
 - (BOOL)saveToDb;

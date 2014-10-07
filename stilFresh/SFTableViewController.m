@@ -91,24 +91,27 @@
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.box = self.box;
     NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
-    cell.imageView.image = nil;
+    cell.pic.image = nil;
+    NSLog(@"obj: %@", managedObject);
+    // Make sure the layout is done before assigning any value from NSManagedObj.
+    cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
+    [cell layoutIfNeeded];
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         NSError *err;
         NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
         if (!err) {
             NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
             NSData *dImg = [NSData dataWithContentsOfURL:path];
+            NSLog(@"pic size: %f MB", dImg.length / 1024.0 / 1024);
             UIImage *i = [UIImage imageWithData:dImg];
             if (i) {
                 cell.pic.image = i;
+            } else if (self.box.imgJustSaved && [self.box.imgNameJustSaved isEqualToString:[managedObject valueForKey:@"itemId"]]) {
+                cell.pic.image = self.box.imgJustSaved;
             }
         }
     }
-    // Make sure the layout is done before assigning any value from NSManagedObj.
-    cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
-    [cell layoutIfNeeded];
     if (self.isForCard) {
-        NSLog(@"obj: %@", managedObject);
         cell.notes.text = [managedObject valueForKey:@"notes"];
         cell.dateAdded.text = [self addHyphensToDateString:[self dateToString:[managedObject valueForKey:@"timeAdded"]]];
         cell.bestBefore.text = [self addHyphensToDateString:[self dateToString:[managedObject valueForKey:@"bestBefore"]]];

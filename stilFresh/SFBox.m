@@ -27,6 +27,8 @@
 @synthesize sfGreen1;
 @synthesize sfGreen2;
 @synthesize sfGray;
+@synthesize imgJustSaved;
+@synthesize imgNameJustSaved;
 
 - (id)init
 {
@@ -43,10 +45,11 @@
         self.oneLineHeight = 40;
         self.fontSizeL = 16;
         self.fontSizeM = 14;
-        self.sfGreen0 = [UIColor colorWithRed:157 / 255.0 green:225 / 255.0 blue:63 / 255.0 alpha:0.7];
-        self.sfGreen1 = [UIColor colorWithRed:150 / 255.0 green:206 / 255.0 blue:107 / 255.0 alpha:0.7];
-        self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:0.7];
-        self.sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:0.7];
+        CGFloat alpha = 0.8;
+        self.sfGreen0 = [UIColor colorWithRed:157 / 255.0 green:225 / 255.0 blue:63 / 255.0 alpha:alpha];
+        self.sfGreen1 = [UIColor colorWithRed:150 / 255.0 green:206 / 255.0 blue:107 / 255.0 alpha:alpha];
+        self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:alpha];
+        self.sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha];
     }
     return self;
 }

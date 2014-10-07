@@ -167,47 +167,46 @@
 - (void)saveItem
 {
     BOOL errOccured = NO;
+    SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
     if (!self.camViewCtl.img && self.notes.text.length == 0) {
+        // words or pic is a must.
         errOccured = YES;
         [self.box.warningText setString:@"A picture or a few words is helpful to remember what the item is."];
     } else {
-        if (!self.dayAddedSwitch.isOn) {
+        // valid dayAdded is needed.
+        if (!self.dayAddedSwitch.on) {
             NSDate *p = [self stringToDate:self.dayAdded.text];
             if (!p) {
                 errOccured = YES;
                 [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+            } else {
+                [i setValue:p forKey:@"timeAdded"];
+                [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
             }
+        } else {
+            [i setValue:[NSDate date] forKey:@"timeAdded"];
+            [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
+            
         }
         if (!errOccured) {
+            // valid bestBefore
             NSDate *d = [self stringToDate:self.bestBefore.text];
             if (d) {
                 if ([self validateNotesInput:self.notes.text]) {
-                    SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
                     [i setValue:self.notes.text forKey:@"notes"];
                     [i setValue:d forKey:@"bestBefore"];
-                    if (self.dayAddedSwitch.on) {
-                        [i setValue:[NSDate date] forKey:@"timeAdded"];
-                        [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
-                        [self resetDaysLeft:i];
-                        [self resetFreshness:i];
+                    [self resetDaysLeft:i];
+                    [self resetFreshness:i];
+                    if (self.camViewCtl.img) {
+                        [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
+                        self.box.imgJustSaved = nil;
+                        self.box.imgNameJustSaved = nil;
+                        self.box.imgJustSaved = self.camViewCtl.img;
+                        self.box.imgNameJustSaved = [i valueForKey:@"itemId"];
                     } else {
-                        NSDate *d1 = [self stringToDate:self.dayAdded.text];
-                        if (d1) {
-                            [i setValue:d1 forKey:@"timeAdded"];
-                            [self resetDaysLeft:i];
-                            [self resetFreshness:i];
-                            [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
-                            if (self.camViewCtl.img) {
-                                [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
-                            } else {
-                                [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
-                            }
-                        } else {
-                            errOccured = YES;
-                            [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
-                        }
+                        [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
                     }
-                    NSLog(@"i: %@", i);
+                    NSLog(@"obj to save: %@", i);
                     if (!errOccured) {
                         if ([self.box saveToDb]) {
                             if (self.camViewCtl.img) {
@@ -345,6 +344,10 @@
 
 - (void)showWarningWithName:(NSString *)notificationName
 {
+    // Clear the item inserted but not saved yet
+    for (SFItem *i in self.box.ctx.insertedObjects) {
+        [self.box.ctx deleteObject:i];
+    }
     if (!self.warning) {
         CGFloat w = 220;
         CGFloat h = 75;
