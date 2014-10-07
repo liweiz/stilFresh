@@ -102,12 +102,12 @@
         if (!err) {
             NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
             NSData *dImg = [NSData dataWithContentsOfURL:path];
-            NSLog(@"pic size: %f MB", dImg.length / 1024.0 / 1024);
+            NSLog(@"pic size on local db: %f MB", dImg.length / 1024.0 / 1024);
             UIImage *i = [UIImage imageWithData:dImg];
             if (i) {
-                cell.pic.image = i;
+                cell.pic.image = [self convertImageToGrayscale:i];
             } else if (self.box.imgJustSaved && [self.box.imgNameJustSaved isEqualToString:[managedObject valueForKey:@"itemId"]]) {
-                cell.pic.image = self.box.imgJustSaved;
+                cell.pic.image = [self convertImageToGrayscale:self.box.imgJustSaved];
             }
         }
     }

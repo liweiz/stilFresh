@@ -253,6 +253,7 @@
         return NO;
     }
     NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
+    // http://stackoverflow.com/questions/22454221/image-orientation-problems-when-reloading-images
     NSData *data = UIImageJPEGRepresentation(img, 0.6);
     NSLog(@"picSize: %f MB", data.length / 1024 / 1024.0);
     return [data writeToURL:path atomically:YES];

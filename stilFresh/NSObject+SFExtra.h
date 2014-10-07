@@ -27,4 +27,6 @@
 - (void)resetFreshness:(SFItem *)obj;
 - (NSString *)addHyphensToDateString:(NSString *)date;
 
+- (UIImage *)convertImageToGrayscale:(UIImage *)image;
+
 @end

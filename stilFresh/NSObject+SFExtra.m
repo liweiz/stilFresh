@@ -176,4 +176,61 @@
     return NO;
 }
 
+-(UIImage*)getGrayImage:(UIImage*)sourceImage
+{
+    int width = sourceImage.size.width;
+    int height = sourceImage.size.height;
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    CGContextRef context = CGBitmapContextCreate (nil,width,height,8,0,colorSpace,(CGBitmapInfo)kCGImageAlphaNone);
+    CGColorSpaceRelease(colorSpace);
+    if (context == NULL) {
+        return nil;
+    }
+    CGContextDrawImage(context,CGRectMake(0, 0, width, height), sourceImage.CGImage);
+    UIImage *grayImage = [UIImage imageWithCGImage:CGBitmapContextCreateImage(context)];
+    CGContextRelease(context);
+    return grayImage;
+}
+
+// Modified from http://stackoverflow.com/questions/22422480/apply-black-and-white-filter-to-uiimage
+- (UIImage *)convertImageToGrayscale:(UIImage *)image
+{
+    // Create image rectangle with current image width/height
+    NSLog(@"img width: %f, height %f", image.size.width, image.size.height);
+    CGRect imageRect;
+    if (image.imageOrientation == UIImageOrientationLeft || image.imageOrientation == UIImageOrientationRight) {
+        // For app only allows portrait usage like this one, this is the only possibility.
+        imageRect = CGRectMake(0, 0, image.size.height, image.size.width);
+    } else {
+        // Not test yet.
+        imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
+    }
+    
+    // Grayscale color space
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    
+    // http://stackoverflow.com/questions/18921703/implicit-conversion-from-enumeration-type-enum-cgimagealphainfo-to-different-e
+    // Create bitmap content with new image size and grayscale colorspace. Use the new size to match the possible different size from original image due to possible orientation change.
+    CGContextRef context = CGBitmapContextCreate(nil, imageRect.size.width, imageRect.size.height, 8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaNone);
+    
+    // Draw image into current context, with specified rectangle
+    // using previously defined context (with grayscale colorspace)
+    CGContextDrawImage(context, imageRect, [image CGImage]);
+    
+    // Create bitmap image info from pixel data in current context
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    
+    // Create a new UIImage object
+    // http://stackoverflow.com/questions/8915630/ios-uiimageview-how-to-handle-uiimage-image-orientation
+    UIImage *newImage = [UIImage imageWithCGImage:imageRef scale:1 orientation:image.imageOrientation];
+    
+    // Release colorspace, context and bitmap information
+    CGColorSpaceRelease(colorSpace);
+    CGContextRelease(context);
+    CFRelease(imageRef);
+    
+    // Return the new grayscale image
+    return newImage;
+}
+
 @end

@@ -116,9 +116,6 @@
          self.img = [[UIImage alloc] initWithData:imageData scale:1];
          self.isCapturing = NO;
         [self loadPreview:self.img];
-        
-         // If we have disabled the photo preview directly fire the delegate callback, otherwise, show user a preview
-//         _disablePhotoPreview ? [self photoCaptured] : [self drawControls];
      }];
 }
 
