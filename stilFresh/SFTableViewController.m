@@ -10,6 +10,8 @@
 #import "SFItem.h"
 #import "SFTableViewCell.h"
 #import "NSObject+SFExtra.h"
+#import "Haneke.h"
+#import "HNKCache.h"
 
 @interface SFTableViewController ()
 
@@ -91,6 +93,7 @@
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.box = self.box;
     NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
+    [cell.pic hnk_cancelSetImage];
     cell.pic.image = nil;
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
@@ -102,12 +105,21 @@
         if (!err) {
             NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
             NSData *dImg = [NSData dataWithContentsOfURL:path];
+            
             NSLog(@"pic size on local db: %f MB", dImg.length / 1024.0 / 1024);
-            UIImage *i = [UIImage imageWithData:dImg];
-            if (i) {
-                cell.pic.image = [self convertImageToGrayscale:i];
+            if (dImg.length > 0) {
+                NSLog(@"path: %@", path.path);
+                // Try reading from cache, if not available, async process to generate related ones will be underway so that we probably will have those next time.
+                [cell.pic hnk_setImageFromFile:path.path];
+                if (cell.pic.image) {
+                    NSLog(@"has image");
+                } else {
+                    NSLog(@"no image");
+                    // Use the original one if nothing is available in cache.
+                    cell.pic.image = [UIImage imageWithData:dImg];
+                }
             } else if (self.box.imgJustSaved && [self.box.imgNameJustSaved isEqualToString:[managedObject valueForKey:@"itemId"]]) {
-                cell.pic.image = [self convertImageToGrayscale:self.box.imgJustSaved];
+                cell.pic.image = self.box.imgJustSaved;
             }
         }
     }

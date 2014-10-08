@@ -8,7 +8,7 @@
 
 #import "SFTableViewCell.h"
 #import "SFRootViewCtl.h"
-
+#import "UIImageView+Haneke.h"
 
 @implementation SFTableViewCell
 
@@ -71,6 +71,7 @@
         self.pic = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         self.pic.clipsToBounds = YES;
         self.pic.contentMode = UIViewContentModeScaleAspectFill;
+        self.pic.alpha = 0.75;
     }
     if (!self.status) {
         self.status = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];

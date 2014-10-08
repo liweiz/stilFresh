@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4C0270A11394244ACACEE02 /* libPods-stilFresh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */; };
 		EE3EC78919DF98C400CA09F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78819DF98C400CA09F8 /* main.m */; };
 		EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */; };
 		EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE3EC79619DF98C400CA09F8 /* Images.xcassets */; };
@@ -19,6 +20,9 @@
 		EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */; };
 		EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C219DF995100CA09F8 /* SFView.m */; };
 		EE63B26519E384A200C871C0 /* SFItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE63B26419E384A200C871C0 /* SFItem.m */; };
+		EECAA75019E5A89200AAE177 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		EECAA75119E5AC9400AAE177 /* Pods-stilFresh.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */; };
+		EECAA75219E5AC9600AAE177 /* Pods-stilFresh.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stilFresh.release.xcconfig"; path = "Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh.release.xcconfig"; sourceTree = "<group>"; };
+		D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stilFresh.debug.xcconfig"; path = "Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh.debug.xcconfig"; sourceTree = "<group>"; };
+		E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stilFresh.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE3EC78319DF98C400CA09F8 /* stilFresh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stilFresh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE3EC78719DF98C400CA09F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE3EC78819DF98C400CA09F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -66,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4C0270A11394244ACACEE02 /* libPods-stilFresh.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,12 +87,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C35CD8331054A1EB32B6E9F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EE3EC77A19DF98C300CA09F8 = {
 			isa = PBXGroup;
 			children = (
 				EE3EC78519DF98C400CA09F8 /* stilFresh */,
 				EE3EC7A219DF98C400CA09F8 /* stilFreshTests */,
 				EE3EC78419DF98C400CA09F8 /* Products */,
+				8C35CD8331054A1EB32B6E9F /* Frameworks */,
+				FF9FD9A103B28B5E8257893C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,6 +169,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FF9FD9A103B28B5E8257893C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */,
+				C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -158,9 +185,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE3EC7A919DF98C400CA09F8 /* Build configuration list for PBXNativeTarget "stilFresh" */;
 			buildPhases = (
+				17AD0155FF5146599A48284B /* Check Pods Manifest.lock */,
 				EE3EC77F19DF98C400CA09F8 /* Sources */,
 				EE3EC78019DF98C400CA09F8 /* Frameworks */,
 				EE3EC78119DF98C400CA09F8 /* Resources */,
+				824A0CF2E62F4F9C82C21628 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -232,7 +261,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EECAA75219E5AC9600AAE177 /* Pods-stilFresh.debug.xcconfig in Resources */,
 				EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */,
+				EECAA75019E5A89200AAE177 /* (null) in Resources */,
+				EECAA75119E5AC9400AAE177 /* Pods-stilFresh.release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +276,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		17AD0155FF5146599A48284B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		824A0CF2E62F4F9C82C21628 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EE3EC77F19DF98C400CA09F8 /* Sources */ = {
@@ -361,6 +426,7 @@
 		};
 		EE3EC7AA19DF98C400CA09F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = stilFresh/Info.plist;
@@ -372,6 +438,7 @@
 		};
 		EE3EC7AB19DF98C400CA09F8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = stilFresh/Info.plist;

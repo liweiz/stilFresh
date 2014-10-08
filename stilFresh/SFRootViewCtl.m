@@ -206,7 +206,7 @@
                         [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
                         self.box.imgJustSaved = nil;
                         self.box.imgNameJustSaved = nil;
-                        self.box.imgJustSaved = self.camViewCtl.img;
+                        self.box.imgJustSaved = [self convertImageToGrayscale:self.camViewCtl.img];
                         self.box.imgNameJustSaved = [i valueForKey:@"itemId"];
                     } else {
                         [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
@@ -253,8 +253,10 @@
         return NO;
     }
     NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
+    // Convert to grayscale image to avoid extra process later.
+    UIImage *img0 = [self convertImageToGrayscale:img];
     // http://stackoverflow.com/questions/22454221/image-orientation-problems-when-reloading-images
-    NSData *data = UIImageJPEGRepresentation(img, 0.6);
+    NSData *data = UIImageJPEGRepresentation(img0, 0.6);
     NSLog(@"picSize: %f MB", data.length / 1024 / 1024.0);
     return [data writeToURL:path atomically:YES];
 }
