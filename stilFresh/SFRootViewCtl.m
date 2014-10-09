@@ -168,121 +168,7 @@
     [self setupCSVForDeletedItem];
 }
 
-// Save calendar date as a string. Reason:http://stackoverflow.com/questions/7054411/determining-day-components-of-an-nsdate-object-time-zone-issues
-- (void)saveItem
-{
-    BOOL errOccured = NO;
-    SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
-    
-    if (!self.camViewCtl.img && self.notes.text.length == 0) {
-        // words or pic is a must.
-        errOccured = YES;
-        [self.box.warningText setString:@"A picture or a few words is helpful to remember what the item is."];
-    } else {
-        // valid dayAdded is needed.
-        if (!self.dateAddedSwitch.on) {
-            NSDate *p = [self stringToDate:self.dateAdded.text];
-            if (!p) {
-                errOccured = YES;
-                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
-            } else {
-                [i setValue:self.dateAdded.text forKey:@"dateAdded"];
-            }
-        } else {
-            [i setValue:[self dateToString:[NSDate date]] forKey:@"dateAdded"];
-        }
-        if (!errOccured) {
-            // valid bestBefore
-            NSDate *d = [self stringToDate:self.bestBefore.text];
-            if (!d) {
-                errOccured = YES;
-                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
-            } else {
-                [i setValue:self.bestBefore.text forKey:@"bestBefore"];
-            }
-            if (!errOccured) {
-                if ([self validateNotesInput:self.notes.text]) {
-                    [i setValue:self.notes.text forKey:@"notes"];
-                    [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
-                    [self resetDaysLeft:i];
-                    [self resetFreshness:i];
-                    if (self.camViewCtl.img) {
-                        [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
-                        self.box.imgJustSaved = nil;
-                        self.box.imgNameJustSaved = nil;
-                        self.box.imgJustSaved = [self convertImageToGrayscale:self.camViewCtl.img];
-                        self.box.imgNameJustSaved = [i valueForKey:@"itemId"];
-                    } else {
-                        [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
-                    }
-                    NSLog(@"obj to save: %@", i);
-                    if (!errOccured) {
-                        if ([self.box saveToDb]) {
-                            if (self.camViewCtl.img) {
-                                if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
-                                    [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
-                                    self.camViewCtl.img = nil;
-                                    [[self.camViewCtl.view viewWithTag:555] removeFromSuperview];
-                                    self.camViewCtl.captureBtn.hidden = NO;
-                                } else {
-                                    errOccured = YES;
-                                    [self.box.warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
-                                }
-                            } else {
-                                [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
-                            }
-                        } else {
-                            errOccured = YES;
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
-                        }
-                    }
-                } else {
-                    errOccured = YES;
-                    [self.box.warningText setString:@"Max: 144 characters"];
-                }
-            }
-        }
-    }
-    if (errOccured) {
-        [self showWarningWithName:self.box.warningText];
-    }
-}
 
-
-
-- (BOOL)saveImage:(UIImage *)img fileName:(NSString *)name
-{
-    // Save file name to Core Data. Don't store absolute paths.
-    NSURL *libraryDirectory = [self getFileBaseUrl];
-    NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
-    // Convert to grayscale image to avoid extra process later.
-    UIImage *img0 = [self convertImageToGrayscale:img];
-    // http://stackoverflow.com/questions/22454221/image-orientation-problems-when-reloading-images
-    NSData *data = UIImageJPEGRepresentation(img0, 0.6);
-    NSLog(@"picSize: %f MB", data.length / 1024 / 1024.0);
-    return [data writeToURL:path atomically:YES];
-}
-
-
-
-- (void)deleteItem:(NSNotification *)n
-{
-    BOOL errOccured = YES;
-    for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
-        if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
-            NSString *itemIdToDelete = [i valueForKey:@"itemId"];
-            [self.box.ctx deleteObject:i];
-            if ([self.box saveToDb]) {
-                errOccured = NO;
-                [self addDeletedItemId:itemIdToDelete];
-            }
-            break;
-        }
-    }
-    if (errOccured) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
-    }
-}
 
 - (void)reloadDataForTables
 {
@@ -459,6 +345,147 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - save / delete record
+
+// Save calendar date as a string. Reason:http://stackoverflow.com/questions/7054411/determining-day-components-of-an-nsdate-object-time-zone-issues
+- (void)saveItem
+{
+    BOOL errOccured = NO;
+    SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
+    
+    if (!self.camViewCtl.img && self.notes.text.length == 0) {
+        // words or pic is a must.
+        errOccured = YES;
+        [self.box.warningText setString:@"A picture or a few words is helpful to remember what the item is."];
+    } else {
+        // valid dayAdded is needed.
+        if (!self.dateAddedSwitch.on) {
+            NSDate *p = [self stringToDate:self.dateAdded.text];
+            if (!p) {
+                errOccured = YES;
+                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+            } else {
+                [i setValue:self.dateAdded.text forKey:@"dateAdded"];
+            }
+        } else {
+            [i setValue:[self dateToString:[NSDate date]] forKey:@"dateAdded"];
+        }
+        if (!errOccured) {
+            // valid bestBefore
+            NSDate *d = [self stringToDate:self.bestBefore.text];
+            if (!d) {
+                errOccured = YES;
+                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+            } else {
+                [i setValue:self.bestBefore.text forKey:@"bestBefore"];
+            }
+            if (!errOccured) {
+                if ([self validateNotesInput:self.notes.text]) {
+                    [i setValue:self.notes.text forKey:@"notes"];
+                    [i setValue:[[NSUUID UUID] UUIDString] forKey:@"itemId"];
+                    [self resetDaysLeft:i];
+                    [self resetFreshness:i];
+                    if (self.camViewCtl.img) {
+                        [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
+                        self.box.imgJustSaved = nil;
+                        self.box.imgNameJustSaved = nil;
+                        self.box.imgJustSaved = [self convertImageToGrayscale:self.camViewCtl.img];
+                        self.box.imgNameJustSaved = [i valueForKey:@"itemId"];
+                    } else {
+                        [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
+                    }
+                    NSLog(@"obj to save: %@", i);
+                    if (!errOccured) {
+                        if ([self.box saveToDb]) {
+                            if (self.camViewCtl.img) {
+                                if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
+                                    [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
+                                    self.camViewCtl.img = nil;
+                                    [[self.camViewCtl.view viewWithTag:555] removeFromSuperview];
+                                    self.camViewCtl.captureBtn.hidden = NO;
+                                } else {
+                                    errOccured = YES;
+                                    [self.box.warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
+                                }
+                            } else {
+                                [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
+                            }
+                        } else {
+                            errOccured = YES;
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
+                        }
+                    }
+                } else {
+                    errOccured = YES;
+                    [self.box.warningText setString:@"Max: 144 characters"];
+                }
+            }
+        }
+    }
+    if (errOccured) {
+        [self showWarningWithName:self.box.warningText];
+    }
+}
+
+
+
+- (BOOL)saveImage:(UIImage *)img fileName:(NSString *)name
+{
+    // Save file name to Core Data. Don't store absolute paths.
+    NSURL *libraryDirectory = [self getFileBaseUrl];
+    NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
+    // Convert to grayscale image to avoid extra process later.
+    UIImage *img0 = [self convertImageToGrayscale:img];
+    // http://stackoverflow.com/questions/22454221/image-orientation-problems-when-reloading-images
+    NSData *data = UIImageJPEGRepresentation(img0, 0.6);
+    NSLog(@"picSize: %f MB", data.length / 1024 / 1024.0);
+    return [data writeToURL:path atomically:YES];
+}
+
+
+
+- (void)deleteItem:(NSNotification *)n
+{
+    BOOL errOccured = YES;
+    for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
+        if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
+            NSString *itemIdToDelete = [i valueForKey:@"itemId"];
+            [self.box.ctx deleteObject:i];
+            if ([self.box saveToDb]) {
+                errOccured = NO;
+                [self addDeletedItemId:itemIdToDelete];
+            }
+            break;
+        }
+    }
+    if (errOccured) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
+    }
+}
+
+- (void)checkAndDeleteImages
+{
+    NSArray *a = [self readDeletedItemIds];
+    NSURL *libraryDirectory = [self getFileBaseUrl];
+    for (NSArray *i in a) {
+        if (i[0]) {
+            NSLog(@"deletedId: %@", i[0]);
+            NSURL *path = [NSURL URLWithString:i[0] relativeToURL:libraryDirectory];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path.path]) {
+                NSLog(@"1 fileExistsAtPath: %@", path.path);
+            } else {
+                NSLog(@"1 file NOT existsAtPath: %@", path.path);
+            }
+            [[NSFileManager defaultManager] removeItemAtURL:path error:nil];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path.path]) {
+                NSLog(@"2 fileExistsAtPath: %@", path.path);
+            } else {
+                NSLog(@"2 file NOT existsAtPath: %@", path.path);
+            }
+        }
+    }
+}
+
 #pragma mark - add / read deletedItemId to CSV
 - (void)setupCSVForDeletedItem
 {
@@ -466,8 +493,6 @@
     NSURL *path = [NSURL URLWithString:@"deletedItemIds.csv" relativeToURL:libraryDirectory];
     if (![[NSFileManager defaultManager] fileExistsAtPath:path.path]) {
         [[NSFileManager defaultManager] createFileAtPath:path.path contents:nil attributes:nil];
-    } else {
-        NSLog(@"NONONO");
     }
 }
 
@@ -483,7 +508,7 @@
     }
     [w writeField:itemId];
     [w finishLine];
-    [self printDeletedItemIds];
+    [self checkAndDeleteImages];
 }
 
 - (NSArray *)readDeletedItemIds
@@ -493,16 +518,6 @@
     NSLog(@"deletedItemIds.csv path: %@", path.path);
     NSLog(@"file content length: %ld", [[NSFileManager defaultManager] contentsAtPath:path.path].length);
     return [NSArray arrayWithContentsOfCSVURL:path];
-}
-
-- (void)printDeletedItemIds
-{
-    NSArray *a = [self readDeletedItemIds];
-    for (NSArray *i in a) {
-        if (i[0]) {
-            NSLog(@"deletedId: %@", i[0]);
-        }
-    }
 }
 
 
