@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D4C0270A11394244ACACEE02 /* libPods-stilFresh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */; };
+		EE1547BF19E608E8004B6EDC /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EE1547BE19E608E8004B6EDC /* CHCSVParser.m */; };
 		EE3EC78919DF98C400CA09F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78819DF98C400CA09F8 /* main.m */; };
 		EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */; };
 		EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE3EC79619DF98C400CA09F8 /* Images.xcassets */; };
@@ -40,6 +41,8 @@
 		C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stilFresh.release.xcconfig"; path = "Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh.release.xcconfig"; sourceTree = "<group>"; };
 		D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stilFresh.debug.xcconfig"; path = "Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh.debug.xcconfig"; sourceTree = "<group>"; };
 		E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stilFresh.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE1547BD19E608E8004B6EDC /* CHCSVParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
+		EE1547BE19E608E8004B6EDC /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
 		EE3EC78319DF98C400CA09F8 /* stilFresh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stilFresh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE3EC78719DF98C400CA09F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE3EC78819DF98C400CA09F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -136,6 +139,8 @@
 				EE3EC7C219DF995100CA09F8 /* SFView.m */,
 				EE63B26319E384A200C871C0 /* SFItem.h */,
 				EE63B26419E384A200C871C0 /* SFItem.m */,
+				EE1547BD19E608E8004B6EDC /* CHCSVParser.h */,
+				EE1547BE19E608E8004B6EDC /* CHCSVParser.m */,
 				EE3EC79619DF98C400CA09F8 /* Images.xcassets */,
 				EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */,
 				EE3EC78619DF98C400CA09F8 /* Supporting Files */,
@@ -323,6 +328,7 @@
 				EE63B26519E384A200C871C0 /* SFItem.m in Sources */,
 				EE3EC78919DF98C400CA09F8 /* main.m in Sources */,
 				EE3EC7C619DF995100CA09F8 /* SFRootViewCtl.m in Sources */,
+				EE1547BF19E608E8004B6EDC /* CHCSVParser.m in Sources */,
 				EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */,
 				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,

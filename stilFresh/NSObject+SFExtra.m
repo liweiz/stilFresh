@@ -233,4 +233,14 @@
     return newImage;
 }
 
+- (NSURL *)getFileBaseUrl
+{
+    NSError *err;
+    NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
+    if (err) {
+        return nil;
+    }
+    return libraryDirectory;
+}
+
 @end

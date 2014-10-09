@@ -29,4 +29,6 @@
 
 - (UIImage *)convertImageToGrayscale:(UIImage *)image;
 
+- (NSURL *)getFileBaseUrl;
+
 @end

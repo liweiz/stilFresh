@@ -10,6 +10,7 @@
 #import "SFItem.h"
 #import "NSObject+SFExtra.h"
 
+
 @interface SFRootViewCtl ()
 
 @end
@@ -162,6 +163,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endTableChange) name:@"endTableChange" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"deleteItem" object:nil];
+    
+    // Create a CSV file in NSLibraryDirectory to store all the deleted items' itemIds to locate and delete their corresponding image files.
+    [self setupCSVForDeletedItem];
 }
 
 // Save calendar date as a string. Reason:http://stackoverflow.com/questions/7054411/determining-day-components-of-an-nsdate-object-time-zone-issues
@@ -244,14 +248,12 @@
     }
 }
 
+
+
 - (BOOL)saveImage:(UIImage *)img fileName:(NSString *)name
 {
     // Save file name to Core Data. Don't store absolute paths.
-    NSError *err;
-    NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
-    if (err) {
-        return NO;
-    }
+    NSURL *libraryDirectory = [self getFileBaseUrl];
     NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
     // Convert to grayscale image to avoid extra process later.
     UIImage *img0 = [self convertImageToGrayscale:img];
@@ -261,14 +263,18 @@
     return [data writeToURL:path atomically:YES];
 }
 
+
+
 - (void)deleteItem:(NSNotification *)n
 {
     BOOL errOccured = YES;
     for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
         if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
+            NSString *itemIdToDelete = [i valueForKey:@"itemId"];
             [self.box.ctx deleteObject:i];
             if ([self.box saveToDb]) {
                 errOccured = NO;
+                [self addDeletedItemId:itemIdToDelete];
             }
             break;
         }
@@ -452,6 +458,53 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - add / read deletedItemId to CSV
+- (void)setupCSVForDeletedItem
+{
+    NSURL *libraryDirectory = [self getFileBaseUrl];
+    NSURL *path = [NSURL URLWithString:@"deletedItemIds.csv" relativeToURL:libraryDirectory];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path.path]) {
+        [[NSFileManager defaultManager] createFileAtPath:path.path contents:nil attributes:nil];
+    } else {
+        NSLog(@"NONONO");
+    }
+}
+
+- (void)addDeletedItemId:(NSString *)itemId
+{
+    NSURL *libraryDirectory = [self getFileBaseUrl];
+    NSURL *path = [NSURL URLWithString:@"deletedItemIds.csv" relativeToURL:libraryDirectory];
+    CHCSVWriter *w;
+    if ([[NSFileManager defaultManager] contentsAtPath:path.path].length == 0) {
+        w = [[CHCSVWriter alloc] initForWritingToCSVFile:path.path append:NO];
+    } else {
+        w = [[CHCSVWriter alloc] initForWritingToCSVFile:path.path append:YES];
+    }
+    [w writeField:itemId];
+    [w finishLine];
+    [self printDeletedItemIds];
+}
+
+- (NSArray *)readDeletedItemIds
+{
+    NSURL *libraryDirectory = [self getFileBaseUrl];
+    NSURL *path = [NSURL URLWithString:@"deletedItemIds.csv" relativeToURL:libraryDirectory];
+    NSLog(@"deletedItemIds.csv path: %@", path.path);
+    NSLog(@"file content length: %ld", [[NSFileManager defaultManager] contentsAtPath:path.path].length);
+    return [NSArray arrayWithContentsOfCSVURL:path];
+}
+
+- (void)printDeletedItemIds
+{
+    NSArray *a = [self readDeletedItemIds];
+    for (NSArray *i in a) {
+        if (i[0]) {
+            NSLog(@"deletedId: %@", i[0]);
+        }
+    }
+}
+
 
 /*
 #pragma mark - Navigation

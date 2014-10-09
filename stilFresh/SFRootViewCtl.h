@@ -11,8 +11,9 @@
 #import "SFTableViewController.h"
 #import "SFView.h"
 #import "SFCamViewCtl.h"
+#import "CHCSVParser.h"
 
-@interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate>
+@interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate, CHCSVParserDelegate>
 
 @property (assign, nonatomic) CGRect appRect;
 @property (strong, nonatomic) SFBox *box;
