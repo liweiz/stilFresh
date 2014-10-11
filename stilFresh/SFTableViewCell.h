@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "SFBox.h"
+#import "SFTimeLine.h"
 
 @interface SFTableViewCell : UITableViewCell
 
@@ -36,5 +37,10 @@
 @property (strong, nonatomic) UIView *deleteBtn;
 @property (strong, nonatomic) UITapGestureRecognizer *deleteTap;
 @property (strong, nonatomic) NSMutableString *itemId;
+@property (strong, nonatomic) SFTimeLine *timeLine;
+
+@property (strong, nonatomic) NSDate *dateAddedTL;
+@property (strong, nonatomic) NSDate *bestBeforeTL;
+@property (strong, nonatomic) NSDate *todayTL;
 
 @end

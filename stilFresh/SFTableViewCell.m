@@ -30,6 +30,10 @@
 @synthesize bottomLine;
 @synthesize number;
 @synthesize text;
+@synthesize timeLine;
+@synthesize dateAddedTL;
+@synthesize bestBeforeTL;
+@synthesize todayTL;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -137,6 +141,16 @@
             self.notes.textColor = [UIColor whiteColor];
             [self.status addSubview:self.notes];
         }
+        if (!self.timeLine) {
+            self.timeLine = [[SFTimeLine alloc] initWithFrame:CGRectMake(0, 0, 30, self.frame.size.height)];
+            self.timeLine.box = self.box;
+            [self.contentView addSubview:self.timeLine];
+            self.status.frame = CGRectMake(self.timeLine.frame.size.width, self.status.frame.origin.y, self.status.frame.size.width, self.status.frame.size.height);
+        }
+        self.timeLine.dateAdded = self.dateAddedTL;
+        self.timeLine.bestBefore = self.bestBeforeTL;
+        self.timeLine.today = self.todayTL;
+        [self.timeLine reset];
         if (!self.dateAdded) {
             self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + gap1, self.notes.frame.size.width, 44)];
             [self setupTextField:self.dateAdded];

@@ -98,6 +98,11 @@
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
+    if (self.isForCard) {
+        cell.dateAddedTL = [self stringToDate:[managedObject valueForKey:@"dateAdded"]];
+        cell.bestBeforeTL = [self stringToDate:[managedObject valueForKey:@"bestBefore"]];
+        cell.todayTL = [self stringToDate:[self dateToString:[NSDate date]]];
+    }
     [cell layoutIfNeeded];
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         NSError *err;
@@ -129,6 +134,7 @@
         cell.bestBefore.text = [self addHyphensToDateString:[managedObject valueForKey:@"bestBefore"]];
         cell.daysLeft.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
+        
     } else {
         cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         cell.text.text = [managedObject valueForKey:@"notes"];

@@ -516,9 +516,13 @@
     NSURL *libraryDirectory = [self getFileBaseUrl];
     NSURL *path = [NSURL URLWithString:@"deletedItemIds.csv" relativeToURL:libraryDirectory];
     NSLog(@"deletedItemIds.csv path: %@", path.path);
-    NSLog(@"file content length: %ld", [[NSFileManager defaultManager] contentsAtPath:path.path].length);
+    NSLog(@"file content length: %ld", (unsigned long)[[NSFileManager defaultManager] contentsAtPath:path.path].length);
     return [NSArray arrayWithContentsOfCSVURL:path];
 }
+
+#pragma mark - timeLine
+
+
 
 
 /*

@@ -13,7 +13,7 @@
 #import "SFCamViewCtl.h"
 #import "CHCSVParser.h"
 
-@interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate, CHCSVParserDelegate>
+@interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate>
 
 @property (assign, nonatomic) CGRect appRect;
 @property (strong, nonatomic) SFBox *box;
@@ -40,5 +40,6 @@
 @property (strong, nonatomic) UICollectionViewController *itemViewCtl;
 
 @property (strong, nonatomic) UILabel *warning;
+
 
 @end
