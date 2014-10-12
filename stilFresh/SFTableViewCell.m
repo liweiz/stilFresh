@@ -145,7 +145,6 @@
             self.timeLine = [[SFTimeLine alloc] initWithFrame:CGRectMake(0, 0, 30, self.frame.size.height)];
             self.timeLine.box = self.box;
             [self.contentView addSubview:self.timeLine];
-            self.status.frame = CGRectMake(self.timeLine.frame.size.width, self.status.frame.origin.y, self.status.frame.size.width, self.status.frame.size.height);
         }
         self.timeLine.dateAdded = self.dateAddedTL;
         self.timeLine.bestBefore = self.bestBeforeTL;
@@ -164,7 +163,9 @@
         }
         
         if (!self.deleteBtn) {
-            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width - 44) / 2, self.frame.size.height - 20 - 44, 44, 44)];
+            CGFloat gap1 = 10;
+            CGFloat w1 = 44;
+            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width - gap1 - w1, gap1, w1, w1)];
             self.deleteBtn.backgroundColor = [UIColor redColor];
             self.deleteBtn.alpha = self.textBackGroundAlpha;
             [self.status addSubview:self.deleteBtn];
@@ -172,8 +173,11 @@
             [self.deleteBtn addGestureRecognizer:self.deleteTap];
         }
         if (!self.daysLeft) {
-            
-            self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.frame.size.height / 2, self.bestBefore.frame.size.width, self.frame.size.height / 2 - self.deleteBtn.frame.size.height - 20 * 2)];
+            CGFloat gap1 = 15;
+            CGFloat w1 = 150;
+            CGFloat h1 = 90;
+            self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake(self.frame.size.width - gap1 - w1, self.frame.size.height - gap1 - h1, w1, h1)];
+            self.daysLeft.textAlignment = NSTextAlignmentRight;
             [self setupTextField:self.daysLeft];
             self.daysLeft.font = [UIFont boldSystemFontOfSize:90];
             [self.status addSubview:self.daysLeft];
@@ -198,7 +202,6 @@
 {
     f.backgroundColor = [UIColor clearColor];
     f.font = [UIFont systemFontOfSize:34];
-    f.textAlignment = NSTextAlignmentCenter;
     f.textColor = [UIColor whiteColor];
     f.userInteractionEnabled = NO;
 }
