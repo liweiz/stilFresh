@@ -130,8 +130,8 @@
     }
     if (self.isForCard) {
         cell.notes.text = [managedObject valueForKey:@"notes"];
-        cell.dateAdded.text = [self addHyphensToDateString:[managedObject valueForKey:@"dateAdded"]];
-        cell.bestBefore.text = [self addHyphensToDateString:[managedObject valueForKey:@"bestBefore"]];
+//        cell.dateAdded.text = [self addHyphensToDateString:[managedObject valueForKey:@"dateAdded"]];
+//        cell.bestBefore.text = [self addHyphensToDateString:[managedObject valueForKey:@"bestBefore"]];
         cell.daysLeft.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
         

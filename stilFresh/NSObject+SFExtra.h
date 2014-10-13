@@ -30,5 +30,6 @@
 - (UIImage *)convertImageToGrayscale:(UIImage *)image;
 
 - (NSURL *)getFileBaseUrl;
+- (NSString *)displayDateString:(NSString *)date;
 
 @end

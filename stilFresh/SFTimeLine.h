@@ -25,12 +25,6 @@
 @property (assign, nonatomic) CGFloat timeLineWidth;
 @property (assign, nonatomic) CGFloat singleLineHeight;
 @property (assign, nonatomic) CGFloat labelWidth;
-@property (strong, nonatomic) UILabel *bestBeforeL;
-@property (strong, nonatomic) UILabel *bestBeforeIntro;
-@property (strong, nonatomic) UILabel *dateAddedL;
-@property (strong, nonatomic) UILabel *dateAddedIntro;
-@property (strong, nonatomic) UILabel *todayL;
-@property (strong, nonatomic) UILabel *todayIntro;
 @property (assign, nonatomic) CGFloat radiusS;
 @property (assign, nonatomic) CGFloat radiusL;
 

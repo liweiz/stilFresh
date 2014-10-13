@@ -142,7 +142,7 @@
             [self.status addSubview:self.notes];
         }
         if (!self.timeLine) {
-            self.timeLine = [[SFTimeLine alloc] initWithFrame:CGRectMake(0, 0, 30, self.frame.size.height)];
+            self.timeLine = [[SFTimeLine alloc] initWithFrame:CGRectMake(0, 0, 100, self.frame.size.height)];
             self.timeLine.box = self.box;
             [self.contentView addSubview:self.timeLine];
         }

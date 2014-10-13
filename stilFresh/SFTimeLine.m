@@ -21,12 +21,6 @@
 @synthesize timeLineWidth;
 @synthesize axisPoint;
 @synthesize timeLineHeight;
-@synthesize bestBeforeIntro;
-@synthesize bestBeforeL;
-@synthesize dateAddedIntro;
-@synthesize dateAddedL;
-@synthesize todayIntro;
-@synthesize todayL;
 @synthesize singleLineHeight;
 @synthesize labelWidth;
 
@@ -36,9 +30,15 @@
     if (self) {
         // Initialization code
         self.dateSequence = [NSMutableArray arrayWithCapacity:0];
-        self.axisPoint = CGPointMake(30, 30);
-        self.timeLineWidth = 5;
+        self.axisPoint = CGPointMake(120, 30);
+        self.timeLineHeight = self.frame.size.height - self.axisPoint.y * 2;
+        self.timeLineWidth = 3;
+        self.singleLineHeight = 30;
+        self.labelWidth = 120;
+        self.radiusS = 3;
+        self.radiusL = 7;
         self.backgroundColor = [UIColor clearColor];
+        self.clipsToBounds = NO;
     }
     return self;
 }
@@ -48,91 +48,78 @@
     for (UIView *x in self.subviews) {
         [x removeFromSuperview];
     }
-    [self.dateSequence setArray:[self placeDatesInOrder]];
     [self addTimeLineBase];
-    if (self.bbBaseView) {
-//        [self addColorToTimeLineBeforeBb];
-        
-    }
+    [self.dateSequence setArray:[self placeDatesInOrder]];
+    [self addContentAtStartPoint:self.axisPoint height:self.timeLineHeight];
 }
-
-
-
 
 - (void)addTimeLineBase
 {
-    CGFloat h1 = [self getTimeLineHeightRatioBeforeBestBefore];
-    CGFloat height = self.frame.size.height - self.gapY * 2;
-    if (h1 == 0) {
-        // Only timeLine after bestBefore needed.
-        self.afterBbBaseView = [[UIView alloc] initWithFrame:CGRectMake(self.gapX, self.gapY, self.timeLineWidth, height)];
-        self.afterBbBaseView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:self.afterBbBaseView];
-    } else if (h1 < 1) {
-        CGFloat h2 = 1 - h1;
-        self.bbBaseView = [[UIView alloc] initWithFrame:CGRectMake(self.gapX, self.gapY, self.timeLineWidth, height * h1)];
-        self.bbBaseView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:self.bbBaseView];
-        self.afterBbBaseView = [[UIView alloc] initWithFrame:CGRectMake(self.gapX, self.gapY + self.bbBaseView.frame.size.height, self.timeLineWidth, height * h2)];
-        self.afterBbBaseView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:self.afterBbBaseView];
-    } else {
-        // No timeLine after bestBefore needed.
-        self.bbBaseView = [[UIView alloc] initWithFrame:CGRectMake(self.gapX, self.gapY, self.timeLineWidth, height * h1)];
-        self.bbBaseView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:self.bbBaseView];
-    }
-    [self addDots:h1];
+    UIView *base = [[UIView alloc] initWithFrame:CGRectMake(self.axisPoint.x - self.timeLineWidth / 2, self.axisPoint.y, self.timeLineWidth, self.timeLineHeight)];
+    [self addSubview:base];
+    base.backgroundColor = [UIColor whiteColor];
 }
 
-- (void)addDots:(CGFloat)bbBaseViewHeightRatio
+// Use axis point
+- (void)addContentAtStartPoint:(CGPoint)p height:(CGFloat)h
 {
-    CGFloat w = 15;
-    CGPoint p0 = CGPointMake(self.gapX + self.timeLineWidth / 2 - w / 2, self.gapY - w / 2);
-    CGFloat x1 = p0.x + w / 2 / 2;
-    CGFloat h = self.frame.size.height - self.gapY * 2;
-    NSArray *a;
-    if (bbBaseViewHeightRatio == 0) {
-        UIView *d0 = [self createADot:w at:p0];
-        UIView *d1 = [self createADot:w at:CGPointMake(p0.x, p0.y + h)];
-        a = [NSArray arrayWithObjects:d0, d1, nil];
-    } else if (bbBaseViewHeightRatio == 1) {
-        UIView *d0 = [self createADot:w at:p0];
-        UIView *d1 = [self createADot:w / 2 at:CGPointMake(x1, p0.y + h * bbBaseViewHeightRatio / 3)];
-        UIView *d2 = [self createADot:w / 2 at:CGPointMake(x1, p0.y + h * bbBaseViewHeightRatio * 2 / 3)];
-        UIView *d3 = [self createADot:w at:CGPointMake(p0.x, p0.y + h * bbBaseViewHeightRatio)];
-        UIView *d4 = [self createADot:w at:CGPointMake(p0.x, p0.y + h)];
-        a = [NSArray arrayWithObjects:d0, d1, d2, d3, d4, nil];
-    } else {
-        UIView *d0 = [self createADot:w at:p0];
-        UIView *d1 = [self createADot:w / 2 at:CGPointMake(x1, p0.y + h / 3)];
-        UIView *d2 = [self createADot:w / 2 at:CGPointMake(x1, p0.y + h * 2 / 3)];
-        UIView *d3 = [self createADot:w at:CGPointMake(p0.x, p0.y + h)];
-        a = [NSArray arrayWithObjects:d0, d1, d2, d3, nil];
-    }
-    for (UIView *i in a) {
-        [self addSubview:i];
-    }
-}
-
-
-
-- (void)addLabels
-{
-    CGFloat w = 15;
-    CGPoint p0 = CGPointMake(self.gapX + self.timeLineWidth / 2 - w / 2, self.gapY - w / 2);
-    CGFloat x1 = p0.x + w / 2 / 2;
-    CGFloat h = self.frame.size.height - self.gapY * 2;
-    NSArray *a;
+    NSArray *r = [self allLargePointsRatios];
+    NSArray *pp = [self allLargePoints:r startPoint:p height:h];
+    CGFloat g = 10;
     if ([self.dateSequence count] == 3) {
-        self.dateAddedIntro = [UILabel alloc] initWithFrame:<#(CGRect)#>
+        NSInteger i = 0;
+        for (NSDate *d in self.dateSequence) {
+            NSString *s = [self contentMatch:d];
+            [self addOneLargeDotSet:[(NSValue *)pp[i] CGPointValue] lines:1 gap:g text1:s text2:[self displayDateString:[self dateToString:d]]];
+            i++;
+        }
+    } else if ([self.dateSequence count] == 2) {
+        if ([self.dateSequence[0] isKindOfClass:[NSDate class]]) {
+            // One line
+            NSString *s = [self contentMatch:self.dateSequence[0]];
+            [self addOneLargeDotSet:[pp[0] CGPointValue] lines:1 gap:g text1:s text2:[self dateToString:self.dateSequence[0]]];
+            // Two line
+            NSString *ss0 = [self contentMatch:self.dateSequence[1][0]];
+            NSString *ss1 = [self contentMatch:self.dateSequence[1][1]];
+            NSString *ss = [[ss0 stringByAppendingString:@"\n"] stringByAppendingString:ss1];
+            [self addOneLargeDotSet:[pp[1] CGPointValue] lines:2 gap:g text1:ss text2:[self displayDateString:[self dateToString:self.dateSequence[1][0]]]];
+        } else {
+            // Two line
+            NSString *ss0 = [self contentMatch:self.dateSequence[0][0]];
+            NSString *ss1 = [self contentMatch:self.dateSequence[0][1]];
+            NSString *ss = [[ss0 stringByAppendingString:@"\n"] stringByAppendingString:ss1];
+            [self addOneLargeDotSet:[pp[0] CGPointValue] lines:2 gap:g text1:ss text2:[self displayDateString:[self dateToString:self.dateSequence[0][0]]]];
+            // One line
+            NSString *s = [self contentMatch:self.dateSequence[1]];
+            [self addOneLargeDotSet:[pp[1] CGPointValue] lines:1 gap:g text1:s text2:[self displayDateString:[self dateToString:self.dateSequence[1]]]];
+        }
+    } else if ([self.dateSequence count] == 1) {
+        // Three line
+        NSString *ss0 = [self contentMatch:self.dateSequence[0][0]];
+        NSString *ss1 = [self contentMatch:self.dateSequence[0][1]];
+        NSString *ss2 = [self contentMatch:self.dateSequence[0][2]];
+        NSString *ss = [[[[ss0 stringByAppendingString:@"\n"] stringByAppendingString:ss1] stringByAppendingString:@"\n"] stringByAppendingString:ss2];
+        [self addOneLargeDotSet:[pp[0] CGPointValue] lines:3 gap:g text1:ss text2:[self displayDateString:[self dateToString:self.dateSequence[0][0]]]];
     }
 }
 
+- (NSString *)contentMatch:(NSDate *)d
+{
+    if ([d isEqual:self.dateAdded]) {
+        return @"Purchased on";
+    } else if ([d isEqual:self.bestBefore]) {
+        return @"Best before";
+    } else if ([d isEqual:self.today]) {
+        return @"Today";
+    }
+    return nil;
+}
+
+// Use axis point
 - (void)addOneLargeDotSet:(CGPoint)p lines:(NSInteger)n gap:(CGFloat)g text1:(NSString *)t1 text2:(NSString *)t2
 {
-    CGPoint a0 = [self getDotOriginX:p.x y:p.y width:self.radiusL];
-    UIView *d0 = [self createADot:self.radiusS at:a0];
+    CGPoint a0 = [self getDotOriginX:p.x y:p.y width:self.radiusL * 2];
+    UIView *d0 = [self createADot:self.radiusL * 2 at:a0];
     [self addSubview:d0];
     CGFloat h;
     if (n == 1) {
@@ -144,12 +131,10 @@
     }
     CGPoint a1 = [self getLeftLabelOriginX:p.x y:p.y height:h gap:g];
     UILabel *d1 = [self createLeftLabel:h at:a1];
-    d1.backgroundColor = [UIColor clearColor];
     d1.text = t1;
     [self addSubview:d1];
     CGPoint a2 = [self getRightLabelOriginX:p.x y:p.y height:h gap:g];
     UILabel *d2 = [self createRightLabel:h at:a2];
-    d2.backgroundColor = [UIColor clearColor];
     d2.text = t2;
     [self addSubview:d2];
 }
@@ -157,12 +142,12 @@
 - (void)addSmallDots:(NSArray *)a
 {
     if ([a count] == 3) {
-        CGPoint a00 = (CGPoint)a[0];
+        CGPoint a00 = [(NSValue *)a[0] CGPointValue];
         CGPoint a0 = [self getDotOriginX:a00.x y:a00.y width:self.radiusS];
         UIView *d0 = [self createADot:self.radiusS at:a0];
         d0.backgroundColor = [UIColor whiteColor];
         [self addSubview:d0];
-        CGPoint a01 = (CGPoint)a[1];
+        CGPoint a01 = [(NSValue *)a[1] CGPointValue];
         CGPoint a1 = [self getDotOriginX:a01.x y:a01.y width:self.radiusS];
         UIView *d1 = [self createADot:self.radiusS at:a1];
         d1.backgroundColor = [UIColor whiteColor];
@@ -174,6 +159,7 @@
 {
     UILabel *l = [[UILabel alloc] initWithFrame:CGRectMake(origin.x, origin.y, self.labelWidth, height)];
     l.backgroundColor = [UIColor clearColor];
+    l.textColor = [UIColor whiteColor];
     l.textAlignment = NSTextAlignmentRight;
     return l;
 }
@@ -182,6 +168,7 @@
 {
     UILabel *l = [[UILabel alloc] initWithFrame:CGRectMake(origin.x, origin.y, self.labelWidth, height)];
     l.backgroundColor = [UIColor clearColor];
+    l.textColor = [UIColor whiteColor];
     l.textAlignment = NSTextAlignmentLeft;
     return l;
 }
@@ -210,69 +197,47 @@
 
 - (CGPoint)getDotOriginX:(CGFloat)x y:(CGFloat)y width:(CGFloat)w
 {
-    CGFloat xx = x - w;
-    CGFloat yy = y - w;
+    CGFloat xx = x - w / 2;
+    CGFloat yy = y - w / 2;
     return CGPointMake(xx, yy);
 }
 
-- (CGPoint)getTodayPoint
+
+
+//// Today is not a fixed point.
+//- (NSArray *)getFixedPointsOnBestBefore
+//{
+//    CGFloat ratio = [self getTimeLineHeightRatioBeforeBestBefore];
+//    if (ratio != 0 && ratio != 1) {
+//        NSValue *p1 = [NSValue valueWithCGPoint:CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height / 3)];
+//        NSValue *p2 = [NSValue valueWithCGPoint:CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height * 2 / 3)];
+//        NSValue *p3 = [NSValue valueWithCGPoint:CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height)];
+//        return [NSArray arrayWithObjects:p1, p2, p3, nil];
+//    }
+//    return nil;
+//}
+
+- (NSArray *)allLargePoints:(NSArray *)ratioArray startPoint:(CGPoint)p height:(CGFloat)h
+{
+    NSMutableArray *a = [NSMutableArray arrayWithCapacity:0];
+    for (NSNumber *n in ratioArray) {
+        [a addObject:[NSValue valueWithCGPoint:CGPointMake(p.x, p.y + h * n.floatValue)]];
+    }
+    return a;
+}
+
+- (NSArray *)allLargePointsRatios
 {
     if ([self.dateSequence count] == 3) {
-        if ([self.dateSequence[0] isEqual:self.today]) {
-            return self.axisPoint;
-        } else if ([self.dateSequence[2] isEqual:self.today]) {
-            return CGPointMake(self.axisPoint.x, self.axisPoint.y + self.timeLineHeight);
-        } else {
-            CGFloat r = [self getTodayRatio];
-            return CGPointMake(self.axisPoint.x, self.axisPoint.y + self.timeLineHeight * r);
-        }
-    }
-}
-
-// Today is not a fixed point.
-- (NSArray *)getFixedPointsOnBestBefore
-{
-    CGFloat ratio = [self getTimeLineHeightRatioBeforeBestBefore];
-    if (ratio != 0 && ratio != 1) {
-        CGPoint p1 = CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height / 3);
-        CGPoint p2 = CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height * 2 / 3);
-        CGPoint p3 = CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height);
-        return NSArray arrayWithObjects:p1, p2, p3, nil];
-    }
-    return nil;
-}
-
-// This only happens when today is between the other two.
-- (CGFloat)getTodayRatio
-{
-    if ([self.dateSequence count] == 3 && [self.dateSequence[1] isEqual:self.today]) {
         NSInteger base = [self getDaysLeftFrom:self.dateSequence[0] to:self.dateSequence[2]];
         NSInteger mid = [self getDaysLeftFrom:self.dateSequence[0] to:self.dateSequence[1]];
-        return (CGFloat)mid / base;
+        CGFloat r = (CGFloat)mid / base;
+        return [NSArray arrayWithObjects:[NSNumber numberWithFloat:0], [NSNumber numberWithFloat:r], [NSNumber numberWithFloat:1], nil];
+    } else if ([self.dateSequence count] == 2) {
+        return [NSArray arrayWithObjects:[NSNumber numberWithFloat:0], [NSNumber numberWithFloat:1], nil];
+    } else {
+        return [NSArray arrayWithObject:[NSNumber numberWithFloat:0]];
     }
-    return 0;
-}
-
-- (CGFloat)getTimeLineHeightRatioBeforeBestBefore
-{
-    // Proceed only when bestBefore is not the earliest time.
-    if ([self.dateSequence count] > 1 && ![self.dateSequence[0] isEqual:self.bestBefore]) {
-        if ([self.dateSequence count] == 3) {
-            if ([self.dateSequence[2] isEqual:self.bestBefore]) {
-                return 1;
-            } else {
-                NSInteger base = [self getDaysLeftFrom:self.dateSequence[0] to:self.dateSequence[2]];
-                NSInteger mid = [self getDaysLeftFrom:self.dateSequence[0] to:self.dateSequence[1]];
-                return (CGFloat)mid / base;
-            }
-        } else if ([self.dateSequence[0] isKindOfClass:[NSArray class]]) {
-            // Implicitly means: [self.dateSequence count] == 2 here
-            if ([(NSArray *)self.dateSequence[1] containsObject:self.bestBefore]) {
-                return 1;
-            }
-        }
-    }
-    return 0;
 }
 
 // Find out the sequence of all dates.
