@@ -180,6 +180,7 @@
 {
     [self.cardViewCtl.tableView scrollToRowAtIndexPath:self.listViewCtl.tableView.indexPathForSelectedRow atScrollPosition:UITableViewScrollPositionTop animated:NO];
     self.cardViewCtl.tableView.hidden = NO;
+    [self.cardViewCtl resetZViews:self.listViewCtl.tableView.indexPathForSelectedRow.row];
     [self.cardViewCtl.tableView.superview bringSubviewToFront:self.cardViewCtl.tableView];
     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
 }
@@ -449,9 +450,11 @@
     BOOL errOccured = YES;
     for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
         if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
+            NSInteger n = [self.box.fResultsCtl.fetchedObjects indexOfObject:i];
             NSString *itemIdToDelete = [i valueForKey:@"itemId"];
             [self.box.ctx deleteObject:i];
             if ([self.box saveToDb]) {
+                [self.cardViewCtl respondToChangeZViews:n];
                 errOccured = NO;
                 [self addDeletedItemId:itemIdToDelete];
             }

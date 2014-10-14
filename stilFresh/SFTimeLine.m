@@ -65,7 +65,7 @@
 {
     NSArray *r = [self allLargePointsRatios];
     NSArray *pp = [self allLargePoints:r startPoint:p height:h];
-    CGFloat g = 10;
+    CGFloat g = 15;
     if ([self.dateSequence count] == 3) {
         NSInteger i = 0;
         for (NSDate *d in self.dateSequence) {

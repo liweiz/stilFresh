@@ -12,6 +12,7 @@
 #import "NSObject+SFExtra.h"
 #import "Haneke.h"
 #import "HNKCache.h"
+#import "SFCellCover.h"
 
 @interface SFTableViewController ()
 
@@ -21,7 +22,8 @@
 
 @synthesize box;
 @synthesize isForCard;
-
+@synthesize cellHeight;
+@synthesize zViews;
 
 - (void)loadView
 {
@@ -45,6 +47,7 @@
         self.tableView.pagingEnabled = YES;
         self.tableView.bounces = YES;
         self.tableView.allowsSelection = NO;
+        self.zViews = [NSMutableArray arrayWithCapacity:0];
     } else {
         self.tableView.rowHeight = self.box.appRect.size.height / 5;
     }
@@ -67,6 +70,59 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - z-axis tableViewCell
+
+- (void)refreshZViews
+{
+    [self.zViews removeAllObjects];
+    for (NSManagedObject *o in self.box.fResultsCtl.fetchedObjects) {
+        SFCellCover *c = [[SFCellCover alloc] initWithFrame:self.box.appRect];
+        c.box = self.box;
+        c.dateAddedTL = [self stringToDate:[o valueForKey:@"dateAdded"]];
+        c.bestBeforeTL = [self stringToDate:[o valueForKey:@"bestBefore"]];
+        c.todayTL = [self stringToDate:[self dateToString:[NSDate date]]];
+        [c addContent];
+        c.alpha = 0;
+        [self.tableView addSubview:c];
+        [self.zViews addObject:c];
+    }
+}
+
+- (void)respondToChangeZViews:(NSInteger)rowNo
+{
+    [self refreshZViews];
+    for (SFCellCover *c in self.zViews) {
+        if ([self.zViews indexOfObject:c] == rowNo) {
+            c.alpha = 1;
+        } else {
+            c.alpha = 0;
+        }
+    }
+}
+
+- (void)resetZViews:(NSInteger)rowNo
+{
+    for (SFCellCover *c in self.zViews) {
+        if ([self.zViews indexOfObject:c] == rowNo) {
+            c.alpha = 1;
+        } else {
+            c.alpha = 0;
+        }
+    }
+}
+
+- (void)alphaChangeOnZViews:(CGFloat)scrollViewOffsetY cellHeight:(CGFloat)h
+{
+    CGFloat r0 = scrollViewOffsetY / h;
+    NSInteger i = ceilf(r0);
+    CGFloat r1 = fmodf(scrollViewOffsetY, h) / h;
+    
+    [self.zViews[i] setAlpha:1 - r1];
+    if (i > 1 && i <= [self.zViews count]) {
+        [self.zViews[i] setAlpha:r1];
+    }
 }
 
 #pragma mark - Table view data source
@@ -98,11 +154,6 @@
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
-    if (self.isForCard) {
-        cell.dateAddedTL = [self stringToDate:[managedObject valueForKey:@"dateAdded"]];
-        cell.bestBeforeTL = [self stringToDate:[managedObject valueForKey:@"bestBefore"]];
-        cell.todayTL = [self stringToDate:[self dateToString:[NSDate date]]];
-    }
     [cell layoutIfNeeded];
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         NSError *err;
@@ -138,6 +189,9 @@
     } else {
         cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         cell.text.text = [managedObject valueForKey:@"notes"];
+    }
+    if (self.cellHeight == 0) {
+        self.cellHeight = cell.frame.size.height;
     }
     return cell;
 }
@@ -187,14 +241,25 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 }
 */
 
-/*
-#pragma mark - Navigation
+#pragma mark - Table view delegate
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
 }
-*/
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+#pragma mark - scroll view delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (self.isForCard) {
+        [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.cellHeight];
+    }
+}
 
 @end
