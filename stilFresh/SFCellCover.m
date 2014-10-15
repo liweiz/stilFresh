@@ -15,6 +15,8 @@
 @synthesize dateAddedTL;
 @synthesize bestBeforeTL;
 @synthesize todayTL;
+@synthesize daysLeftIndicator;
+@synthesize stringDaysLeft;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -38,6 +40,18 @@
     self.timeLine.bestBefore = self.bestBeforeTL;
     self.timeLine.today = self.todayTL;
     [self.timeLine reset];
+    if (!self.daysLeftIndicator) {
+        CGFloat gap1 = 15;
+        CGFloat w1 = 150;
+        CGFloat h1 = 90;
+        self.daysLeftIndicator = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - gap1 - w1, self.frame.size.height - gap1 - h1, w1, h1)];
+        self.daysLeftIndicator.textAlignment = NSTextAlignmentRight;
+        self.daysLeftIndicator.backgroundColor = [UIColor clearColor];
+        self.daysLeftIndicator.textColor = [UIColor whiteColor];
+        self.daysLeftIndicator.font = [UIFont boldSystemFontOfSize:90];
+        [self addSubview:self.daysLeftIndicator];
+    }
+    self.daysLeftIndicator.text = self.stringDaysLeft;
 }
 
 /*

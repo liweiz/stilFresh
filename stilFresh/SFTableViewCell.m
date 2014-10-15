@@ -20,9 +20,6 @@
 @synthesize textBackGroundColor;
 @synthesize textBackGroundAlpha;
 @synthesize notes;
-@synthesize bestBefore;
-@synthesize daysLeft;
-@synthesize dateAdded;
 @synthesize deleteBtn;
 @synthesize deleteTap;
 @synthesize itemId;
@@ -139,17 +136,6 @@
             [self.status addSubview:self.notes];
         }
         
-        if (!self.dateAdded) {
-            self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + gap1, self.notes.frame.size.width, 44)];
-            [self setupTextField:self.dateAdded];
-            
-            [self.status addSubview:self.dateAdded];
-        }
-        if (!self.bestBefore) {
-            self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(gap1, self.dateAdded.frame.origin.y + self.dateAdded.frame.size.height + gap1, self.dateAdded.frame.size.width, self.dateAdded.frame.size.height)];
-            [self setupTextField:self.bestBefore];
-            [self.status addSubview:self.bestBefore];
-        }
         
         if (!self.deleteBtn) {
             CGFloat gap1 = 10;
@@ -160,16 +146,6 @@
             [self.status addSubview:self.deleteBtn];
             self.deleteTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callForDeletion)];
             [self.deleteBtn addGestureRecognizer:self.deleteTap];
-        }
-        if (!self.daysLeft) {
-            CGFloat gap1 = 15;
-            CGFloat w1 = 150;
-            CGFloat h1 = 90;
-            self.daysLeft = [[UITextField alloc] initWithFrame:CGRectMake(self.frame.size.width - gap1 - w1, self.frame.size.height - gap1 - h1, w1, h1)];
-            self.daysLeft.textAlignment = NSTextAlignmentRight;
-            [self setupTextField:self.daysLeft];
-            self.daysLeft.font = [UIFont boldSystemFontOfSize:90];
-            [self.status addSubview:self.daysLeft];
         }
     }
     if (self.pic.image) {

@@ -82,6 +82,7 @@
         c.dateAddedTL = [self stringToDate:[o valueForKey:@"dateAdded"]];
         c.bestBeforeTL = [self stringToDate:[o valueForKey:@"bestBefore"]];
         c.todayTL = [self stringToDate:[self dateToString:[NSDate date]]];
+        c.stringDaysLeft = [NSString stringWithFormat:@"%ld", (long)[[o valueForKey:@"daysLeft"] integerValue]];
         [c addContent];
         c.alpha = 0;
         NSLog(@"frame: %f, %f, %f, %f", self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height);
@@ -209,11 +210,7 @@
     }
     if (self.isForCard) {
         cell.notes.text = [managedObject valueForKey:@"notes"];
-//        cell.dateAdded.text = [self addHyphensToDateString:[managedObject valueForKey:@"dateAdded"]];
-//        cell.bestBefore.text = [self addHyphensToDateString:[managedObject valueForKey:@"bestBefore"]];
-        cell.daysLeft.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
-        
     } else {
         cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         cell.text.text = [managedObject valueForKey:@"notes"];

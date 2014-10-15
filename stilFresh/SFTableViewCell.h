@@ -22,7 +22,6 @@
 // Shared view
 @property (strong, nonatomic) UIImageView *pic;
 
-
 // For list
 @property (assign, nonatomic) NSInteger statusCode;
 @property (strong, nonatomic) UIView *status;
@@ -31,9 +30,6 @@
 @property (strong, nonatomic) UILabel *text;
 // For item detail
 @property (strong, nonatomic) UITextView *notes;
-@property (strong, nonatomic) UITextField *bestBefore;
-@property (strong, nonatomic) UITextField *daysLeft;
-@property (strong, nonatomic) UITextField *dateAdded;
 @property (strong, nonatomic) UIView *deleteBtn;
 @property (strong, nonatomic) UITapGestureRecognizer *deleteTap;
 @property (strong, nonatomic) NSMutableString *itemId;

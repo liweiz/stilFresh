@@ -17,7 +17,8 @@
 @property (strong, nonatomic) NSDate *dateAddedTL;
 @property (strong, nonatomic) NSDate *bestBeforeTL;
 @property (strong, nonatomic) NSDate *todayTL;
-
+@property (strong, nonatomic) UILabel *daysLeftIndicator;
+@property (strong, nonatomic) NSString *stringDaysLeft;
 
 - (void)addContent;
 
