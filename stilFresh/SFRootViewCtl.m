@@ -153,6 +153,7 @@
     [self.interfaceBase addSubview:self.cardViewCtl.tableView];
     [self.cardViewCtl didMoveToParentViewController:self];
 //    self.cardViewCtl.tableView.hidden = YES;
+    [self.cardViewCtl refreshZViews];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCard) name:@"rowSelected" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataForTables) name:@"reloadData" object:nil];
@@ -178,10 +179,13 @@
 
 - (void)showCard
 {
+    self.cardViewCtl.isTransitingFromList = YES;
     [self.cardViewCtl.tableView scrollToRowAtIndexPath:self.listViewCtl.tableView.indexPathForSelectedRow atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    self.cardViewCtl.isTransitingFromList = NO;
     self.cardViewCtl.tableView.hidden = NO;
+    [self.cardViewCtl.tableView.superview sendSubviewToBack:self.cardViewCtl.tableView];
     [self.cardViewCtl resetZViews:self.listViewCtl.tableView.indexPathForSelectedRow.row];
-    [self.cardViewCtl.tableView.superview bringSubviewToFront:self.cardViewCtl.tableView];
+//    [self.cardViewCtl.tableView.superview bringSubviewToFront:self.cardViewCtl.tableView];
     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
 }
 

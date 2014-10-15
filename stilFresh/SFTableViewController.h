@@ -15,11 +15,12 @@
 @interface SFTableViewController : UITableViewController
 
 @property (strong, nonatomic) SFBox *box;
-@property (assign, nonatomic) CGFloat cellHeight;
 @property (assign, nonatomic) BOOL isForCard;
+@property (assign, nonatomic) BOOL isTransitingFromList;
 @property (strong, nonatomic) NSMutableArray *zViews;
 
 - (void)respondToChangeZViews:(NSInteger)rowNo;
+- (void)refreshZViews;
 - (void)resetZViews:(NSInteger)rowNo;
 - (void)alphaChangeOnZViews:(CGFloat)scrollViewOffsetY cellHeight:(CGFloat)h;
 

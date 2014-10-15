@@ -22,7 +22,7 @@
 
 @synthesize box;
 @synthesize isForCard;
-@synthesize cellHeight;
+@synthesize isTransitingFromList;
 @synthesize zViews;
 
 - (void)loadView
@@ -63,7 +63,6 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     [self.tableView reloadData];
-    
 }
 
 
@@ -78,14 +77,18 @@
 {
     [self.zViews removeAllObjects];
     for (NSManagedObject *o in self.box.fResultsCtl.fetchedObjects) {
-        SFCellCover *c = [[SFCellCover alloc] initWithFrame:self.box.appRect];
+        SFCellCover *c = [[SFCellCover alloc] initWithFrame:self.tableView.frame];
         c.box = self.box;
         c.dateAddedTL = [self stringToDate:[o valueForKey:@"dateAdded"]];
         c.bestBeforeTL = [self stringToDate:[o valueForKey:@"bestBefore"]];
         c.todayTL = [self stringToDate:[self dateToString:[NSDate date]]];
         [c addContent];
         c.alpha = 0;
-        [self.tableView addSubview:c];
+        NSLog(@"frame: %f, %f, %f, %f", self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height);
+        if ([self.tableView superview]) {
+            NSLog(@"YES");
+        }
+        [[self.tableView superview] addSubview:c];
         [self.zViews addObject:c];
     }
 }
@@ -115,13 +118,38 @@
 
 - (void)alphaChangeOnZViews:(CGFloat)scrollViewOffsetY cellHeight:(CGFloat)h
 {
-    CGFloat r0 = scrollViewOffsetY / h;
-    NSInteger i = ceilf(r0);
-    CGFloat r1 = fmodf(scrollViewOffsetY, h) / h;
-    
-    [self.zViews[i] setAlpha:1 - r1];
-    if (i > 1 && i <= [self.zViews count]) {
-        [self.zViews[i] setAlpha:r1];
+    if ([self.zViews count] > 0) {
+        CGFloat r0 = scrollViewOffsetY / h;
+        NSInteger i = ceilf(r0);
+        if (r0 - i == 0) {
+            i++;
+        }
+        CGFloat r1 = fmodf(scrollViewOffsetY, h) / h;
+        for (SFCellCover *c in self.zViews) {
+            if (r0 > 0) {
+                if ([self.zViews indexOfObject:c] == i - 1) {
+                    c.alpha = 1 - r1;
+                } else if ([self.zViews indexOfObject:c] == i) {
+                    c.alpha = r1;
+                } else {
+                    c.alpha = 0;
+                }
+            } else if (r0 == 0) {
+                if ([self.zViews indexOfObject:c] == 0) {
+                    c.alpha = 1;
+                } else {
+                    c.alpha = 0;
+                }
+                break;
+            } else {
+                if ([self.zViews indexOfObject:c] == 0) {
+                    c.alpha = 1 + r1;
+                } else {
+                    c.alpha = 0;
+                }
+                break;
+            }
+        }
     }
 }
 
@@ -190,9 +218,6 @@
         cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         cell.text.text = [managedObject valueForKey:@"notes"];
     }
-    if (self.cellHeight == 0) {
-        self.cellHeight = cell.frame.size.height;
-    }
     return cell;
 }
 
@@ -258,8 +283,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (self.isForCard) {
-        [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.cellHeight];
+        if (!self.isTransitingFromList) {
+            [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
+        }
     }
 }
+
+
 
 @end
