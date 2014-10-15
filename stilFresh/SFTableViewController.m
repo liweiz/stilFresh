@@ -154,6 +154,37 @@
     }
 }
 
+#pragma mark - fakeDeleteBtn
+// Use frame of deleteBtn on cell.
+- (void)getFakeDeleteBtn:(CGRect)frame
+{
+    if (!self.fakeDeleteBtn && self.isForCard) {
+        self.fakeDeleteBtn = [[UIImageView alloc] initWithFrame:CGRectMake(frame.origin.x + self.tableView.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height)];
+        self.fakeDeleteBtn.backgroundColor = [UIColor yellowColor];
+        [self.tableView.superview addSubview:self.fakeDeleteBtn];
+    }
+}
+
+- (void)alphaChangeOnFakeDeleteBtn:(CGFloat)scrollViewOffsetY cellHeight:(CGFloat)h
+{
+    // btn is visible in the range of first half of the height of the cell.
+    if ([self.box.fResultsCtl.fetchedObjects count] > 0) {
+        CGFloat r = fmodf(scrollViewOffsetY, h) / h;
+        CGFloat x = 0.25;
+        if (r > 0 && r <= x) {
+            self.fakeDeleteBtn.alpha = 1 - r / x;
+        } else if (r < 0) {
+            self.fakeDeleteBtn.alpha = 1 + r / x;
+        } else if (r >= 1 - x && r < 1) {
+            self.fakeDeleteBtn.alpha = 1 - (1 - r) / x;
+        } else if (r == 0) {
+            self.fakeDeleteBtn.alpha = 1;
+        } else if (r > x && r < 1 - x) {
+            self.fakeDeleteBtn.alpha = 0;
+        }
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -215,6 +246,8 @@
         cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
         cell.text.text = [managedObject valueForKey:@"notes"];
     }
+    // Check and get fakeDeleteBtn ready if necessary.
+    [self getFakeDeleteBtn:cell.deleteBtn.frame];
     return cell;
 }
 
@@ -282,6 +315,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if (self.isForCard) {
         if (!self.isTransitingFromList) {
             [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
+            if (self.fakeDeleteBtn) {
+                [self alphaChangeOnFakeDeleteBtn:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
+            }
         }
     }
 }

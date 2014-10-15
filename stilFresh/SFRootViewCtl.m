@@ -185,7 +185,6 @@
     self.cardViewCtl.tableView.hidden = NO;
     [self.cardViewCtl.tableView.superview sendSubviewToBack:self.cardViewCtl.tableView];
     [self.cardViewCtl resetZViews:self.listViewCtl.tableView.indexPathForSelectedRow.row];
-//    [self.cardViewCtl.tableView.superview bringSubviewToFront:self.cardViewCtl.tableView];
     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
 }
 

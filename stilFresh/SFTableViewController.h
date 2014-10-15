@@ -18,10 +18,13 @@
 @property (assign, nonatomic) BOOL isForCard;
 @property (assign, nonatomic) BOOL isTransitingFromList;
 @property (strong, nonatomic) NSMutableArray *zViews;
+@property (strong, nonatomic) UIImageView *fakeDeleteBtn;
 
 - (void)respondToChangeZViews:(NSInteger)rowNo;
 - (void)refreshZViews;
 - (void)resetZViews:(NSInteger)rowNo;
 - (void)alphaChangeOnZViews:(CGFloat)scrollViewOffsetY cellHeight:(CGFloat)h;
+
+- (void)getFakeDeleteBtn:(CGRect)frame;
 
 @end
