@@ -450,22 +450,24 @@
 
 - (void)deleteItem:(NSNotification *)n
 {
-    BOOL errOccured = YES;
-    for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
-        if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
-            NSInteger n = [self.box.fResultsCtl.fetchedObjects indexOfObject:i];
-            NSString *itemIdToDelete = [i valueForKey:@"itemId"];
-            [self.box.ctx deleteObject:i];
-            if ([self.box saveToDb]) {
-                [self.cardViewCtl respondToChangeZViews:n];
-                errOccured = NO;
-                [self addDeletedItemId:itemIdToDelete];
+    if (self.cardViewCtl.canDelete) {
+        BOOL errOccured = YES;
+        for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
+            if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
+                NSInteger n = [self.box.fResultsCtl.fetchedObjects indexOfObject:i];
+                NSString *itemIdToDelete = [i valueForKey:@"itemId"];
+                [self.box.ctx deleteObject:i];
+                if ([self.box saveToDb]) {
+                    [self.cardViewCtl respondToChangeZViews:n];
+                    errOccured = NO;
+                    [self addDeletedItemId:itemIdToDelete];
+                }
+                break;
             }
-            break;
         }
-    }
-    if (errOccured) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
+        if (errOccured) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
+        }
     }
 }
 

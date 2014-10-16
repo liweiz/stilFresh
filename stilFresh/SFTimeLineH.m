@@ -1,15 +1,15 @@
 //
-//  SFTimeLine.m
+//  SFTimeLineH.m
 //  stilFresh
 //
-//  Created by Liwei Zhang on 2014-10-10.
+//  Created by Liwei Zhang on 2014-10-15.
 //  Copyright (c) 2014 Liwei Zhang. All rights reserved.
 //
 
-#import "SFTimeLine.h"
+#import "SFTimeLineH.h"
 #import "NSObject+SFExtra.h"
 
-@implementation SFTimeLine
+@implementation SFTimeLineH
 
 @synthesize box;
 @synthesize dateAdded;
@@ -30,13 +30,13 @@
     if (self) {
         // Initialization code
         self.dateSequence = [NSMutableArray arrayWithCapacity:0];
-        self.axisPoint = CGPointMake(120, 30);
-        self.timeLineHeight = self.frame.size.height - self.axisPoint.y * 2;
-        self.timeLineWidth = 3;
+        self.axisPoint = CGPointMake(40, 60);
+        self.timeLineHeight = 1;
+        self.timeLineWidth = self.frame.size.width - self.axisPoint.x * 2;
         self.singleLineHeight = 30;
-        self.labelWidth = 120;
-        self.radiusS = 3;
-        self.radiusL = 7;
+        self.labelWidth = 60;
+        self.radiusS = 1;
+        self.radiusL = 2;
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = NO;
     }
@@ -50,56 +50,32 @@
     }
     [self addTimeLineBase];
     [self.dateSequence setArray:[self placeDatesInOrder]];
-    [self addContentAtStartPoint:self.axisPoint height:self.timeLineHeight];
+    [self addContentAtStartPoint:self.axisPoint length:self.timeLineWidth];
 }
 
 - (void)addTimeLineBase
 {
-    UIView *base = [[UIView alloc] initWithFrame:CGRectMake(self.axisPoint.x - self.timeLineWidth / 2, self.axisPoint.y, self.timeLineWidth, self.timeLineHeight)];    
+    UIView *base = [[UIView alloc] initWithFrame:CGRectMake(self.axisPoint.x, self.axisPoint.y - self.timeLineHeight / 2, self.timeLineWidth, self.timeLineHeight)];
     [self addSubview:base];
     base.backgroundColor = [UIColor whiteColor];
+    base.alpha = 0.5;
 }
 
 // Use axis point
-- (void)addContentAtStartPoint:(CGPoint)p height:(CGFloat)h
+- (void)addContentAtStartPoint:(CGPoint)p length:(CGFloat)l
 {
     NSArray *r = [self allLargePointsRatios];
-    NSArray *pp = [self allLargePoints:r startPoint:p height:h];
-    CGFloat g = 15;
-    if ([self.dateSequence count] == 3) {
-        NSInteger i = 0;
-        for (NSDate *d in self.dateSequence) {
-            NSString *s = [self contentMatch:d];
-            [self addOneLargeDotSet:[(NSValue *)pp[i] CGPointValue] lines:1 gap:g text1:s text2:[self displayDateString:[self dateToString:d]]];
-            i++;
-        }
-    } else if ([self.dateSequence count] == 2) {
-        if ([self.dateSequence[0] isKindOfClass:[NSDate class]]) {
-            // One line
-            NSString *s = [self contentMatch:self.dateSequence[0]];
-            [self addOneLargeDotSet:[pp[0] CGPointValue] lines:1 gap:g text1:s text2:[self dateToString:self.dateSequence[0]]];
-            // Two line
-            NSString *ss0 = [self contentMatch:self.dateSequence[1][0]];
-            NSString *ss1 = [self contentMatch:self.dateSequence[1][1]];
-            NSString *ss = [[ss0 stringByAppendingString:@"\n"] stringByAppendingString:ss1];
-            [self addOneLargeDotSet:[pp[1] CGPointValue] lines:2 gap:g text1:ss text2:[self displayDateString:[self dateToString:self.dateSequence[1][0]]]];
+    NSArray *pp = [self allLargePoints:r startPoint:p length:l];
+    CGFloat g = 2;
+    NSInteger i = 0;
+    for (id d in self.dateSequence) {
+        if ([d isKindOfClass:[NSDate class]]) {
+            [self addOneLargeDotSet:[(NSValue *)pp[i] CGPointValue] lines:1 gap:g text1:[self displayMonthString:[self dateToString:d]] text2:[self displayDayString:[self dateToString:d]]];
         } else {
-            // Two line
-            NSString *ss0 = [self contentMatch:self.dateSequence[0][0]];
-            NSString *ss1 = [self contentMatch:self.dateSequence[0][1]];
-            NSString *ss = [[ss0 stringByAppendingString:@"\n"] stringByAppendingString:ss1];
-            [self addOneLargeDotSet:[pp[0] CGPointValue] lines:2 gap:g text1:ss text2:[self displayDateString:[self dateToString:self.dateSequence[0][0]]]];
-            // One line
-            NSString *s = [self contentMatch:self.dateSequence[1]];
-            [self addOneLargeDotSet:[pp[1] CGPointValue] lines:1 gap:g text1:s text2:[self displayDateString:[self dateToString:self.dateSequence[1]]]];
+            NSDate *dd = d[0];
+            [self addOneLargeDotSet:[(NSValue *)pp[i] CGPointValue] lines:1 gap:g text1:[self displayMonthString:[self dateToString:dd]] text2:[self displayDayString:[self dateToString:dd]]];
         }
-    } else if ([self.dateSequence count] == 1) {
-        // Three line
-        NSString *ss0 = [self contentMatch:self.dateSequence[0][0]];
-        NSString *ss1 = [self contentMatch:self.dateSequence[0][1]];
-        NSString *ss2 = [self contentMatch:self.dateSequence[0][2]];
-        NSString *ss = [[[[ss0 stringByAppendingString:@"\n"] stringByAppendingString:ss1] stringByAppendingString:@"\n"] stringByAppendingString:ss2];
-        [self addOneLargeDotSet:[pp[0] CGPointValue] lines:3 gap:g text1:ss text2:[self displayDateString:[self dateToString:self.dateSequence[0][0]]]];
+        i++;
     }
 }
 
@@ -129,12 +105,12 @@
     } else if (n == 3) {
         h = self.singleLineHeight * 3;
     }
-    CGPoint a1 = [self getLeftLabelOriginX:p.x y:p.y height:h gap:g];
-    UILabel *d1 = [self createLeftLabel:h at:a1];
+    CGPoint a1 = [self getUpperLabelOriginX:p.x y:p.y height:h gap:g];
+    UILabel *d1 = [self createLabel:h at:a1];
     d1.text = t1;
     [self addSubview:d1];
-    CGPoint a2 = [self getRightLabelOriginX:p.x y:p.y height:h gap:g];
-    UILabel *d2 = [self createRightLabel:h at:a2];
+    CGPoint a2 = [self getLowerLabelOriginX:p.x y:p.y height:h gap:g];
+    UILabel *d2 = [self createLabel:h at:a2];
     d2.text = t2;
     [self addSubview:d2];
 }
@@ -155,21 +131,12 @@
     }
 }
 
-- (UILabel *)createLeftLabel:(CGFloat)height at:(CGPoint)origin
+- (UILabel *)createLabel:(CGFloat)height at:(CGPoint)origin
 {
     UILabel *l = [[UILabel alloc] initWithFrame:CGRectMake(origin.x, origin.y, self.labelWidth, height)];
     l.backgroundColor = [UIColor clearColor];
     l.textColor = [UIColor whiteColor];
-    l.textAlignment = NSTextAlignmentRight;
-    return l;
-}
-
-- (UILabel *)createRightLabel:(CGFloat)height at:(CGPoint)origin
-{
-    UILabel *l = [[UILabel alloc] initWithFrame:CGRectMake(origin.x, origin.y, self.labelWidth, height)];
-    l.backgroundColor = [UIColor clearColor];
-    l.textColor = [UIColor whiteColor];
-    l.textAlignment = NSTextAlignmentLeft;
+    l.textAlignment = NSTextAlignmentCenter;
     return l;
 }
 
@@ -181,17 +148,17 @@
     return dot;
 }
 
-- (CGPoint)getLeftLabelOriginX:(CGFloat)x y:(CGFloat)y height:(CGFloat)h gap:(CGFloat)g
+- (CGPoint)getUpperLabelOriginX:(CGFloat)x y:(CGFloat)y height:(CGFloat)h gap:(CGFloat)g
 {
-    CGFloat xx = x - g - self.labelWidth;
-    CGFloat yy = y - h / 2;
+    CGFloat xx = x - self.labelWidth / 2;
+    CGFloat yy = y - g - h;
     return CGPointMake(xx, yy);
 }
 
-- (CGPoint)getRightLabelOriginX:(CGFloat)x y:(CGFloat)y height:(CGFloat)h gap:(CGFloat)g
+- (CGPoint)getLowerLabelOriginX:(CGFloat)x y:(CGFloat)y height:(CGFloat)h gap:(CGFloat)g
 {
-    CGFloat xx = x + g;
-    CGFloat yy = y - h / 2;
+    CGFloat xx = x - self.labelWidth / 2;
+    CGFloat yy = y + g;
     return CGPointMake(xx, yy);
 }
 
@@ -202,26 +169,11 @@
     return CGPointMake(xx, yy);
 }
 
-
-
-//// Today is not a fixed point.
-//- (NSArray *)getFixedPointsOnBestBefore
-//{
-//    CGFloat ratio = [self getTimeLineHeightRatioBeforeBestBefore];
-//    if (ratio != 0 && ratio != 1) {
-//        NSValue *p1 = [NSValue valueWithCGPoint:CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height / 3)];
-//        NSValue *p2 = [NSValue valueWithCGPoint:CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height * 2 / 3)];
-//        NSValue *p3 = [NSValue valueWithCGPoint:CGPointMake(self.axisPoint.x, self.axisPoint.y + self.bbBaseView.frame.size.height)];
-//        return [NSArray arrayWithObjects:p1, p2, p3, nil];
-//    }
-//    return nil;
-//}
-
-- (NSArray *)allLargePoints:(NSArray *)ratioArray startPoint:(CGPoint)p height:(CGFloat)h
+- (NSArray *)allLargePoints:(NSArray *)ratioArray startPoint:(CGPoint)p length:(CGFloat)l
 {
     NSMutableArray *a = [NSMutableArray arrayWithCapacity:0];
     for (NSNumber *n in ratioArray) {
-        [a addObject:[NSValue valueWithCGPoint:CGPointMake(p.x, p.y + h * n.floatValue)]];
+        [a addObject:[NSValue valueWithCGPoint:CGPointMake(p.x + l * n.floatValue, p.y)]];
     }
     return a;
 }

@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "SFBox.h"
-#import "SFTimeLine.h"
+#import "SFTimeLineH.h"
 
 @interface SFCellCover : UIView
 
 @property (strong, nonatomic) SFBox *box;
-@property (strong, nonatomic) SFTimeLine *timeLine;
+@property (strong, nonatomic) SFTimeLineH *timeLine;
 @property (strong, nonatomic) NSDate *dateAddedTL;
 @property (strong, nonatomic) NSDate *bestBeforeTL;
 @property (strong, nonatomic) NSDate *todayTL;

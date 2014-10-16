@@ -27,6 +27,7 @@
 		EECAA75219E5AC9600AAE177 /* Pods-stilFresh.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */; };
 		EECBDAE619E81D41007129C6 /* SFTimeLine.m in Sources */ = {isa = PBXBuildFile; fileRef = EECBDAE519E81D41007129C6 /* SFTimeLine.m */; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
+		EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECF10119EF005A000A90C3 /* SFTimeLineH.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,8 @@
 		EECBDAE519E81D41007129C6 /* SFTimeLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTimeLine.m; sourceTree = "<group>"; };
 		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
 		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
+		EEECF10019EF005A000A90C3 /* SFTimeLineH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTimeLineH.h; sourceTree = "<group>"; };
+		EEECF10119EF005A000A90C3 /* SFTimeLineH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTimeLineH.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,8 @@
 				EE87B42519EC7FB80022DE0E /* SFCellCover.m */,
 				EECBDAE419E81D41007129C6 /* SFTimeLine.h */,
 				EECBDAE519E81D41007129C6 /* SFTimeLine.m */,
+				EEECF10019EF005A000A90C3 /* SFTimeLineH.h */,
+				EEECF10119EF005A000A90C3 /* SFTimeLineH.m */,
 				EE3EC7BD19DF995100CA09F8 /* SFTableViewCell.h */,
 				EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */,
 				EE3EC7BF19DF995100CA09F8 /* SFTableViewController.h */,
@@ -344,6 +349,7 @@
 				EECBDAE619E81D41007129C6 /* SFTimeLine.m in Sources */,
 				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,
+				EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,6 +24,7 @@
 @synthesize isForCard;
 @synthesize isTransitingFromList;
 @synthesize zViews;
+@synthesize canDelete;
 
 - (void)loadView
 {
@@ -43,6 +44,7 @@
     self.tableView.showsHorizontalScrollIndicator = NO;
     self.tableView.showsVerticalScrollIndicator = NO;
     if (self.isForCard) {
+        self.canDelete = YES;
         self.tableView.rowHeight = self.box.appRect.size.height;
         self.tableView.pagingEnabled = YES;
         self.tableView.bounces = YES;
@@ -315,6 +317,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if (self.isForCard) {
         if (!self.isTransitingFromList) {
             [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
+            self.canDelete = NO;
             if (self.fakeDeleteBtn) {
                 [self alphaChangeOnFakeDeleteBtn:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
             }
@@ -322,6 +325,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
-
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    if (self.isForCard) {
+        self.canDelete = YES;
+    }
+}
 
 @end

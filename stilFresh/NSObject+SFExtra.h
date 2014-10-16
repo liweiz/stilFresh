@@ -31,5 +31,7 @@
 
 - (NSURL *)getFileBaseUrl;
 - (NSString *)displayDateString:(NSString *)date;
+- (NSString *)displayMonthString:(NSString *)date;
+- (NSString *)displayDayString:(NSString *)date;
 
 @end

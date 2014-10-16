@@ -135,12 +135,10 @@
             self.notes.textColor = [UIColor whiteColor];
             [self.status addSubview:self.notes];
         }
-        
-        
         if (!self.deleteBtn) {
             CGFloat gap1 = 10;
             CGFloat w1 = 44;
-            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width - gap1 - w1, gap1, w1, w1)];
+            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake( gap1, self.frame.size.height - gap1 - w1, w1, w1)];
             self.deleteBtn.backgroundColor = [UIColor redColor];
             self.deleteBtn.alpha = self.textBackGroundAlpha;
             [self.status addSubview:self.deleteBtn];

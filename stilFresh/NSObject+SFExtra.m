@@ -146,40 +146,40 @@
     NSString *m;
     switch (mm.integerValue) {
         case 1:
-            m = @"Jan.";
+            m = @"Jan";
             break;
         case 2:
-            m = @"Feb.";
+            m = @"Feb";
             break;
         case 3:
-            m = @"Mar.";
+            m = @"Mar";
             break;
         case 4:
-            m = @"Apr.";
+            m = @"Apr";
             break;
         case 5:
             m = @"May";
             break;
         case 6:
-            m = @"Jun.";
+            m = @"Jun";
             break;
         case 7:
-            m = @"Jul.";
+            m = @"Jul";
             break;
         case 8:
-            m = @"Aug.";
+            m = @"Aug";
             break;
         case 9:
-            m = @"Sep.";
+            m = @"Sep";
             break;
         case 10:
-            m = @"Oct.";
+            m = @"Oct";
             break;
         case 11:
-            m = @"Nov.";
+            m = @"Nov";
             break;
         case 12:
-            m = @"Dec.";
+            m = @"Dec";
             break;
         default:
             break;
@@ -188,6 +188,59 @@
         return [[m stringByAppendingString:@" "] stringByAppendingString:[date substringWithRange:NSMakeRange(6, 2)]];
     }
     return nil;
+}
+
+- (NSString *)displayMonthString:(NSString *)date
+{
+    NSString *mm = [date substringWithRange:NSMakeRange(4, 2)];
+    NSString *m;
+    switch (mm.integerValue) {
+        case 1:
+            m = @"Jan";
+            break;
+        case 2:
+            m = @"Feb";
+            break;
+        case 3:
+            m = @"Mar";
+            break;
+        case 4:
+            m = @"Apr";
+            break;
+        case 5:
+            m = @"May";
+            break;
+        case 6:
+            m = @"Jun";
+            break;
+        case 7:
+            m = @"Jul";
+            break;
+        case 8:
+            m = @"Aug";
+            break;
+        case 9:
+            m = @"Sep";
+            break;
+        case 10:
+            m = @"Oct";
+            break;
+        case 11:
+            m = @"Nov";
+            break;
+        case 12:
+            m = @"Dec";
+            break;
+        default:
+            m = @"";
+            break;
+    }
+    return m;
+}
+
+- (NSString *)displayDayString:(NSString *)date
+{
+    return [date substringWithRange:NSMakeRange(6, 2)];
 }
 
 #pragma mark - validate input
