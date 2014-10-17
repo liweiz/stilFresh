@@ -22,10 +22,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    CGRect aRect = [[UIScreen mainScreen] applicationFrame];
-    // [[UIScreen mainScreen] applicationFrame].origin.y is 20 and it will be updated by system to 0 later. So we assign it manually first here.
-    self.appRect = CGRectMake(aRect.origin.x, 0, aRect.size.width, aRect.size.height);
-    self.window = [[UIWindow alloc] initWithFrame:aRect];
+    self.appRect = [[UIScreen mainScreen] bounds];
+    self.window = [[UIWindow alloc] initWithFrame:self.appRect];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

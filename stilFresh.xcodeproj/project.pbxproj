@@ -25,7 +25,6 @@
 		EECAA75019E5A89200AAE177 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		EECAA75119E5AC9400AAE177 /* Pods-stilFresh.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */; };
 		EECAA75219E5AC9600AAE177 /* Pods-stilFresh.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */; };
-		EECBDAE619E81D41007129C6 /* SFTimeLine.m in Sources */ = {isa = PBXBuildFile; fileRef = EECBDAE519E81D41007129C6 /* SFTimeLine.m */; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
 		EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECF10119EF005A000A90C3 /* SFTimeLineH.m */; };
 /* End PBXBuildFile section */
@@ -72,8 +71,6 @@
 		EE63B26419E384A200C871C0 /* SFItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFItem.m; sourceTree = "<group>"; };
 		EE87B42419EC7FB80022DE0E /* SFCellCover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCellCover.h; sourceTree = "<group>"; };
 		EE87B42519EC7FB80022DE0E /* SFCellCover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCellCover.m; sourceTree = "<group>"; };
-		EECBDAE419E81D41007129C6 /* SFTimeLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTimeLine.h; sourceTree = "<group>"; };
-		EECBDAE519E81D41007129C6 /* SFTimeLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTimeLine.m; sourceTree = "<group>"; };
 		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
 		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
 		EEECF10019EF005A000A90C3 /* SFTimeLineH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTimeLineH.h; sourceTree = "<group>"; };
@@ -142,8 +139,6 @@
 				EE3EC7BC19DF995100CA09F8 /* SFRootViewCtl.m */,
 				EE87B42419EC7FB80022DE0E /* SFCellCover.h */,
 				EE87B42519EC7FB80022DE0E /* SFCellCover.m */,
-				EECBDAE419E81D41007129C6 /* SFTimeLine.h */,
-				EECBDAE519E81D41007129C6 /* SFTimeLine.m */,
 				EEECF10019EF005A000A90C3 /* SFTimeLineH.h */,
 				EEECF10119EF005A000A90C3 /* SFTimeLineH.m */,
 				EE3EC7BD19DF995100CA09F8 /* SFTableViewCell.h */,
@@ -346,7 +341,6 @@
 				EE3EC7C619DF995100CA09F8 /* SFRootViewCtl.m in Sources */,
 				EE1547BF19E608E8004B6EDC /* CHCSVParser.m in Sources */,
 				EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */,
-				EECBDAE619E81D41007129C6 /* SFTimeLine.m in Sources */,
 				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,
 				EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */,

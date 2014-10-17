@@ -30,13 +30,13 @@
     if (self) {
         // Initialization code
         self.dateSequence = [NSMutableArray arrayWithCapacity:0];
-        self.axisPoint = CGPointMake(40, 60);
+        self.axisPoint = CGPointMake(40, frame.size.height / 2);
         self.timeLineHeight = 1;
         self.timeLineWidth = self.frame.size.width - self.axisPoint.x * 2;
         self.singleLineHeight = 30;
         self.labelWidth = 60;
         self.radiusS = 1;
-        self.radiusL = 2;
+        self.radiusL = 20;
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = NO;
     }
@@ -57,8 +57,7 @@
 {
     UIView *base = [[UIView alloc] initWithFrame:CGRectMake(self.axisPoint.x, self.axisPoint.y - self.timeLineHeight / 2, self.timeLineWidth, self.timeLineHeight)];
     [self addSubview:base];
-    base.backgroundColor = [UIColor whiteColor];
-    base.alpha = 0.5;
+    base.backgroundColor = [UIColor clearColor];
 }
 
 // Use axis point
@@ -66,7 +65,7 @@
 {
     NSArray *r = [self allLargePointsRatios];
     NSArray *pp = [self allLargePoints:r startPoint:p length:l];
-    CGFloat g = 2;
+    CGFloat g = -6;
     NSInteger i = 0;
     for (id d in self.dateSequence) {
         if ([d isKindOfClass:[NSDate class]]) {
@@ -145,6 +144,7 @@
     UIView *dot = [[UIView alloc] initWithFrame:CGRectMake(origin.x, origin.y, width, width)];
     dot.layer.cornerRadius = dot.frame.size.width / 2;
     dot.backgroundColor = [UIColor whiteColor];
+    dot.alpha = 0.4;
     return dot;
 }
 

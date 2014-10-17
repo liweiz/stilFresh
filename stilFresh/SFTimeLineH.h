@@ -28,6 +28,7 @@
 @property (assign, nonatomic) CGFloat radiusS;
 @property (assign, nonatomic) CGFloat radiusL;
 
+
 - (void)reset;
 
 @end

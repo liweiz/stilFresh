@@ -31,6 +31,7 @@
 @property (strong, nonatomic) UILabel *dateAddedLabel;
 @property (strong, nonatomic) UISwitch *dateAddedSwitch;
 @property (strong, nonatomic) UITextField *dateAdded;
+@property (strong, nonatomic) UIView *cardViewBase;
 
 @property (strong, nonatomic) SFTableViewController *listViewCtl;
 @property (strong, nonatomic) SFTableViewController *cardViewCtl;

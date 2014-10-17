@@ -30,9 +30,9 @@
 {
     CGFloat x;
     if (self.isForCard) {
-        x = self.box.appRect.size.width * 3;
+        x = 0;
     } else {
-        x = self.box.appRect.size.width * 2;
+        x = (self.box.appRect.size.width + 10) * 2;
     }
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, self.box.appRect.size.width, self.box.appRect.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -51,6 +51,8 @@
         self.tableView.allowsSelection = NO;
         self.zViews = [NSMutableArray arrayWithCapacity:0];
     } else {
+        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
+        self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
         self.tableView.rowHeight = self.box.appRect.size.height / 5;
     }
 }
@@ -63,7 +65,6 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
     [self.tableView reloadData];
 }
 
@@ -242,6 +243,7 @@
         }
     }
     if (self.isForCard) {
+        cell.bestBefore.text = [self displayBBWithIntro:[managedObject valueForKey:@"bestBefore"]];
         cell.notes.text = [managedObject valueForKey:@"notes"];
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     } else {

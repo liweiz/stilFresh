@@ -29,6 +29,8 @@
 @synthesize sfGray;
 @synthesize imgJustSaved;
 @synthesize imgNameJustSaved;
+@synthesize goldenRatio;
+@synthesize gapToEdge;
 
 - (id)init
 {
@@ -42,6 +44,7 @@
         self.originX = 15;
         self.originY = 15;
         self.gap = 10;
+        self.gapToEdge = 15;
         self.oneLineHeight = 40;
         self.fontSizeL = 16;
         self.fontSizeM = 14;
@@ -50,6 +53,7 @@
         self.sfGreen1 = [UIColor colorWithRed:150 / 255.0 green:206 / 255.0 blue:107 / 255.0 alpha:alpha];
         self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:alpha];
         self.sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha];
+        self.goldenRatio = 1.61803398875;
     }
     return self;
 }

@@ -30,6 +30,7 @@
 @synthesize camViewCtl;
 @synthesize listViewCtl;
 @synthesize cardViewCtl;
+@synthesize cardViewBase;
 @synthesize menuView;
 @synthesize itemViewCtl;
 @synthesize warning;
@@ -49,8 +50,9 @@
 
 - (void)loadView
 {
+    [UIApplication sharedApplication].keyWindow.backgroundColor = [UIColor blackColor];
     self.view = [[UIView alloc] initWithFrame:self.appRect];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.box.appRect = self.appRect;
     self.box.width = self.appRect.size.width - self.box.originX * 2;
 }
@@ -58,11 +60,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.interfaceBase = [[UIScrollView alloc] initWithFrame:self.box.appRect];
+    self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.box.appRect.size.width + 10, self.box.appRect.size.height)];
     // Four views, from left to right: 1. cam 2. input 3. list 4. menu/card
-    CGSize theContentSize = CGSizeMake(self.box.appRect.size.width * 4, self.box.appRect.size.height);
+    CGSize theContentSize = CGSizeMake((self.box.appRect.size.width + 10) * 4 , self.box.appRect.size.height);
     self.interfaceBase.contentSize = theContentSize;
-    self.interfaceBase.contentOffset = CGPointMake(self.appRect.size.width * 2, 0);
+    self.interfaceBase.contentOffset = CGPointMake((self.appRect.size.width + 10) * 2, 0);
     self.interfaceBase.bounces = NO;
     self.interfaceBase.showsVerticalScrollIndicator = NO;
     self.interfaceBase.showsHorizontalScrollIndicator = NO;
@@ -78,7 +80,7 @@
     [self.camViewCtl didMoveToParentViewController:self];
     
     // InputView
-    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width, 0, self.appRect.size.width, self.appRect.size.height)];
+    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width + 10, 0, self.appRect.size.width, self.appRect.size.height)];
     self.inputView.touchToDismissKeyboardIsOn = YES;
     self.inputView.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.inputView];
@@ -146,11 +148,14 @@
     [self.listViewCtl didMoveToParentViewController:self];
     
     // CardViewCtl
+    self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake((self.box.appRect.size.width + 10) * 3, 0, self.box.appRect.size.width, self.box.appRect.size.height)];
+    self.cardViewBase.backgroundColor = [UIColor clearColor];
+    [self.interfaceBase addSubview:self.cardViewBase];
     self.cardViewCtl = [[SFTableViewController alloc] init];
     self.cardViewCtl.box = self.box;
     self.cardViewCtl.isForCard = YES;
     [self addChildViewController:self.cardViewCtl];
-    [self.interfaceBase addSubview:self.cardViewCtl.tableView];
+    [self.cardViewBase addSubview:self.cardViewCtl.tableView];
     [self.cardViewCtl didMoveToParentViewController:self];
 //    self.cardViewCtl.tableView.hidden = YES;
     [self.cardViewCtl refreshZViews];

@@ -27,7 +27,7 @@
 @synthesize bottomLine;
 @synthesize number;
 @synthesize text;
-
+@synthesize bestBefore;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -125,25 +125,32 @@
         }
     } else {
         CGFloat gap1 = 10;
+        if (!self.deleteBtn) {
+            CGFloat w1 = 44;
+            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width - self.box.gapToEdge - w1, self.box.gapToEdge + 20, w1, w1)];
+            self.deleteBtn.backgroundColor = [UIColor clearColor];
+            [self.status addSubview:self.deleteBtn];
+            self.deleteTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callForDeletion)];
+            [self.deleteBtn addGestureRecognizer:self.deleteTap];
+        }
+        if (!self.bestBefore) {
+            self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.gapToEdge, self.box.gapToEdge + 20, 200, self.deleteBtn.frame.size.height)];
+            self.bestBefore.backgroundColor = [UIColor clearColor];
+            self.bestBefore.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
+            self.bestBefore.adjustsFontSizeToFitWidth = YES;
+            self.bestBefore.textAlignment = NSTextAlignmentLeft;
+            self.bestBefore.textColor = [UIColor whiteColor];
+            [self.status addSubview:self.bestBefore];
+        }
         if (!self.notes) {
-            self.notes = [[UITextView alloc] initWithFrame:CGRectMake(gap1, gap1, self.appRect.size.width - gap1 * 2, 80)];
+            self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + gap1 + 20, self.appRect.size.width - gap1 * 2, 80)];
             self.notes.backgroundColor = self.textBackGroundColor;
             self.notes.alpha = self.textBackGroundAlpha;
             self.notes.userInteractionEnabled = NO;
             self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
-            self.notes.textAlignment = NSTextAlignmentCenter;
+            self.notes.textAlignment = NSTextAlignmentLeft;
             self.notes.textColor = [UIColor whiteColor];
             [self.status addSubview:self.notes];
-        }
-        if (!self.deleteBtn) {
-            CGFloat gap1 = 10;
-            CGFloat w1 = 44;
-            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake( gap1, self.frame.size.height - gap1 - w1, w1, w1)];
-            self.deleteBtn.backgroundColor = [UIColor redColor];
-            self.deleteBtn.alpha = self.textBackGroundAlpha;
-            [self.status addSubview:self.deleteBtn];
-            self.deleteTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callForDeletion)];
-            [self.deleteBtn addGestureRecognizer:self.deleteTap];
         }
     }
     if (self.pic.image) {

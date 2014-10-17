@@ -30,6 +30,7 @@
 @property (strong, nonatomic) UILabel *text;
 // For item detail
 @property (strong, nonatomic) UITextView *notes;
+@property (strong, nonatomic) UILabel *bestBefore;
 @property (strong, nonatomic) UIView *deleteBtn;
 @property (strong, nonatomic) UITapGestureRecognizer *deleteTap;
 @property (strong, nonatomic) NSMutableString *itemId;
