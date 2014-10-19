@@ -149,14 +149,13 @@
         [self.deleteBase addSubview:self.status];
         [self.deleteBase setContentOffset:CGPointZero animated:NO];
         if (!self.bestBefore) {
-            self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.gapToEdge, self.box.gapToEdge + 20, 200, self.deleteBtn.frame.size.height)];
+            self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.gapToEdge, self.box.gapToEdge + 20, self.frame.size.width - self.box.gapToEdge * 2, 44)];
             self.bestBefore.backgroundColor = [UIColor clearColor];
             self.bestBefore.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
             self.bestBefore.adjustsFontSizeToFitWidth = YES;
             self.bestBefore.textAlignment = NSTextAlignmentLeft;
             self.bestBefore.textColor = [UIColor whiteColor];
-            [self.deleteBase addSubview:self.bestBefore];
-            self.box.bestBeforeFrame = self.bestBefore.frame;
+            [self.status addSubview:self.bestBefore];
         }
         if (!self.notes) {
             self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + gap1 + 20, self.appRect.size.width - gap1 * 2, 80)];
@@ -166,7 +165,7 @@
             self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
             self.notes.textAlignment = NSTextAlignmentLeft;
             self.notes.textColor = [UIColor whiteColor];
-            [self.deleteBase addSubview:self.notes];
+            [self.status addSubview:self.notes];
         }
     }
     if (self.pic.image) {

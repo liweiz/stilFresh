@@ -76,7 +76,13 @@
 
 - (void)refreshZViews
 {
+    for (SFCellCover *x in self.zViews) {
+        if (x.superview) {
+            [x removeFromSuperview];
+        }
+    }
     [self.zViews removeAllObjects];
+    
     for (NSManagedObject *o in self.box.fResultsCtl.fetchedObjects) {
         SFCellCover *c = [[SFCellCover alloc] initWithFrame:self.tableView.frame];
         c.box = self.box;
@@ -86,10 +92,6 @@
         c.stringDaysLeft = [NSString stringWithFormat:@"%ld", (long)[[o valueForKey:@"daysLeft"] integerValue]];
         [c addContent];
         c.alpha = 0;
-        NSLog(@"frame: %f, %f, %f, %f", self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height);
-        if ([self.tableView superview]) {
-            NSLog(@"YES");
-        }
         [[self.tableView superview] addSubview:c];
         [self.zViews addObject:c];
     }
