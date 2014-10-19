@@ -187,9 +187,15 @@
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    if (targetContentOffset->x == scrollView.frame.size.width) {
-        scrollView.userInteractionEnabled = NO;
-        [self callForDeletion];
+    // Delete is triggered only when more than 1/2 of width has been covered.
+    if (scrollView.contentOffset.x > self.deleteBase.frame.size.width / 2) {
+        if (targetContentOffset->x == scrollView.frame.size.width) {
+            scrollView.userInteractionEnabled = NO;
+            [self callForDeletion];
+        }
+    } else {
+        // Prevent from unintended swipe. E.g. when scroll up the tableView, the swipe may be triggered. So user has to swipe harder to get through.
+        targetContentOffset->x = 0;
     }
 }
 
