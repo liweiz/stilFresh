@@ -61,7 +61,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.box.appRect.size.width + 10, self.box.appRect.size.height)];
-    // Four views, from left to right: 1. cam 2. input 3. list 4. menu/card
+    // Four views, from left to right: 1. cam 2. input 3. list 4. menu/card 5. swipe-to-left-to-delete
     CGSize theContentSize = CGSizeMake((self.box.appRect.size.width + 10) * 4 , self.box.appRect.size.height);
     self.interfaceBase.contentSize = theContentSize;
     self.interfaceBase.contentOffset = CGPointMake((self.appRect.size.width + 10) * 2, 0);
@@ -70,7 +70,7 @@
     self.interfaceBase.showsHorizontalScrollIndicator = NO;
     self.interfaceBase.pagingEnabled = YES;
     self.interfaceBase.backgroundColor = [UIColor clearColor];
-    
+    self.interfaceBase.delegate = self;
     [self.view addSubview:self.interfaceBase];
     
     self.camViewCtl = [[SFCamViewCtl alloc] init];
@@ -158,7 +158,6 @@
     [self.cardViewBase addSubview:self.cardViewCtl.tableView];
     [self.cardViewCtl didMoveToParentViewController:self];
 //    self.cardViewCtl.tableView.hidden = YES;
-    [self.cardViewCtl refreshZViews];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCard) name:@"rowSelected" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataForTables) name:@"reloadData" object:nil];
@@ -189,6 +188,7 @@
     self.cardViewCtl.isTransitingFromList = NO;
     self.cardViewCtl.tableView.hidden = NO;
     [self.cardViewCtl.tableView.superview sendSubviewToBack:self.cardViewCtl.tableView];
+    [self.cardViewCtl refreshZViews];
     [self.cardViewCtl resetZViews:self.listViewCtl.tableView.indexPathForSelectedRow.row];
     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
 }
@@ -455,24 +455,22 @@
 
 - (void)deleteItem:(NSNotification *)n
 {
-    if (self.cardViewCtl.canDelete) {
-        BOOL errOccured = YES;
-        for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
-            if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
-                NSInteger n = [self.box.fResultsCtl.fetchedObjects indexOfObject:i];
-                NSString *itemIdToDelete = [i valueForKey:@"itemId"];
-                [self.box.ctx deleteObject:i];
-                if ([self.box saveToDb]) {
-                    [self.cardViewCtl respondToChangeZViews:n];
-                    errOccured = NO;
-                    [self addDeletedItemId:itemIdToDelete];
-                }
-                break;
+    BOOL errOccured = YES;
+    for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
+        if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
+            NSInteger n = [self.box.fResultsCtl.fetchedObjects indexOfObject:i];
+            NSString *itemIdToDelete = [i valueForKey:@"itemId"];
+            [self.box.ctx deleteObject:i];
+            if ([self.box saveToDb]) {
+                [self.cardViewCtl respondToChangeZViews:n];
+                errOccured = NO;
+                [self addDeletedItemId:itemIdToDelete];
             }
+            break;
         }
-        if (errOccured) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
-        }
+    }
+    if (errOccured) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
     }
 }
 

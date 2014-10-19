@@ -31,6 +31,7 @@
 @synthesize imgNameJustSaved;
 @synthesize goldenRatio;
 @synthesize gapToEdge;
+@synthesize bestBeforeFrame;
 
 - (id)init
 {

@@ -32,7 +32,7 @@
 - (void)addContent
 {
     if (!self.timeLine) {
-        self.timeLine = [[SFTimeLineH alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 50 - self.box.gapToEdge, self.frame.size.width, 50)];
+        self.timeLine = [[SFTimeLineH alloc] initWithFrame:CGRectMake(0, self.box.bestBeforeFrame.origin.y + 10, self.frame.size.width, 50)];
         self.timeLine.box = self.box;
         [self addSubview:self.timeLine];
     }
@@ -43,7 +43,7 @@
     if (!self.daysLeftIndicator) {
         CGFloat gap1 = 15;
         CGFloat h1 = self.frame.size.height / (1 + self.box.goldenRatio) * self.box.goldenRatio;
-        self.daysLeftIndicator = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, self.frame.size.height - h1 - self.timeLine.frame.size.height - gap1 - self.box.gapToEdge)];
+        self.daysLeftIndicator = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, self.timeLine.frame.origin.y - gap1 - (self.frame.size.height - h1))];
         self.daysLeftIndicator.textAlignment = NSTextAlignmentCenter;
         self.daysLeftIndicator.backgroundColor = [UIColor clearColor];
         self.daysLeftIndicator.textColor = [UIColor whiteColor];

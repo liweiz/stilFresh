@@ -11,7 +11,7 @@
 #import "SFBox.h"
 #import "SFTimeLine.h"
 
-@interface SFTableViewCell : UITableViewCell
+@interface SFTableViewCell : UITableViewCell <UIScrollViewDelegate>
 
 @property (assign, nonatomic) BOOL isForCardView;
 @property (assign, nonatomic) CGRect appRect;
@@ -33,6 +33,7 @@
 @property (strong, nonatomic) UILabel *bestBefore;
 @property (strong, nonatomic) UIView *deleteBtn;
 @property (strong, nonatomic) UITapGestureRecognizer *deleteTap;
+@property (strong, nonatomic) UIScrollView *deleteBase;
 @property (strong, nonatomic) NSMutableString *itemId;
 
 

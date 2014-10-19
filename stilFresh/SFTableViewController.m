@@ -24,7 +24,6 @@
 @synthesize isForCard;
 @synthesize isTransitingFromList;
 @synthesize zViews;
-@synthesize canDelete;
 
 - (void)loadView
 {
@@ -44,7 +43,6 @@
     self.tableView.showsHorizontalScrollIndicator = NO;
     self.tableView.showsVerticalScrollIndicator = NO;
     if (self.isForCard) {
-        self.canDelete = YES;
         self.tableView.rowHeight = self.box.appRect.size.height;
         self.tableView.pagingEnabled = YES;
         self.tableView.bounces = YES;
@@ -163,8 +161,13 @@
 {
     if (!self.fakeDeleteBtn && self.isForCard) {
         self.fakeDeleteBtn = [[UIImageView alloc] initWithFrame:CGRectMake(frame.origin.x + self.tableView.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height)];
-        self.fakeDeleteBtn.backgroundColor = [UIColor yellowColor];
+        self.fakeDeleteBtn.backgroundColor = [UIColor clearColor];
+        UIImage *i = [UIImage imageNamed:@"DeleteIcon"];
+        self.fakeDeleteBtn.image = [i imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.fakeDeleteBtn.tintColor = [UIColor whiteColor];
         [self.tableView.superview addSubview:self.fakeDeleteBtn];
+        // First time launch.
+        [self refreshZViews];
     }
 }
 
@@ -251,7 +254,7 @@
         cell.text.text = [managedObject valueForKey:@"notes"];
     }
     // Check and get fakeDeleteBtn ready if necessary.
-    [self getFakeDeleteBtn:cell.deleteBtn.frame];
+//    [self getFakeDeleteBtn:cell.deleteBtn.frame];
     return cell;
 }
 
@@ -319,18 +322,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if (self.isForCard) {
         if (!self.isTransitingFromList) {
             [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
-            self.canDelete = NO;
-            if (self.fakeDeleteBtn) {
-                [self alphaChangeOnFakeDeleteBtn:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
-            }
+//            if (self.fakeDeleteBtn) {
+//                [self alphaChangeOnFakeDeleteBtn:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
+//            }
         }
-    }
-}
-
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
-    if (self.isForCard) {
-        self.canDelete = YES;
     }
 }
 

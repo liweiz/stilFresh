@@ -20,6 +20,7 @@
 @synthesize textBackGroundColor;
 @synthesize textBackGroundAlpha;
 @synthesize notes;
+@synthesize deleteBase;
 @synthesize deleteBtn;
 @synthesize deleteTap;
 @synthesize itemId;
@@ -73,7 +74,6 @@
     }
     if (!self.status) {
         self.status = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
-        [self.contentView addSubview:self.status];
     }
     // Change color for freshness
     switch (self.statusCode) {
@@ -94,6 +94,7 @@
             break;
     }
     if (!self.isForCardView) {
+        [self.contentView addSubview:self.status];
         if (!self.bottomLine) {
             CGFloat h1 = 0.5;
             self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.status.frame.size.height - h1, self.status.frame.size.width, h1)];
@@ -125,14 +126,28 @@
         }
     } else {
         CGFloat gap1 = 10;
-        if (!self.deleteBtn) {
-            CGFloat w1 = 44;
-            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width - self.box.gapToEdge - w1, self.box.gapToEdge + 20, w1, w1)];
-            self.deleteBtn.backgroundColor = [UIColor clearColor];
-            [self.status addSubview:self.deleteBtn];
-            self.deleteTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callForDeletion)];
-            [self.deleteBtn addGestureRecognizer:self.deleteTap];
+//        if (!self.deleteBtn) {
+//            CGFloat w1 = 44;
+//            self.deleteBtn = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width - 10 - w1, self.frame.size.height - 10 - w1, w1, w1)];
+//            self.deleteBtn.backgroundColor = [UIColor clearColor];
+//            [self.status addSubview:self.deleteBtn];
+//            self.deleteTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callForDeletion)];
+//            [self.deleteBtn addGestureRecognizer:self.deleteTap];
+//        }
+        if (!self.deleteBase) {
+            self.deleteBase = [[UIScrollView alloc] initWithFrame:self.box.appRect];
+            self.deleteBase.backgroundColor = [UIColor clearColor];
+            self.deleteBase.contentSize = CGSizeMake(self.deleteBase.frame.size.width * 2, self.deleteBase.frame.size.height);
+            self.deleteBase.pagingEnabled = YES;
+            self.deleteBase.bounces = NO;
+            self.deleteBase.showsHorizontalScrollIndicator = NO;
+            self.deleteBase.showsVerticalScrollIndicator = NO;
+            self.deleteBase.delegate = self;
+            [self.contentView addSubview:self.deleteBase];
         }
+        self.deleteBase.userInteractionEnabled = YES;
+        [self.deleteBase addSubview:self.status];
+        [self.deleteBase setContentOffset:CGPointZero animated:NO];
         if (!self.bestBefore) {
             self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.gapToEdge, self.box.gapToEdge + 20, 200, self.deleteBtn.frame.size.height)];
             self.bestBefore.backgroundColor = [UIColor clearColor];
@@ -140,7 +155,8 @@
             self.bestBefore.adjustsFontSizeToFitWidth = YES;
             self.bestBefore.textAlignment = NSTextAlignmentLeft;
             self.bestBefore.textColor = [UIColor whiteColor];
-            [self.status addSubview:self.bestBefore];
+            [self.deleteBase addSubview:self.bestBefore];
+            self.box.bestBeforeFrame = self.bestBefore.frame;
         }
         if (!self.notes) {
             self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + gap1 + 20, self.appRect.size.width - gap1 * 2, 80)];
@@ -150,13 +166,31 @@
             self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
             self.notes.textAlignment = NSTextAlignmentLeft;
             self.notes.textColor = [UIColor whiteColor];
-            [self.status addSubview:self.notes];
+            [self.deleteBase addSubview:self.notes];
         }
     }
     if (self.pic.image) {
-        [self.backgroundView addSubview:self.pic];
+        if (self.isForCardView) {
+            [self.deleteBase addSubview:self.pic];
+        } else {
+            [self.backgroundView addSubview:self.pic];
+        }
+        [self.pic.superview sendSubviewToBack:self.pic];
     } else {
         [self.pic removeFromSuperview];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    self.deleteBase.alpha = 1 - scrollView.contentOffset.x / self.deleteBase.frame.size.width;
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (targetContentOffset->x == scrollView.frame.size.width) {
+        scrollView.userInteractionEnabled = NO;
+        [self callForDeletion];
     }
 }
 

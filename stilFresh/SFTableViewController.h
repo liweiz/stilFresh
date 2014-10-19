@@ -17,7 +17,6 @@
 @property (strong, nonatomic) SFBox *box;
 @property (assign, nonatomic) BOOL isForCard;
 @property (assign, nonatomic) BOOL isTransitingFromList;
-@property (assign, nonatomic) BOOL canDelete;
 @property (strong, nonatomic) NSMutableArray *zViews;
 @property (strong, nonatomic) UIImageView *fakeDeleteBtn;
 

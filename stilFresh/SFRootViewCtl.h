@@ -13,7 +13,7 @@
 #import "SFCamViewCtl.h"
 #import "CHCSVParser.h"
 
-@interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate>
+@interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate>
 
 @property (assign, nonatomic) CGRect appRect;
 @property (strong, nonatomic) SFBox *box;
@@ -32,7 +32,6 @@
 @property (strong, nonatomic) UISwitch *dateAddedSwitch;
 @property (strong, nonatomic) UITextField *dateAdded;
 @property (strong, nonatomic) UIView *cardViewBase;
-
 @property (strong, nonatomic) SFTableViewController *listViewCtl;
 @property (strong, nonatomic) SFTableViewController *cardViewCtl;
 
