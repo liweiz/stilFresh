@@ -10,9 +10,8 @@
 #import "SFItem.h"
 #import "SFTableViewCell.h"
 #import "NSObject+SFExtra.h"
-#import "Haneke.h"
-#import "HNKCache.h"
 #import "SFCellCover.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface SFTableViewController ()
 
@@ -42,16 +41,17 @@
     self.tableView.allowsMultipleSelection = NO;
     self.tableView.showsHorizontalScrollIndicator = NO;
     self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView.bounces = YES;
     if (self.isForCard) {
         self.tableView.rowHeight = self.box.appRect.size.height;
         self.tableView.pagingEnabled = YES;
-        self.tableView.bounces = YES;
+        
         self.tableView.allowsSelection = NO;
         self.zViews = [NSMutableArray arrayWithCapacity:0];
     } else {
         self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
-        self.tableView.rowHeight = self.box.appRect.size.height / 5;
+        self.tableView.rowHeight = (self.box.appRect.size.height - 20) / 5;
     }
 }
 
@@ -217,7 +217,6 @@
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.box = self.box;
     NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
-    [cell.pic hnk_cancelSetImage];
     cell.pic.image = nil;
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
@@ -234,7 +233,7 @@
             if (dImg.length > 0) {
                 NSLog(@"path: %@", path.path);
                 // Try reading from cache, if not available, async process to generate related ones will be underway so that we probably will have those next time.
-                [cell.pic hnk_setImageFromFile:path.path];
+                [cell.pic sd_setImageWithURL:path];
                 if (cell.pic.image) {
                     NSLog(@"has image");
                 } else {

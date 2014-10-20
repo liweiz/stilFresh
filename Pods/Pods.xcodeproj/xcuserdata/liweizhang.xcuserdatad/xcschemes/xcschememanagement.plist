@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-stilFresh-Haneke.xcscheme</key>
+		<key>Pods-stilFresh-SDWebImage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -17,12 +17,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>2DC3F26DCCB7545879AEFF40</key>
+		<key>0563B0F47B4602B465973FDA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7E315A418045855F649538C7</key>
+		<key>8B88166E2258E0C66E0127D1</key>
 		<dict>
 			<key>primary</key>
 			<true/>

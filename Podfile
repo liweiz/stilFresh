@@ -5,7 +5,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target "stilFresh" do
 
-pod 'Haneke', '~> 1.0'
+pod 'SDWebImage', '~>3.7'
 
 end
 

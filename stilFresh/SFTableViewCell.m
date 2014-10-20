@@ -8,7 +8,6 @@
 
 #import "SFTableViewCell.h"
 #import "SFRootViewCtl.h"
-#import "UIImageView+Haneke.h"
 
 @implementation SFTableViewCell
 
