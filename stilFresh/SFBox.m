@@ -44,7 +44,7 @@
         self.warningText = [[NSMutableString alloc] init];
         self.originX = 15;
         self.originY = 15;
-        self.gap = 10;
+        self.gap = 2;
         self.gapToEdge = 15;
         self.oneLineHeight = 40;
         self.fontSizeL = 16;

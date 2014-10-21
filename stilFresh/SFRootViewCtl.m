@@ -60,11 +60,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.box.appRect.size.width + 10, self.box.appRect.size.height)];
+    self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.box.appRect.size.width + self.box.gap, self.box.appRect.size.height)];
     // Four views, from left to right: 1. cam 2. input 3. list 4. menu/card 5. swipe-to-left-to-delete
-    CGSize theContentSize = CGSizeMake((self.box.appRect.size.width + 10) * 4 , self.box.appRect.size.height);
+    CGSize theContentSize = CGSizeMake((self.box.appRect.size.width + self.box.gap) * 4 , self.box.appRect.size.height);
     self.interfaceBase.contentSize = theContentSize;
-    self.interfaceBase.contentOffset = CGPointMake((self.appRect.size.width + 10) * 2, 0);
+    self.interfaceBase.contentOffset = CGPointMake((self.appRect.size.width + self.box.gap) * 2, 0);
     self.interfaceBase.bounces = NO;
     self.interfaceBase.showsVerticalScrollIndicator = NO;
     self.interfaceBase.showsHorizontalScrollIndicator = NO;
@@ -73,17 +73,28 @@
     self.interfaceBase.delegate = self;
     [self.view addSubview:self.interfaceBase];
     
+    
+    
     self.camViewCtl = [[SFCamViewCtl alloc] init];
     self.camViewCtl.box = self.box;
     [self addChildViewController:self.camViewCtl];
     [self.interfaceBase addSubview:self.camViewCtl.view];
     [self.camViewCtl didMoveToParentViewController:self];
     
+    // add black gap
+    UIView *g0 = [[UIView alloc] initWithFrame:CGRectMake(self.camViewCtl.view.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    g0.backgroundColor = [UIColor blackColor];
+    [self.interfaceBase addSubview:g0];
+    
     // InputView
-    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width + 10, 0, self.appRect.size.width, self.appRect.size.height)];
+    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width + self.box.gap, 0, self.appRect.size.width, self.appRect.size.height)];
     self.inputView.touchToDismissKeyboardIsOn = YES;
     self.inputView.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.inputView];
+    // add black gap
+    UIView *g1 = [[UIView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x + self.inputView.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    g1.backgroundColor = [UIColor blackColor];
+    [self.interfaceBase addSubview:g1];
     // BestBefore
     self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.originY, self.box.width - self.box.gap - 54, 44)];
     
@@ -146,9 +157,13 @@
     [self addChildViewController:self.listViewCtl];
     [self.interfaceBase addSubview:self.listViewCtl.tableView];
     [self.listViewCtl didMoveToParentViewController:self];
+    // add black gap
+    UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewCtl.tableView.frame.origin.x + self.listViewCtl.tableView.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    g2.backgroundColor = [UIColor blackColor];
+    [self.interfaceBase addSubview:g2];
     
     // CardViewCtl
-    self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake((self.box.appRect.size.width + 10) * 3, 0, self.box.appRect.size.width, self.box.appRect.size.height)];
+    self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake((self.box.appRect.size.width + self.box.gap) * 3, 0, self.box.appRect.size.width, self.box.appRect.size.height)];
     self.cardViewBase.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.cardViewBase];
     self.cardViewCtl = [[SFTableViewController alloc] init];
@@ -158,6 +173,10 @@
     [self.cardViewBase addSubview:self.cardViewCtl.tableView];
     [self.cardViewCtl didMoveToParentViewController:self];
 //    self.cardViewCtl.tableView.hidden = YES;
+    // add black gap
+    UIView *g3 = [[UIView alloc] initWithFrame:CGRectMake(self.cardViewBase.frame.origin.x + self.cardViewBase.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    g3.backgroundColor = [UIColor blackColor];
+    [self.interfaceBase addSubview:g3];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCard) name:@"rowSelected" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataForTables) name:@"reloadData" object:nil];
