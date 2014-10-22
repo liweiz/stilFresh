@@ -464,24 +464,17 @@
     } else {
         // valid dayAdded is needed.
         if (!self.dateAddedSwitch.on) {
-            NSDate *p = [self stringToDate:self.dateAdded.text];
-            if (!p) {
-                errOccured = YES;
-                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
-            } else {
-                [i setValue:self.dateAdded.text forKey:@"dateAdded"];
-            }
+            [i setValue:[self dateToString:self.dateAddedDate] forKey:@"dateAdded"];
         } else {
             [i setValue:[self dateToString:[NSDate date]] forKey:@"dateAdded"];
         }
         if (!errOccured) {
             // valid bestBefore
-            NSDate *d = [self stringToDate:self.bestBefore.text];
-            if (!d) {
+            if (!self.bestBeforeDate) {
                 errOccured = YES;
-                [self.box.warningText setString:@"Please enter date info: YYYY-MM-DD."];
+                [self.box.warningText setString:@"Please select date for best before."];
             } else {
-                [i setValue:self.bestBefore.text forKey:@"bestBefore"];
+                [i setValue:[self dateToString:self.bestBeforeDate] forKey:@"bestBefore"];
             }
             if (!errOccured) {
                 if ([self validateNotesInput:self.notes.text]) {
