@@ -339,6 +339,25 @@
     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
 }
 
+#pragma mark - text view delegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView isEqual:self.notes]) {
+        if (!self.notesPlaceHolder.hidden) {
+            self.notesPlaceHolder.hidden = YES;
+        }
+    }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView isEqual:self.notes]) {
+        if (self.notes.text.length == 0) {
+            self.notesPlaceHolder.hidden = NO;
+        }
+    }
+}
 
 #pragma mark - warning display
 
