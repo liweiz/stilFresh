@@ -33,7 +33,8 @@
             if (![x isKindOfClass:[UITextField class]]) {
                 [self endEditing:YES];
             }
-        } else if (self.touchToDismissViewIsOn == YES) {
+        }
+        if (self.touchToDismissViewIsOn == YES) {
             if (!([x isKindOfClass:[UILabel class]] && x.userInteractionEnabled == YES)) {
                 // Dismiss view
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"dismiss" object:self];

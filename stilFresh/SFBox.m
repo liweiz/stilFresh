@@ -32,6 +32,7 @@
 @synthesize goldenRatio;
 @synthesize gapToEdge;
 @synthesize bestBeforeFrame;
+@synthesize placeholderFontColor;
 
 - (id)init
 {
@@ -50,6 +51,8 @@
         self.fontSizeL = 16;
         self.fontSizeM = 14;
         CGFloat alpha = 0.8;
+        // http://stackoverflow.com/questions/10496114/uitextfield-placeholder-font-color-white-ios-5
+        self.placeholderFontColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.098/255.0 alpha:0.22];
         self.sfGreen0 = [UIColor colorWithRed:157 / 255.0 green:225 / 255.0 blue:63 / 255.0 alpha:alpha];
         self.sfGreen1 = [UIColor colorWithRed:150 / 255.0 green:206 / 255.0 blue:107 / 255.0 alpha:alpha];
         self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:alpha];

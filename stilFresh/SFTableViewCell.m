@@ -100,28 +100,28 @@
             self.bottomLine.backgroundColor = [UIColor whiteColor];
             [self.status addSubview:self.bottomLine];
         }
-        if (!self.number) {
-            CGFloat gap = 10;
-            CGFloat w = 44;
-            self.number = [[UILabel alloc] initWithFrame:CGRectMake(gap, gap, w, self.contentView.frame.size.height - gap * 2)];
-            self.number.backgroundColor = [UIColor clearColor];
-            self.number.textColor = [UIColor whiteColor];
-            self.number.textAlignment = NSTextAlignmentRight;
-            self.number.font = [UIFont boldSystemFontOfSize:self.box.fontSizeL * 2];
-            self.number.lineBreakMode = NSLineBreakByCharWrapping;
-            [self.status addSubview:self.number];
-        }
         if (!self.text) {
             CGFloat gap = 10;
-            self.text = [[UILabel alloc] initWithFrame:CGRectMake(self.number.frame.origin.x + self.number.frame.size.width + gap, gap, self.contentView.frame.size.width - gap * 3 - self.number.frame.size.width, self.number.frame.size.height)];
+            self.text = [[UILabel alloc] initWithFrame:CGRectMake(gap, gap, self.contentView.frame.size.width - gap * 3 - 60, self.number.frame.size.height)];
             self.text.backgroundColor = [UIColor clearColor];
             self.text.textColor = [UIColor whiteColor];
             self.text.textAlignment = NSTextAlignmentLeft;
             self.text.userInteractionEnabled = NO;
             self.text.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
-            self.text.lineBreakMode = NSLineBreakByCharWrapping;
+            self.text.lineBreakMode = NSLineBreakByWordWrapping;
             self.text.numberOfLines = 2;
             [self.status addSubview:self.text];
+        }
+        if (!self.number) {
+            CGFloat gap = 10;
+            CGFloat w = 60;
+            self.number = [[UILabel alloc] initWithFrame:CGRectMake(self.text.frame.origin.x + self.text.frame.size.width + gap, gap, w, self.contentView.frame.size.height - gap * 2)];
+            self.number.backgroundColor = [UIColor clearColor];
+            self.number.textColor = [UIColor whiteColor];
+            self.number.textAlignment = NSTextAlignmentRight;
+            self.number.font = [UIFont boldSystemFontOfSize:self.box.fontSizeL * 2];
+            self.number.lineBreakMode = NSLineBreakByWordWrapping;
+            [self.status addSubview:self.number];
         }
     } else {
         CGFloat gap1 = 10;

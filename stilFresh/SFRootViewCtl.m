@@ -37,6 +37,9 @@
 @synthesize dateAddedLabel;
 @synthesize dateAddedSwitch;
 @synthesize dateAdded;
+@synthesize isForBestBefore;
+@synthesize bestBeforeDate;
+@synthesize dateAddedDate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -73,8 +76,6 @@
     self.interfaceBase.delegate = self;
     [self.view addSubview:self.interfaceBase];
     
-    
-    
     self.camViewCtl = [[SFCamViewCtl alloc] init];
     self.camViewCtl.box = self.box;
     [self addChildViewController:self.camViewCtl];
@@ -89,6 +90,7 @@
     // InputView
     self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width + self.box.gap, 0, self.appRect.size.width, self.appRect.size.height)];
     self.inputView.touchToDismissKeyboardIsOn = YES;
+    self.inputView.touchToDismissViewIsOn = YES;
     self.inputView.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.inputView];
     // add black gap
@@ -96,17 +98,18 @@
     g1.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g1];
     // BestBefore
-    self.bestBefore = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.originY, self.box.width - self.box.gap - 54, 44)];
-    
+    self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.box.originY + 20, self.box.width - self.box.gap - 54, 44)];
+    UITapGestureRecognizer *bbTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnBestBefore)];
+    [self.bestBefore addGestureRecognizer:bbTap];
+    self.bestBefore.userInteractionEnabled = YES;
+    [self checkPlaceHolder];
     self.bestBefore.backgroundColor = [UIColor clearColor];
-    self.bestBefore.placeholder = @"Best before: YYYYMMDD";
-    self.bestBefore.delegate = self;
-    self.bestBefore.keyboardType = UIKeyboardTypeNumberPad;
+    
     self.bestBefore.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     [self configLayer:self.bestBefore.layer box:self.box isClear:YES];
     [self.inputView addSubview:self.bestBefore];
     // AddBtn
-    self.addBtn = [[UIView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.box.originY, 54, self.bestBefore.frame.size.height)];
+    self.addBtn = [[UIView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height)];
     [self configLayer:self.addBtn.layer box:self.box isClear:NO];
     self.addBtn.backgroundColor = self.box.sfGreen0;
     self.addTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(saveItem)];
@@ -138,12 +141,13 @@
     [self.dateAddedSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
     [self.inputView addSubview:self.dateAddedSwitch];
     self.dateAddedSwitch.onTintColor = self.box.sfGreen0;
-    self.dateAdded = [[UITextField alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54, 44)];
+    self.dateAdded = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54, 44)];
+    UITapGestureRecognizer *daTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnDateAdded)];
+    [self.dateAdded addGestureRecognizer:daTap];
+    self.dateAdded.userInteractionEnabled = YES;
     [self configLayer:self.dateAdded.layer box:self.box isClear:YES];
     self.dateAdded.backgroundColor = [UIColor clearColor];
-    self.dateAdded.placeholder = @"Date purchased: YYYYMMDD";
-    self.dateAdded.delegate = self;
-    self.dateAdded.keyboardType = UIKeyboardTypeNumberPad;
+
     self.dateAdded.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     [self.inputView addSubview:self.dateAdded];
     self.dateAdded.hidden = YES;
@@ -187,12 +191,135 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endTableChange) name:@"endTableChange" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"deleteItem" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideDatePicker) name:@"dismiss" object:nil];
     // Create a CSV file in NSLibraryDirectory to store all the deleted items' itemIds to locate and delete their corresponding image files.
     [self setupCSVForDeletedItem];
 }
 
+#pragma mark - tap on date input
+// Start to edit bestBefore
+- (void)tapOnBestBefore
+{
+    if ([self.bestBefore.text isEqualToString:@"Best before"]) {
+        NSDateComponents *c = [[NSDateComponents alloc] init];
+        c.day = 5;
+        NSDate *dayAfter5 = [[NSCalendar currentCalendar] dateByAddingComponents:c toDate:[NSDate date] options:0];
+        
+        self.bestBeforeDate = dayAfter5;
+        self.bestBefore.textColor = [UIColor blackColor];
+    }
+    [self showDatePicker:self.bestBefore date:self.bestBeforeDate];
+}
 
+// Start to edit dateAdded
+- (void)changeSwitch:(UISwitch *)sender
+{
+    if(sender.on){
+        NSLog(@"Switch is ON");
+        self.dateAdded.hidden = YES;
+        self.dateAddedLabel.hidden = NO;
+        [self hideDatePicker];
+    } else{
+        NSLog(@"Switch is OFF");
+        self.dateAdded.hidden = NO;
+        self.dateAddedLabel.hidden = YES;
+        NSDateComponents *c = [[NSDateComponents alloc] init];
+        c.day = -5;
+        NSDate *dayBefore5 = [[NSCalendar currentCalendar] dateByAddingComponents:c toDate:[NSDate date] options:0];
+        self.dateAddedDate = dayBefore5;
+        [self showDatePicker:self.dateAdded date:self.dateAddedDate];
+    }
+}
+
+- (void)tapOnDateAdded
+{
+    [self showDatePicker:self.dateAdded date:self.dateAddedDate];
+}
+
+- (void)checkPlaceHolder
+{
+    if (self.bestBefore.text.length == 0) {
+        self.bestBefore.text = @"Best before";
+        self.bestBefore.textColor = self.box.placeholderFontColor;
+    } else {
+        self.bestBefore.textColor = [UIColor blackColor];
+    }
+}
+
+- (void)resetInput
+{
+    self.bestBefore.text = @"Best before";
+    self.bestBeforeDate = nil;
+    self.bestBefore.textColor = self.box.placeholderFontColor;
+    self.notes.text = @"";
+    self.dateAddedSwitch.on = YES;
+    [self changeSwitch:self.dateAddedSwitch];
+}
+
+#pragma mark - datePicker
+- (void)showDatePicker:(UILabel *)l date:(NSDate *)d
+{
+    if (![self.interfaceBase viewWithTag:999]) {
+        // http://stackoverflow.com/questions/18970679/ios-7-uidatepicker-height-inconsistency
+        CGFloat h = 216;
+        UIScrollView *base = [[UIScrollView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x, self.appRect.size.height - h, self.appRect.size.width, h)];
+        base.tag = 999;
+        base.backgroundColor = [UIColor clearColor];
+        base.contentSize = CGSizeMake(base.frame.size.width, base.frame.size.height * 2);
+        base.userInteractionEnabled = YES;
+        base.delegate = self;
+        UIDatePicker *p = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, base.frame.size.height, base
+                                                                         .frame.size.width, base.frame.size.height)];
+        p.tag = 998;
+        [p addTarget:self action:@selector(dateUpdated:) forControlEvents:UIControlEventValueChanged];
+        p.datePickerMode = UIDatePickerModeDate;
+        [base addSubview:p];
+        [self.interfaceBase addSubview:base];
+        [base setContentOffset:CGPointMake(0, base.frame.size.height) animated:YES];
+    }
+    if ([l isEqual:self.bestBefore]) {
+        self.isForBestBefore = YES;
+    } else if ([l isEqual:self.dateAdded]) {
+        self.isForBestBefore = NO;
+    }
+    UIDatePicker *x = (UIDatePicker *)[self.interfaceBase viewWithTag:998];
+    if ([x isKindOfClass:[UIDatePicker class]]) {
+        [x setDate:d animated:NO];
+    }
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, YYYY"];
+    l.text = [formatter stringFromDate:d];
+}
+
+- (void)dateUpdated:(UIDatePicker *)datePicker
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, YYYY"];
+    if (self.isForBestBefore) {
+        self.bestBefore.text = [formatter stringFromDate:datePicker.date];
+        self.bestBeforeDate = datePicker.date;
+    } else {
+        self.dateAdded.text = [formatter stringFromDate:datePicker.date];
+        self.dateAddedDate = datePicker.date;
+    }
+}
+
+- (void)hideDatePicker
+{
+    UIScrollView *v = (UIScrollView *)[self.interfaceBase viewWithTag:999];
+    if (v) {
+        [v setContentOffset:CGPointZero animated:YES];
+    }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    if (scrollView.tag == 999) {
+        if (scrollView.contentOffset.y == 0) {
+            [scrollView removeFromSuperview];
+        }
+    }
+}
 
 - (void)reloadDataForTables
 {
@@ -212,57 +339,6 @@
     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
 }
 
-
-- (void)changeSwitch:(UISwitch *)sender
-{
-    if(sender.on){
-        NSLog(@"Switch is ON");
-        self.dateAdded.hidden = YES;
-        self.dateAddedLabel.hidden = NO;
-    } else{
-        NSLog(@"Switch is OFF");
-        self.dateAdded.hidden = NO;
-        self.dateAddedLabel.hidden = YES;
-    }
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if ([textField isEqual:self.bestBefore]) {
-        if (textField.text.length == 0) {
-            NSDateComponents *c = [[NSDateComponents alloc] init];
-            c.day = 5;
-            NSDate *dayAfter5 = [[NSCalendar currentCalendar] dateByAddingComponents:c toDate:[NSDate date] options:0];
-            self.bestBefore.text = [self dateToString:dayAfter5];
-        }
-    }
-    if ([textField isEqual:self.dateAdded]) {
-        if (textField.text.length == 0) {
-            NSDateComponents *c = [[NSDateComponents alloc] init];
-            c.day = -5;
-            NSDate *dayAfter5 = [[NSCalendar currentCalendar] dateByAddingComponents:c toDate:[NSDate date] options:0];
-            self.dateAdded.text = [self dateToString:dayAfter5];
-        }
-    }
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    if ([textView isEqual:self.notes]) {
-        if (!self.notesPlaceHolder.hidden) {
-            self.notesPlaceHolder.hidden = YES;
-        }
-    }
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    if ([textView isEqual:self.notes]) {
-        if (self.notes.text.length == 0) {
-            self.notesPlaceHolder.hidden = NO;
-        }
-    }
-}
 
 #pragma mark - warning display
 
@@ -437,6 +513,8 @@
                                 }
                             } else {
                                 [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
+                                // Keep input info till fully successful submit.
+                                [self resetInput];
                             }
                         } else {
                             errOccured = YES;
