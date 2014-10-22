@@ -12,6 +12,7 @@
 #import "NSObject+SFExtra.h"
 #import "SFCellCover.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "SFHintView.h"
 
 @interface SFTableViewController ()
 
@@ -52,6 +53,11 @@
         self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
         self.tableView.rowHeight = (self.box.appRect.size.height - 20) / 5;
+        if ([self.tableView numberOfRowsInSection:0] == 0) {
+            SFHintView *hv = [[SFHintView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width / 2, self.tableView.frame.size.height)];
+            hv.contentMode = UIViewContentModeScaleAspectFit;
+            [hv setupWithImageName:@"SwipeToCreate" superView:self.tableView];
+        }
     }
 }
 

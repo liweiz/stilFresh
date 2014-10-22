@@ -40,6 +40,7 @@
 @synthesize isForBestBefore;
 @synthesize bestBeforeDate;
 @synthesize dateAddedDate;
+@synthesize hintIsOn;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -312,14 +313,7 @@
     }
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
-    if (scrollView.tag == 999) {
-        if (scrollView.contentOffset.y == 0) {
-            [scrollView removeFromSuperview];
-        }
-    }
-}
+
 
 - (void)reloadDataForTables
 {
@@ -640,10 +634,62 @@
     return [NSArray arrayWithContentsOfCSVURL:path];
 }
 
-#pragma mark - timeLine
+#pragma mark - scrollViewDelegate
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    if (scrollView.tag == 999) {
+        // Remove datePicker.
+        if (scrollView.contentOffset.y == 0) {
+            [scrollView removeFromSuperview];
+        }
+    } else if ([scrollView isEqual:self.interfaceBase]) {
+        if (self.hintIsOn) {
+            if (scrollView.contentOffset.x == 0) {
+                // Reach camView
+            } else if (scrollView.contentOffset.x == scrollView.frame.size.width / 4) {
+                // Reach inputView
+            } else if (scrollView.contentOffset.x == scrollView.frame.size.width / 2) {
+                // Reach list
+            } else if (scrollView.contentOffset.x == scrollView.frame.size.width * 3 / 4) {
+                // Reach card/menu
+                
+            }
+        }
+        
+    }
+}
 
+#pragma mark - hint display
+/*
+ Hint display flow:
+ A. Intro to create new record:
+ 1. Show swipeToCreate (if user can figure out how to swipe left to menu, then s/he can easily turn the hint off)
+ 2. Show swipeToCapture/swipeBack and more info button to show bestBefore/notes/dateAdded
+ 2.1.1 on Capture, show swipeBack/capture
+ 2.1.2 after captured, show swipeToDispose/swipeBackToUse
+ 2.2 show more info for bestBefore/notes/dateAdded
+ 3. Check every time if mininum requirements for submit has been reached. If yes, show hint for submit.
+ B. CardView
+ 1. Show swipeToDelete and swipeBack
+ */
 
-
+// switches contains the on/off indicators for all the hints on the page in order.
+- (void)showHintOnInput:(NSArray *)switches
+{
+    for (NSNumber *n in switches) {
+        if (n.boolValue) {
+            if ([switches indexOfObject:n] == 0) {
+                // SwipeToCreate
+            } else if ([switches indexOfObject:n] == 1) {
+                // SwipeToMenu
+            } else if ([switches indexOfObject:n] == 2) {
+                // TapToSelect
+            } else if ([switches indexOfObject:n] == 3) {
+                // ColorInfo
+            }
+        }
+    }
+}
 
 /*
 #pragma mark - Navigation

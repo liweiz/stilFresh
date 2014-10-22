@@ -21,6 +21,7 @@
 		EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */; };
 		EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC7C219DF995100CA09F8 /* SFView.m */; };
 		EE63B26519E384A200C871C0 /* SFItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE63B26419E384A200C871C0 /* SFItem.m */; };
+		EE781A5E19F7FB5900BEB383 /* SFHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE781A5D19F7FB5900BEB383 /* SFHintView.m */; };
 		EE87B42619EC7FB80022DE0E /* SFCellCover.m in Sources */ = {isa = PBXBuildFile; fileRef = EE87B42519EC7FB80022DE0E /* SFCellCover.m */; };
 		EECAA75019E5A89200AAE177 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		EECAA75119E5AC9400AAE177 /* Pods-stilFresh.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */; };
@@ -69,6 +70,8 @@
 		EE3EC7C219DF995100CA09F8 /* SFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFView.m; sourceTree = "<group>"; };
 		EE63B26319E384A200C871C0 /* SFItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFItem.h; sourceTree = "<group>"; };
 		EE63B26419E384A200C871C0 /* SFItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFItem.m; sourceTree = "<group>"; };
+		EE781A5C19F7FB5900BEB383 /* SFHintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHintView.h; sourceTree = "<group>"; };
+		EE781A5D19F7FB5900BEB383 /* SFHintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHintView.m; sourceTree = "<group>"; };
 		EE87B42419EC7FB80022DE0E /* SFCellCover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCellCover.h; sourceTree = "<group>"; };
 		EE87B42519EC7FB80022DE0E /* SFCellCover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCellCover.m; sourceTree = "<group>"; };
 		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
@@ -151,6 +154,7 @@
 				EE63B26419E384A200C871C0 /* SFItem.m */,
 				EE1547BD19E608E8004B6EDC /* CHCSVParser.h */,
 				EE1547BE19E608E8004B6EDC /* CHCSVParser.m */,
+				EE781A5819F7F13200BEB383 /* Hint */,
 				EE3EC79619DF98C400CA09F8 /* Images.xcassets */,
 				EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */,
 				EE3EC78619DF98C400CA09F8 /* Supporting Files */,
@@ -182,6 +186,15 @@
 				EE3EC7A419DF98C400CA09F8 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EE781A5819F7F13200BEB383 /* Hint */ = {
+			isa = PBXGroup;
+			children = (
+				EE781A5C19F7FB5900BEB383 /* SFHintView.h */,
+				EE781A5D19F7FB5900BEB383 /* SFHintView.m */,
+			);
+			name = Hint;
 			sourceTree = "<group>";
 		};
 		FF9FD9A103B28B5E8257893C /* Pods */ = {
@@ -343,6 +356,7 @@
 				EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */,
 				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,
+				EE781A5E19F7FB5900BEB383 /* SFHintView.m in Sources */,
 				EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
