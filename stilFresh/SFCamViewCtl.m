@@ -116,6 +116,7 @@
          self.img = [[UIImage alloc] initWithData:imageData scale:1];
          self.isCapturing = NO;
         [self loadPreview:self.img];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"showPicDisposeHint" object:self];
      }];
 }
 
@@ -132,6 +133,7 @@
     base.showsVerticalScrollIndicator = NO;
     base.delegate = self;
     UIImageView *picTaken = [[UIImageView alloc] initWithFrame:self.streamView.frame];
+    picTaken.contentMode = UIViewContentModeScaleAspectFill;
     picTaken.image = image;
     [base addSubview:picTaken];
     [self.view addSubview:base];

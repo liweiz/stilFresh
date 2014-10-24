@@ -44,6 +44,6 @@
 @property (strong, nonatomic) UICollectionViewController *itemViewCtl;
 
 @property (strong, nonatomic) UILabel *warning;
-
+@property (strong, nonatomic) NSMutableSet *hintViews;
 
 @end

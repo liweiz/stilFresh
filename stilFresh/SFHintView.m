@@ -24,7 +24,7 @@
 {
     UIImage *i = [UIImage imageNamed:@"SwipeToCreate"];
     self.image = [i imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//    self.image = [UIImage imageNamed:@"SwipeToCreate"];
+    self.contentMode = UIViewContentModeScaleAspectFit;
     [view addSubview:self];
 }
 

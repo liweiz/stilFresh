@@ -9,7 +9,8 @@
 #import "SFRootViewCtl.h"
 #import "SFItem.h"
 #import "NSObject+SFExtra.h"
-
+#import "SFHintView.h"
+#import "SFHintBase.h"
 
 @interface SFRootViewCtl ()
 
@@ -41,6 +42,7 @@
 @synthesize bestBeforeDate;
 @synthesize dateAddedDate;
 @synthesize hintIsOn;
+@synthesize hintViews;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -59,6 +61,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.box.appRect = self.appRect;
     self.box.width = self.appRect.size.width - self.box.originX * 2;
+    self.hintIsOn = YES;
 }
 
 - (void)viewDidLoad {
@@ -193,6 +196,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideDatePicker) name:@"dismiss" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPicDisposeHint) name:@"showPicDisposeHint" object:nil];
     // Create a CSV file in NSLibraryDirectory to store all the deleted items' itemIds to locate and delete their corresponding image files.
     [self setupCSVForDeletedItem];
 }
@@ -635,7 +639,7 @@
 }
 
 #pragma mark - scrollViewDelegate
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.tag == 999) {
         // Remove datePicker.
@@ -644,19 +648,35 @@
         }
     } else if ([scrollView isEqual:self.interfaceBase]) {
         if (self.hintIsOn) {
+            NSMutableIndexSet *s;
             if (scrollView.contentOffset.x == 0) {
                 // Reach camView
-            } else if (scrollView.contentOffset.x == scrollView.frame.size.width / 4) {
+                if (self.camViewCtl.img) {
+                    s = [NSMutableIndexSet indexSetWithIndex:5];
+                }
+            } else if (scrollView.contentOffset.x == scrollView.contentSize.width / 4) {
                 // Reach inputView
-            } else if (scrollView.contentOffset.x == scrollView.frame.size.width / 2) {
+                s = [NSMutableIndexSet indexSetWithIndex:4];
+                [s addIndex:6];
+            } else if (scrollView.contentOffset.x == scrollView.contentSize.width / 2) {
                 // Reach list
-            } else if (scrollView.contentOffset.x == scrollView.frame.size.width * 3 / 4) {
+                s = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)];
+            } else if (scrollView.contentOffset.x == scrollView.contentSize.width * 3 / 4) {
                 // Reach card/menu
-                
+                s = [NSMutableIndexSet indexSetWithIndex:3];
+                s = [NSMutableIndexSet indexSetWithIndex:7];
+            }
+            if ([s count] > 0) {
+                [self processHints:s];
             }
         }
-        
     }
+}
+
+- (void)showPicDisposeHint
+{
+    NSMutableIndexSet *s = [NSMutableIndexSet indexSetWithIndex:5];
+    [self processHints:s];
 }
 
 #pragma mark - hint display
@@ -674,21 +694,111 @@
  */
 
 // switches contains the on/off indicators for all the hints on the page in order.
-- (void)showHintOnInput:(NSArray *)switches
+- (void)processHints:(NSIndexSet *)switches
 {
-    for (NSNumber *n in switches) {
-        if (n.boolValue) {
-            if ([switches indexOfObject:n] == 0) {
-                // SwipeToCreate
-            } else if ([switches indexOfObject:n] == 1) {
-                // SwipeToMenu
-            } else if ([switches indexOfObject:n] == 2) {
-                // TapToSelect
-            } else if ([switches indexOfObject:n] == 3) {
-                // ColorInfo
-            }
+    if (!self.hintViews) {
+        self.hintViews = [NSMutableSet setWithCapacity:0];
+    }
+    for (UIView *v in self.view.subviews) {
+        if ([v isKindOfClass:[SFHintBase class]]) {
+            [v removeFromSuperview];
+        };
+    }
+    [self.hintViews removeAllObjects];
+    NSMutableArray *a = [NSMutableArray arrayWithCapacity:0];
+    for (NSInteger i = 0; i < 8; i++) {
+        [a addObject:[NSNumber numberWithInteger:i]];
+    }
+    NSArray *r = [a objectsAtIndexes:switches];
+    if ([r count] > 0) {
+        SFHintBase *base = [[SFHintBase alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:base];
+        for (NSNumber *y in r) {
+            [self addOneHint:y.integerValue onBase:base];
         }
     }
+}
+
+- (void)addOneHint:(NSInteger)x onBase:(SFHintBase *)b
+{
+    UILabel *l;
+    NSString *s;
+    NSString *t;
+    CGRect f;
+    CGFloat xToEdge = 20;
+    switch (x) {
+        case 0:
+            if ([self.listViewCtl.tableView numberOfRowsInSection:0] == 0) {
+                f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height);
+                s = @"SwipeToCreate";
+                t = @"Swipe to add";
+            }
+            break;
+        case 1:
+            if ([self.listViewCtl.tableView numberOfRowsInSection:0] > 0) {
+                f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
+                s = @"SwipeToMenu";
+                t = @"Swipe to settings";
+            }
+            break;
+        case 2:
+            if ([self.listViewCtl.tableView numberOfRowsInSection:0] > 0) {
+                f = CGRectMake(xToEdge, self.view.frame.size.height / 2, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
+                s = @"ColorInfo";
+            }
+            break;
+        case 3:
+            f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
+            s = @"SwipeBack";
+            t = @"Swipe to go back";
+            break;
+        case 4:
+            f = CGRectMake(xToEdge, self.view.frame.size.height / 2, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
+            s = @"SwipeToCapture";
+            t = @"Need a photo? Swipe to take one.";
+            break;
+        case 5:
+            f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height);
+            s = @"SwipeToDispose";
+            t = @"Swipe up to delete. Or swipe back directly, it will be used when you submit.";
+            break;
+        case 6:
+            f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
+            s = @"MoreInputInfo";
+            t = @"Pick the best before date and date purchased, if not today. Have a photo/some text. Save. That's it";
+            break;
+        case 7:
+            f = CGRectMake(xToEdge, self.view.frame.size.height / 2, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
+            s = @"SwipeToDelete";
+            t = @"Swipe left to delete.";
+            break;
+        default:
+            break;
+    }
+    if (f.size.width > 0) {
+        l = [self getHintLabel:f withText:t];
+    }
+    if (l) {
+        [self.hintViews addObject:l];
+    }
+    if (b) {
+        [b addSubview:l];
+    }
+}
+
+- (UILabel *)getHintLabel:(CGRect)rect withText:(NSString *)t
+{
+    UILabel *l = [[UILabel alloc] initWithFrame:rect];
+    l.backgroundColor = [UIColor clearColor];
+    l.textColor = [UIColor whiteColor];
+    l.textAlignment = NSTextAlignmentLeft;
+    l.text = t;
+    l.adjustsFontSizeToFitWidth = YES;
+    l.minimumScaleFactor = 1;
+    l.numberOfLines = 0;
+    l.lineBreakMode = NSLineBreakByWordWrapping;
+    l.font = [UIFont fontWithName:@"BradleyHandITCTT-Bold" size:self.box.fontSizeM * 2];
+    return l;
 }
 
 /*
