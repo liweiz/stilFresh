@@ -102,12 +102,13 @@
         }
         if (!self.text) {
             CGFloat gap = 10;
-            self.text = [[UILabel alloc] initWithFrame:CGRectMake(gap, gap, self.contentView.frame.size.width - gap * 3 - 60, self.number.frame.size.height)];
+            self.text = [[UILabel alloc] initWithFrame:CGRectMake(gap, gap, self.contentView.frame.size.width - gap * 3 - 60, self.contentView.frame.size.height - gap * 2)];
             self.text.backgroundColor = [UIColor clearColor];
             self.text.textColor = [UIColor whiteColor];
             self.text.textAlignment = NSTextAlignmentLeft;
             self.text.userInteractionEnabled = NO;
             self.text.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
+            self.text.minimumScaleFactor = 1;
             self.text.lineBreakMode = NSLineBreakByWordWrapping;
             self.text.numberOfLines = 2;
             [self.status addSubview:self.text];

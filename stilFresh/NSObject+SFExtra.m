@@ -44,7 +44,15 @@
     CGFloat r1 = d / 3.0;
     CGFloat r2 = d * 2.0 / 3;
     NSNumber *n;
-    if (f <= 0) {
+    if (d == 1) {
+        n = [NSNumber numberWithInteger:1];
+    } else if (d == 2) {
+        if (f == 2) {
+            n = [NSNumber numberWithInteger:0];
+        } else if (f == 1) {
+            n = [NSNumber numberWithInteger:2];
+        }
+    } else if (f <= 0) {
         n = [NSNumber numberWithInteger:3];
     } else if (f <= floorf(r1)) {
         n = [NSNumber numberWithInteger:2];
