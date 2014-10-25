@@ -40,6 +40,7 @@
 @property (strong, nonatomic) SFTableViewController *cardViewCtl;
 
 @property (strong, nonatomic) UIView *menuView;
+@property (strong, nonatomic) UILabel *textCount;
 
 @property (strong, nonatomic) UICollectionViewController *itemViewCtl;
 

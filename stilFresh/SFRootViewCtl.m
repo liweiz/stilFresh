@@ -43,6 +43,7 @@
 @synthesize dateAddedDate;
 @synthesize hintIsOn;
 @synthesize hintViews;
+@synthesize textCount;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -133,6 +134,14 @@
     self.notesPlaceHolder.userInteractionEnabled = NO;
     self.notesPlaceHolder.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     [self.notes addSubview:self.notesPlaceHolder];
+    CGFloat th = 44;
+    CGFloat tw = 60;
+    self.textCount = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.size.width - tw, self.notes.frame.size.height - th, tw, th)];
+    self.textCount.backgroundColor = [UIColor clearColor];
+    self.textCount.textColor = [UIColor grayColor];
+    self.textCount.font = self.notes.font;
+    self.textCount.textAlignment = NSTextAlignmentRight;
+    [self.notes addSubview:self.textCount];
     // DayAdded
     self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.notes.frame.origin.y + self.notes.frame.size.height + self.box.gap, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
     [self configLayer:self.dateAddedLabel.layer box:self.box isClear:NO];
@@ -345,6 +354,17 @@
         if (!self.notesPlaceHolder.hidden) {
             self.notesPlaceHolder.hidden = YES;
         }
+        if (self.textCount.hidden) {
+            self.textCount.hidden = NO;
+        }
+        [self showCountTextResult];
+    }
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    if ([textView isEqual:self.notes]) {
+        [self showCountTextResult];
     }
 }
 
@@ -354,7 +374,31 @@
         if (self.notes.text.length == 0) {
             self.notesPlaceHolder.hidden = NO;
         }
+        if (!self.textCount.hidden) {
+            self.textCount.hidden = YES;
+        }
     }
+}
+
+- (void)showCountTextResult
+{
+    NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:self.notes.text];
+    if (self.notes.text.length > 100) {
+        [s addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(100, self.notes.text.length - 100)];
+        self.notes.attributedText = s;
+        self.textCount.font = [self boldFontWithFont:self.notes.font];
+    } else {
+        self.textCount.font = self.notes.font;
+    }
+    self.textCount.text = [NSString stringWithFormat:@"%ld/100", self.notes.text.length];
+}
+
+// http://stackoverflow.com/questions/18862868/setting-bold-font-on-ios-uilabel
+- (UIFont *)boldFontWithFont:(UIFont *)font
+{
+    UIFontDescriptor * fontD = [font.fontDescriptor
+                                fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold];
+    return [UIFont fontWithDescriptor:fontD size:0];
 }
 
 #pragma mark - warning display
