@@ -12,10 +12,11 @@
 #import "SFView.h"
 #import "SFCamViewCtl.h"
 #import "CHCSVParser.h"
+#import "SFMenu.h"
 
 @interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate>
 
-@property (assign, nonatomic) BOOL hintIsOn;
+
 @property (assign, nonatomic) CGRect appRect;
 @property (assign, nonatomic) BOOL isForBestBefore;
 @property (strong, nonatomic) SFBox *box;
@@ -43,6 +44,8 @@
 @property (strong, nonatomic) UILabel *textCount;
 
 @property (strong, nonatomic) UICollectionViewController *itemViewCtl;
+
+@property (strong, nonatomic) SFMenu *menu;
 
 @property (strong, nonatomic) UILabel *warning;
 @property (strong, nonatomic) NSMutableSet *hintViews;

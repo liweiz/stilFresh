@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, SFSort) {
 
 @interface SFBox : NSObject <NSFetchedResultsControllerDelegate>
 
+@property (assign, nonatomic) BOOL hintIsOn;
 @property (assign, nonatomic) CGFloat goldenRatio;
 @property (assign, nonatomic) CGRect appRect;
 @property (assign, nonatomic) CGFloat originX;
@@ -51,5 +52,6 @@ typedef NS_ENUM(NSInteger, SFSort) {
 
 - (void)prepareDataSource;
 - (BOOL)saveToDb;
+- (void)switchHint;
 
 @end

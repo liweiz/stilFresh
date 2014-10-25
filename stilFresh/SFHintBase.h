@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SFHintBase : UIView
+@interface SFHintBase : UIScrollView <UIScrollViewDelegate>
 
 @end

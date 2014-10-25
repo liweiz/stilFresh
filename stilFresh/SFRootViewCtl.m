@@ -41,7 +41,7 @@
 @synthesize isForBestBefore;
 @synthesize bestBeforeDate;
 @synthesize dateAddedDate;
-@synthesize hintIsOn;
+@synthesize menu;
 @synthesize hintViews;
 @synthesize textCount;
 
@@ -62,7 +62,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.box.appRect = self.appRect;
     self.box.width = self.appRect.size.width - self.box.originX * 2;
-    self.hintIsOn = YES;
+    
 }
 
 - (void)viewDidLoad {
@@ -189,11 +189,17 @@
     [self addChildViewController:self.cardViewCtl];
     [self.cardViewBase addSubview:self.cardViewCtl.tableView];
     [self.cardViewCtl didMoveToParentViewController:self];
-//    self.cardViewCtl.tableView.hidden = YES;
+    self.cardViewBase.hidden = YES;
     // add black gap
     UIView *g3 = [[UIView alloc] initWithFrame:CGRectMake(self.cardViewBase.frame.origin.x + self.cardViewBase.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
     g3.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g3];
+    
+    // Menu
+    self.menu = [[SFMenu alloc] initWithFrame:self.cardViewBase.frame];
+    self.menu.box = self.box;
+    [self.menu setup];
+    [self.interfaceBase addSubview:self.menu];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCard) name:@"rowSelected" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataForTables) name:@"reloadData" object:nil];
@@ -206,8 +212,21 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideDatePicker) name:@"dismiss" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPicDisposeHint) name:@"showPicDisposeHint" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(turnOffHint) name:@"turnOffHint" object:nil];
     // Create a CSV file in NSLibraryDirectory to store all the deleted items' itemIds to locate and delete their corresponding image files.
     [self setupCSVForDeletedItem];
+}
+
+- (void)turnOffHint
+{
+    [self.box switchHint];
+    self.menu.hintSwitch.on = NO;
+}
+
+- (void)switchMenuToCard
+{
+    self.menu.hidden = YES;
+    self.cardViewBase.hidden = NO;
 }
 
 #pragma mark - tap on date input
@@ -326,8 +345,6 @@
     }
 }
 
-
-
 - (void)reloadDataForTables
 {
     [self.listViewCtl.tableView reloadData];
@@ -344,6 +361,7 @@
     [self.cardViewCtl refreshZViews];
     [self.cardViewCtl resetZViews:self.listViewCtl.tableView.indexPathForSelectedRow.row];
     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
+    [self switchMenuToCard];
 }
 
 #pragma mark - text view delegate
@@ -691,7 +709,7 @@
             [scrollView removeFromSuperview];
         }
     } else if ([scrollView isEqual:self.interfaceBase]) {
-        if (self.hintIsOn) {
+        if (self.box.hintIsOn) {
             NSMutableIndexSet *s;
             if (scrollView.contentOffset.x == 0) {
                 // Reach camView
@@ -713,6 +731,16 @@
             if ([s count] > 0) {
                 [self processHints:s];
             }
+        }
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if ([scrollView isEqual:self.interfaceBase]) {
+        if (scrollView.contentOffset.x == scrollView.contentSize.width / 2) {
+            self.menu.hidden = NO;
+            self.cardViewBase.hidden = YES;
         }
     }
 }

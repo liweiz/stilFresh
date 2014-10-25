@@ -28,6 +28,7 @@
 		EECAA75119E5AC9400AAE177 /* Pods-stilFresh.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */; };
 		EECAA75219E5AC9600AAE177 /* Pods-stilFresh.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
+		EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = EED7ED7319FBF6680061BA43 /* SFMenu.m */; };
 		EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECF10119EF005A000A90C3 /* SFTimeLineH.m */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,8 @@
 		EE87B42519EC7FB80022DE0E /* SFCellCover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCellCover.m; sourceTree = "<group>"; };
 		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
 		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
+		EED7ED7219FBF6680061BA43 /* SFMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMenu.h; sourceTree = "<group>"; };
+		EED7ED7319FBF6680061BA43 /* SFMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMenu.m; sourceTree = "<group>"; };
 		EEECF10019EF005A000A90C3 /* SFTimeLineH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTimeLineH.h; sourceTree = "<group>"; };
 		EEECF10119EF005A000A90C3 /* SFTimeLineH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTimeLineH.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +138,8 @@
 			children = (
 				EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */,
 				EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */,
+				EED7ED7219FBF6680061BA43 /* SFMenu.h */,
+				EED7ED7319FBF6680061BA43 /* SFMenu.m */,
 				EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */,
 				EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */,
 				EE3EC7B519DF995100CA09F8 /* NSObject+SFExtra.h */,
@@ -362,6 +367,7 @@
 				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,
 				EE781A5E19F7FB5900BEB383 /* SFHintView.m in Sources */,
+				EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */,
 				EE18AD0F19F93CE30004C5C4 /* SFHintBase.m in Sources */,
 				EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */,
 			);

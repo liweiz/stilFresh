@@ -33,6 +33,7 @@
 @synthesize gapToEdge;
 @synthesize bestBeforeFrame;
 @synthesize placeholderFontColor;
+@synthesize hintIsOn;
 
 - (id)init
 {
@@ -58,8 +59,21 @@
         self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:alpha];
         self.sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha];
         self.goldenRatio = 1.61803398875;
+        self.hintIsOn = [[NSUserDefaults standardUserDefaults] boolForKey:@"HintIsOn"];
     }
     return self;
+}
+
+- (void)switchHint
+{
+    NSUserDefaults *u = [NSUserDefaults standardUserDefaults];
+    if (self.hintIsOn) {
+        self.hintIsOn = NO;
+        [u setBool:NO forKey:@"HintIsOn"];
+    } else {
+        self.hintIsOn = YES;
+        [u setBool:YES forKey:@"HintIsOn"];
+    }
 }
 
 - (void)prepareDataSource

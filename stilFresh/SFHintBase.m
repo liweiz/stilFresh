@@ -14,14 +14,21 @@
 {
     self = [super initWithFrame:aRect];
     if (self) {
+        self.contentSize = CGSizeMake(self.frame.size.width, self.frame.size.height * 2);
+        self.delegate = self;
+        self.pagingEnabled = YES;
+        self.showsHorizontalScrollIndicator = NO;
+        self.showsVerticalScrollIndicator = NO;
         self.backgroundColor = [UIColor lightGrayColor];
         self.alpha = 0.8;
         CGFloat gap = 20;
-        UILabel *l = [[UILabel alloc] initWithFrame:CGRectMake(gap, aRect.size.height - gap - 44, aRect.size.width - gap * 2, 44)];
+        UILabel *l = [[UILabel alloc] initWithFrame:CGRectMake(gap, aRect.size.height - gap - 70, aRect.size.width - gap * 2, 70)];
+        l.numberOfLines = 2;
         l.backgroundColor = [UIColor clearColor];
         l.textColor = [UIColor whiteColor];
         l.textAlignment = NSTextAlignmentCenter;
-        l.text = @"Tap anywhere to dismiss";
+        l.adjustsFontSizeToFitWidth = YES;
+        l.text = @"Tap anywhere to dismiss\nSwipe up to turn off all hints";
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
         [self addGestureRecognizer:tap];
         [self addSubview:l];
@@ -32,6 +39,31 @@
 - (void)dismiss
 {
     [self removeFromSuperview];
+}
+
+- (void)turnOffHint
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"turnOffHint" object:self];
+    self.userInteractionEnabled = NO;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    self.alpha = 0.8 * (1 - scrollView.contentOffset.y / scrollView.frame.size.height);
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (targetContentOffset->y == scrollView.frame.size.height) {
+        [self turnOffHint];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView.userInteractionEnabled == NO && scrollView.contentOffset.y == scrollView.frame.size.height) {
+        [self dismiss];
+    }
 }
 
 /*
