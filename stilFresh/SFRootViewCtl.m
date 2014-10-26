@@ -239,6 +239,29 @@
     self.cardViewBase.hidden = NO;
 }
 
+#pragma mark - hightlight input
+// To know which to hightlight, we get that from the tap selection action.
+// To know which to dehighlight, we get that from state change of input pad(keyboard/datePicker)
+- (void)hightlightView:(UIView *)v
+{
+    v.backgroundColor = self.box.sfGreen0Highlighted;
+    NSSet *s = [NSSet setWithObjects:self.bestBefore, self.notes, self.dateAdded, nil];
+    for (UIView *u in s) {
+        // Clear rest views to non-highlighted.
+        if (![u isEqual:v]) {
+            u.backgroundColor = [UIColor clearColor];
+        }
+    }
+}
+
+- (void)dehighlightAllView
+{
+    NSSet *s = [NSSet setWithObjects:self.bestBefore, self.notes, self.dateAdded, nil];
+    for (UIView *u in s) {
+        u.backgroundColor = [UIColor clearColor];
+    }
+}
+
 #pragma mark - tap on date input
 // Start to edit bestBefore
 - (void)tapOnBestBefore
@@ -251,6 +274,7 @@
         self.bestBeforeDate = dayAfter5;
         self.bestBefore.textColor = [UIColor blackColor];
     }
+    [self hightlightView:self.bestBefore];
     [self showDatePicker:self.bestBefore date:self.bestBeforeDate];
 }
 
@@ -270,12 +294,13 @@
         c.day = -5;
         NSDate *dayBefore5 = [[NSCalendar currentCalendar] dateByAddingComponents:c toDate:[NSDate date] options:0];
         self.dateAddedDate = dayBefore5;
-        [self showDatePicker:self.dateAdded date:self.dateAddedDate];
+        [self tapOnDateAdded];
     }
 }
 
 - (void)tapOnDateAdded
 {
+    [self hightlightView:self.dateAdded];
     [self showDatePicker:self.dateAdded date:self.dateAddedDate];
 }
 
@@ -302,7 +327,8 @@
 #pragma mark - datePicker
 - (void)showDatePicker:(UILabel *)l date:(NSDate *)d
 {
-    if (![self.interfaceBase viewWithTag:999]) {
+    UIScrollView *base = (UIScrollView *)[self.interfaceBase viewWithTag:999];
+    if (!base) {
         // http://stackoverflow.com/questions/18970679/ios-7-uidatepicker-height-inconsistency
         CGFloat h = 216;
         UIScrollView *base = [[UIScrollView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x, self.appRect.size.height - h, self.appRect.size.width, h)];
@@ -319,7 +345,10 @@
         [base addSubview:p];
         [self.interfaceBase addSubview:base];
         [base setContentOffset:CGPointMake(0, base.frame.size.height) animated:YES];
+    } else {
+        // This happens when existing datePicker is scrolling back, but new request comes in to demand a datePicker.
     }
+    [base setContentOffset:CGPointMake(0, base.frame.size.height) animated:YES];
     if ([l isEqual:self.bestBefore]) {
         self.isForBestBefore = YES;
     } else if ([l isEqual:self.dateAdded]) {
@@ -327,7 +356,7 @@
     }
     UIDatePicker *x = (UIDatePicker *)[self.interfaceBase viewWithTag:998];
     if ([x isKindOfClass:[UIDatePicker class]]) {
-        [x setDate:d animated:NO];
+        [x setDate:d animated:YES];
     }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MMM dd, YYYY"];
@@ -352,6 +381,7 @@
     UIScrollView *v = (UIScrollView *)[self.interfaceBase viewWithTag:999];
     if (v) {
         [v setContentOffset:CGPointZero animated:YES];
+        [self dehighlightAllView];
     }
 }
 
@@ -385,6 +415,7 @@
         if (self.textCount.hidden) {
             self.textCount.hidden = NO;
         }
+        [self hightlightView:textView];
         [self showCountTextResult];
     }
 }
@@ -405,6 +436,7 @@
         if (!self.textCount.hidden) {
             self.textCount.hidden = YES;
         }
+        [self dehighlightAllView];
     }
 }
 

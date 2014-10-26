@@ -23,6 +23,7 @@
 @synthesize oneLineHeight;
 @synthesize width;
 @synthesize gap;
+@synthesize sfGreen0Highlighted;
 @synthesize sfGreen0;
 @synthesize sfGreen1;
 @synthesize sfGreen2;
@@ -58,6 +59,7 @@
         self.sfGreen1 = [UIColor colorWithRed:150 / 255.0 green:206 / 255.0 blue:107 / 255.0 alpha:alpha];
         self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:alpha];
         self.sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha];
+        self.sfGreen0Highlighted = [self.sfGreen0 colorWithAlphaComponent:0.1];
         self.goldenRatio = 1.61803398875;
         self.hintIsOn = [[NSUserDefaults standardUserDefaults] boolForKey:@"HintIsOn"];
     }
