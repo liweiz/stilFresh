@@ -24,7 +24,6 @@
 @synthesize inputView;
 @synthesize bestBefore;
 @synthesize addBtn;
-@synthesize addTap;
 @synthesize notes;
 @synthesize notesPlaceHolder;
 @synthesize purchasedOn;
@@ -114,20 +113,31 @@
     [self configLayer:self.bestBefore.layer box:self.box isClear:YES];
     [self.inputView addSubview:self.bestBefore];
     // AddBtn
-    self.addBtn = [[UIView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height)];
+    self.addBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.addBtn.frame = CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height);
+    [self.addBtn setTitle:@"Done" forState:UIControlStateNormal];
+    [self.addBtn setTitle:@"Done" forState:UIControlStateHighlighted];
+    [self.addBtn setTitle:@"Done" forState:UIControlStateSelected];
+    [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    self.addBtn.showsTouchWhenHighlighted = YES;
     [self configLayer:self.addBtn.layer box:self.box isClear:NO];
     self.addBtn.backgroundColor = self.box.sfGreen0;
-    self.addTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(saveItem)];
-    [self.addBtn addGestureRecognizer:self.addTap];
+    [self.addBtn addTarget:self action:@selector(saveItem) forControlEvents:UIControlEventTouchUpInside];
     [self.inputView addSubview:self.addBtn];
     // Notes
     self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gap, self.box.width, self.box.oneLineHeight * 2)];
-    [self configLayer:self.notes.layer box:self.box isClear:YES];
+    
     self.notes.backgroundColor = [UIColor clearColor];
     self.notes.delegate = self;
     self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     self.notes.text = @"";
     [self.inputView addSubview:self.notes];
+    UIView *fakeNotes = [[UIView alloc] initWithFrame:self.notes.frame];
+    fakeNotes.backgroundColor = [UIColor clearColor];
+    [self configLayer:fakeNotes.layer box:self.box isClear:YES];
+    [self.inputView insertSubview:fakeNotes belowSubview:self.notes];
     self.notesPlaceHolder = [[UITextField alloc] initWithFrame:CGRectMake(0, -4, self.box.width - self.box.gap - 54, 44)];
     self.notesPlaceHolder.backgroundColor = [UIColor clearColor];
     self.notesPlaceHolder.placeholder = @"Info for this item";
@@ -136,12 +146,12 @@
     [self.notes addSubview:self.notesPlaceHolder];
     CGFloat th = 44;
     CGFloat tw = 60;
-    self.textCount = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.size.width - tw, self.notes.frame.size.height - th, tw, th)];
+    self.textCount = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.size.width - tw, self.notes.frame.size.height - (th - self.notes.font.lineHeight) / 2 - self.notes.font.lineHeight - 2, tw, th)];
     self.textCount.backgroundColor = [UIColor clearColor];
     self.textCount.textColor = [UIColor grayColor];
     self.textCount.font = self.notes.font;
     self.textCount.textAlignment = NSTextAlignmentRight;
-    [self.notes addSubview:self.textCount];
+    [fakeNotes addSubview:self.textCount];
     // DayAdded
     self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.notes.frame.origin.y + self.notes.frame.size.height + self.box.gap, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
     [self configLayer:self.dateAddedLabel.layer box:self.box isClear:NO];
@@ -401,14 +411,15 @@
 - (void)showCountTextResult
 {
     NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:self.notes.text];
-    if (self.notes.text.length > 100) {
-        [s addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(100, self.notes.text.length - 100)];
+    if (self.notes.text.length > 70) {
+        [s addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(70, self.notes.text.length - 70)];
+        [s addAttribute:NSFontAttributeName value:self.notes.font range:NSMakeRange(0, self.notes.text.length)];
         self.notes.attributedText = s;
         self.textCount.font = [self boldFontWithFont:self.notes.font];
     } else {
         self.textCount.font = self.notes.font;
     }
-    self.textCount.text = [NSString stringWithFormat:@"%ld/100", self.notes.text.length];
+    self.textCount.text = [NSString stringWithFormat:@"%ld/70", self.notes.text.length];
 }
 
 // http://stackoverflow.com/questions/18862868/setting-bold-font-on-ios-uilabel

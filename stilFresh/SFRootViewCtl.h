@@ -30,8 +30,7 @@
 @property (strong, nonatomic) UITextView *notes;
 @property (strong, nonatomic) UITextField *notesPlaceHolder;
 @property (strong, nonatomic) UITextField *purchasedOn;
-@property (strong, nonatomic) UIView *addBtn;
-@property (strong, nonatomic) UITapGestureRecognizer *addTap;
+@property (strong, nonatomic) UIButton *addBtn;
 @property (strong, nonatomic) UILabel *dateAddedLabel;
 @property (strong, nonatomic) UISwitch *dateAddedSwitch;
 @property (strong, nonatomic) NSDate *dateAddedDate;
