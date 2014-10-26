@@ -29,6 +29,7 @@
 		EECAA75219E5AC9600AAE177 /* Pods-stilFresh.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
 		EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = EED7ED7319FBF6680061BA43 /* SFMenu.m */; };
+		EED7ED7719FC7F950061BA43 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED7ED7619FC7F950061BA43 /* Crashlytics.framework */; };
 		EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECF10119EF005A000A90C3 /* SFTimeLineH.m */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
 		EED7ED7219FBF6680061BA43 /* SFMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMenu.h; sourceTree = "<group>"; };
 		EED7ED7319FBF6680061BA43 /* SFMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMenu.m; sourceTree = "<group>"; };
+		EED7ED7619FC7F950061BA43 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		EEECF10019EF005A000A90C3 /* SFTimeLineH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTimeLineH.h; sourceTree = "<group>"; };
 		EEECF10119EF005A000A90C3 /* SFTimeLineH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTimeLineH.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EED7ED7719FC7F950061BA43 /* Crashlytics.framework in Frameworks */,
 				D4C0270A11394244ACACEE02 /* libPods-stilFresh.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +139,7 @@
 		EE3EC78519DF98C400CA09F8 /* stilFresh */ = {
 			isa = PBXGroup;
 			children = (
+				EED7ED7619FC7F950061BA43 /* Crashlytics.framework */,
 				EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */,
 				EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */,
 				EED7ED7219FBF6680061BA43 /* SFMenu.h */,
@@ -228,6 +232,7 @@
 				EE3EC78019DF98C400CA09F8 /* Frameworks */,
 				EE3EC78119DF98C400CA09F8 /* Resources */,
 				824A0CF2E62F4F9C82C21628 /* Copy Pods Resources */,
+				EED7ED7519FC7F260061BA43 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -345,6 +350,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		EED7ED7519FC7F260061BA43 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Crashlytics.framework/run d30dc014389e0e949766f2cd80d7559c4af53569 37af7979b92bd233a1ef2853dec65600134fd225924f45874392a1e4d246e811";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -473,6 +491,10 @@
 			baseConfigurationReference = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/stilFresh",
+				);
 				INFOPLIST_FILE = stilFresh/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -485,6 +507,10 @@
 			baseConfigurationReference = C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/stilFresh",
+				);
 				INFOPLIST_FILE = stilFresh/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

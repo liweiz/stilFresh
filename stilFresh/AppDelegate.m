@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "SFRootViewCtl.h"
+#import <Crashlytics/Crashlytics.h>
 
 @interface AppDelegate ()
 
@@ -21,6 +22,7 @@
 @synthesize appRect;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [Crashlytics startWithAPIKey:@"d30dc014389e0e949766f2cd80d7559c4af53569"];
     // Override point for customization after application launch.
     NSDictionary *appDefaults = [NSDictionary
                                  dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"HintIsOn"];
