@@ -768,8 +768,10 @@
                 s = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)];
             } else if (scrollView.contentOffset.x == scrollView.contentSize.width * 3 / 4) {
                 // Reach card/menu
-                s = [NSMutableIndexSet indexSetWithIndex:3];
-                s = [NSMutableIndexSet indexSetWithIndex:7];
+                if (self.menu.hidden) {
+                    s = [NSMutableIndexSet indexSetWithIndex:3];
+                    s = [NSMutableIndexSet indexSetWithIndex:7];
+                }
             }
             if ([s count] > 0) {
                 [self processHints:s];
