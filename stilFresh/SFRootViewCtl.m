@@ -451,7 +451,7 @@
     } else {
         self.textCount.font = self.notes.font;
     }
-    self.textCount.text = [NSString stringWithFormat:@"%ld/70", self.notes.text.length];
+    self.textCount.text = [NSString stringWithFormat:@"%ld/70", (unsigned long)self.notes.text.length];
 }
 
 // http://stackoverflow.com/questions/18862868/setting-bold-font-on-ios-uilabel
@@ -792,8 +792,10 @@
 
 - (void)showPicDisposeHint
 {
-    NSMutableIndexSet *s = [NSMutableIndexSet indexSetWithIndex:5];
-    [self processHints:s];
+    if (self.box.hintIsOn) {
+        NSMutableIndexSet *s = [NSMutableIndexSet indexSetWithIndex:5];
+        [self processHints:s];
+    }
 }
 
 #pragma mark - hint display
