@@ -10,6 +10,7 @@
 		D4C0270A11394244ACACEE02 /* libPods-stilFresh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */; };
 		EE1547BF19E608E8004B6EDC /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EE1547BE19E608E8004B6EDC /* CHCSVParser.m */; };
 		EE18AD0F19F93CE30004C5C4 /* SFHintBase.m in Sources */ = {isa = PBXBuildFile; fileRef = EE18AD0E19F93CE30004C5C4 /* SFHintBase.m */; };
+		EE26665519FDF899009E11EA /* SFIntro.m in Sources */ = {isa = PBXBuildFile; fileRef = EE26665419FDF899009E11EA /* SFIntro.m */; };
 		EE3EC78919DF98C400CA09F8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78819DF98C400CA09F8 /* main.m */; };
 		EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */; };
 		EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE3EC79619DF98C400CA09F8 /* Images.xcassets */; };
@@ -51,6 +52,8 @@
 		EE1547BE19E608E8004B6EDC /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
 		EE18AD0D19F93CE30004C5C4 /* SFHintBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHintBase.h; sourceTree = "<group>"; };
 		EE18AD0E19F93CE30004C5C4 /* SFHintBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHintBase.m; sourceTree = "<group>"; };
+		EE26665319FDF899009E11EA /* SFIntro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFIntro.h; sourceTree = "<group>"; };
+		EE26665419FDF899009E11EA /* SFIntro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFIntro.m; sourceTree = "<group>"; };
 		EE3EC78319DF98C400CA09F8 /* stilFresh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stilFresh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE3EC78719DF98C400CA09F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE3EC78819DF98C400CA09F8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -207,6 +210,8 @@
 				EE781A5D19F7FB5900BEB383 /* SFHintView.m */,
 				EE18AD0D19F93CE30004C5C4 /* SFHintBase.h */,
 				EE18AD0E19F93CE30004C5C4 /* SFHintBase.m */,
+				EE26665319FDF899009E11EA /* SFIntro.h */,
+				EE26665419FDF899009E11EA /* SFIntro.m */,
 			);
 			name = Hint;
 			sourceTree = "<group>";
@@ -386,6 +391,7 @@
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,
 				EE781A5E19F7FB5900BEB383 /* SFHintView.m in Sources */,
 				EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */,
+				EE26665519FDF899009E11EA /* SFIntro.m in Sources */,
 				EE18AD0F19F93CE30004C5C4 /* SFHintBase.m in Sources */,
 				EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */,
 			);

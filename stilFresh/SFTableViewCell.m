@@ -28,6 +28,7 @@
 @synthesize number;
 @synthesize text;
 @synthesize bestBefore;
+@synthesize statusIndicator;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -73,33 +74,11 @@
     }
     if (!self.status) {
         self.status = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
+        self.status.backgroundColor = [UIColor clearColor];
     }
-    // Change color for freshness
-    switch (self.statusCode) {
-        case 0:
-            self.status.backgroundColor = self.box.sfGreen0;
-            break;
-        case 1:
-            self.status.backgroundColor = self.box.sfGreen1;
-            break;
-        case 2:
-            self.status.backgroundColor = self.box.sfGreen2;
-            break;
-        case 3:
-            self.status.backgroundColor = self.box.sfGray;
-            break;
-        default:
-            self.status.backgroundColor = [UIColor clearColor];
-            break;
-    }
+    
     if (!self.isForCardView) {
         [self.contentView addSubview:self.status];
-        if (!self.bottomLine) {
-            CGFloat h1 = 0.5;
-            self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.status.frame.size.height - h1, self.status.frame.size.width, h1)];
-            self.bottomLine.backgroundColor = [UIColor whiteColor];
-            [self.status addSubview:self.bottomLine];
-        }
         if (!self.text) {
             CGFloat gap = 10;
             self.text = [[UILabel alloc] initWithFrame:CGRectMake(gap, gap, self.contentView.frame.size.width - gap * 3 - 60, self.contentView.frame.size.height - gap * 2)];
@@ -123,6 +102,16 @@
             self.number.font = [UIFont boldSystemFontOfSize:self.box.fontSizeL * 2];
             self.number.lineBreakMode = NSLineBreakByWordWrapping;
             [self.status addSubview:self.number];
+        }
+        if (!self.statusIndicator) {
+            self.statusIndicator = [[UIView alloc] initWithFrame:CGRectMake(self.number.frame.origin.x, 0, self.status.frame.size.width - self.number.frame.origin.x, self.status.frame.size.height)];
+            [self.status insertSubview:self.statusIndicator belowSubview:self.number];
+        }
+        if (!self.bottomLine) {
+            CGFloat h1 = 0.5;
+            self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.status.frame.size.height - h1, self.status.frame.size.width, h1)];
+            self.bottomLine.backgroundColor = [UIColor whiteColor];
+            [self.status addSubview:self.bottomLine];
         }
     } else {
         CGFloat gap1 = 10;
@@ -167,6 +156,24 @@
             self.notes.textColor = [UIColor whiteColor];
             [self.status addSubview:self.notes];
         }
+    }
+    // Change color for freshness
+    switch (self.statusCode) {
+        case 0:
+            self.statusIndicator.backgroundColor = self.box.sfGreen0;
+            break;
+        case 1:
+            self.statusIndicator.backgroundColor = self.box.sfGreen1;
+            break;
+        case 2:
+            self.statusIndicator.backgroundColor = self.box.sfGreen2;
+            break;
+        case 3:
+            self.statusIndicator.backgroundColor = self.box.sfGray;
+            break;
+        default:
+            self.statusIndicator.backgroundColor = [UIColor clearColor];
+            break;
     }
     if (self.pic.image) {
         if (self.isForCardView) {

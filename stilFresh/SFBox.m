@@ -52,7 +52,7 @@
         self.oneLineHeight = 40;
         self.fontSizeL = 16;
         self.fontSizeM = 14;
-        CGFloat alpha = 0.8;
+        CGFloat alpha = 1;
         // http://stackoverflow.com/questions/10496114/uitextfield-placeholder-font-color-white-ios-5
         self.placeholderFontColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.098/255.0 alpha:0.22];
         self.sfGreen0 = [UIColor colorWithRed:157 / 255.0 green:225 / 255.0 blue:63 / 255.0 alpha:alpha];
