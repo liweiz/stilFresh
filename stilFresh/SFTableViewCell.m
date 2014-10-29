@@ -89,7 +89,6 @@
         self.pic.alpha = 1;
         [self.pic.superview sendSubviewToBack:self.pic];
     } else if (!self.isForCardView) {
-        self.pic.frame = CGRectMake(0, 0, 0, self.frame.size.height);
         [self.pic removeFromSuperview];
     }
     if (self.isForCardView) {
@@ -114,7 +113,7 @@
             [self.deleteBase addSubview:self.notes];
         }
         if (!self.bottomLine) {
-            CGFloat h1 = 2;
+            CGFloat h1 = 3;
             self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, h1)];
             self.bottomLine.backgroundColor = [UIColor blackColor];
             [self.contentView addSubview:self.bottomLine];
@@ -125,7 +124,7 @@
             self.text.backgroundColor = [UIColor clearColor];
             self.text.textColor = [UIColor whiteColor];
             self.text.userInteractionEnabled = NO;
-            self.text.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
+            self.text.font = [UIFont fontWithName:@"Helvetica-Light" size:self.box.fontSizeM * 2];
             self.text.minimumScaleFactor = 1;
             self.text.lineBreakMode = NSLineBreakByWordWrapping;
             self.text.numberOfLines = 5;
@@ -142,7 +141,6 @@
             self.number.lineBreakMode = NSLineBreakByWordWrapping;
             [self.contentView addSubview:self.number];
         }
-        
         if (self.pic.image) {
             self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic
                                          .frame.size.width, 0, self.contentView.frame.size.width - self.pic.frame.size.width, self.contentView.frame.size.height);
@@ -150,18 +148,19 @@
             self.number.textAlignment = NSTextAlignmentCenter;
             self.number.frame = self.pic.frame;
         } else {
-            self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic
-                                         .frame.size.width, 0, self.contentView.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), self.contentView.frame.size.height);
-            self.text.textAlignment = NSTextAlignmentLeft;
-            self.number.textAlignment = NSTextAlignmentRight;
+            self.text.frame = CGRectMake(0, 0, self.contentView.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), self.contentView.frame.size.height);
+            self.text.textAlignment = NSTextAlignmentCenter;
+            self.number.textAlignment = NSTextAlignmentCenter;
             self.number.frame = CGRectMake(self.text.frame.origin.x + self.text.frame.size.width, 0, self.contentView.frame.size.width - self.text.frame.origin.x - self.text.frame.size.width, self.contentView.frame.size.height);
         }
+        CGFloat h1 = 1;
         if (!self.bottomLine) {
-            CGFloat h1 = 0.5;
-            self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, h1)];
+            // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
+            self.bottomLine = [[UIView alloc] init];
             self.bottomLine.backgroundColor = [UIColor whiteColor];
             [self.contentView addSubview:self.bottomLine];
         }
+        self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
     }
     [self bringSubviewToFront:self.bottomLine];
     // Change color for freshness
