@@ -12,6 +12,58 @@
 
 @implementation NSObject (SFExtra)
 
+#pragma mark - convert number to semantic text
+- (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f {
+    NSString *s;
+    NSRange r1 = NSMakeRange(0, 0);
+    NSRange r2 = NSMakeRange(0, 0);
+    if (i < 1) {
+        s = @"Best before date passed";
+    } else if (i == 1) {
+        s = @"1 day\nleft";
+    } if (i < 7) {
+        s = [NSString stringWithFormat:@"%ld days\nleft", i];
+    } else if (i < 11) {
+        s = @"About\n1 week\nleft";
+    } else if (i < 25) {
+        s = [NSString stringWithFormat:@"About\n%ld weeks\nleft", (NSInteger)(i / 7.0)];
+    } else if (i < 35) {
+        s = [NSString stringWithFormat:@"About\n1 month\nleft"];
+    } else if (i < 30 * 6 - 15) {
+        s = [NSString stringWithFormat:@"About\n%ld months\nleft", (NSInteger)(i / 30.0)];
+    } else if (i < 30 * 6 + 15) {
+        s = [NSString stringWithFormat:@"About\nhalf year\nleft"];
+    } else if (i < 30 * 12 - 15) {
+        s = [NSString stringWithFormat:@"About\n%ld months\nleft", (NSInteger)(i / 30.0)];
+    } else if (i < 30 * 12 + 15) {
+        s = [NSString stringWithFormat:@"About\n1 year\nleft"];
+    } else if (i < 365 * 2) {
+        s = [NSString stringWithFormat:@"Over\n1 year\nleft"];
+    } else {
+        s = [NSString stringWithFormat:@"Over\n%ld years\nleft", (NSInteger)floorf(i / 365.0)];
+    }
+    if ([s containsString:@"About"]) {
+        r1 = NSMakeRange(0, 5);
+    } else if ([s containsString:@"Over"]){
+        r1 = NSMakeRange(0, 4);
+    }
+    if ([s containsString:@"left"]) {
+        r2 = NSMakeRange(s.length - 4, 4);
+    }
+    NSMutableAttributedString * r = [[NSMutableAttributedString alloc] initWithString:s];
+    UIFont *ff = [UIFont fontWithName:f.familyName size:f.pointSize * 0.6];
+    if (r1.length > 0) {
+        [r addAttribute:NSFontAttributeName value:ff range:r1];
+    }
+    if (r2.length > 0) {
+        [r addAttribute:NSFontAttributeName value:ff range:r2];
+    }
+    NSRange rd = NSMakeRange(r1.location + r1.length, r.length - r1.length - r2.length);
+    [r addAttribute:NSFontAttributeName value:f range:rd];
+    [r addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, s.length)];
+    return r;
+}
+
 #pragma mark - config layer
 
 - (void)configLayer:(CALayer *)layer box:(SFBox *)b isClear:(BOOL)isClear

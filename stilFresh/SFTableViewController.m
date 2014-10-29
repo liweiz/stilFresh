@@ -52,8 +52,6 @@
     } else {
         self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
-        self.tableView.rowHeight = (self.box.appRect.size.height - 20) / 5;
-        
     }
 }
 
@@ -223,14 +221,12 @@
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
-    [cell layoutIfNeeded];
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         NSError *err;
         NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
         if (!err) {
             NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
             NSData *dImg = [NSData dataWithContentsOfURL:path];
-            
             NSLog(@"pic size on local db: %f MB", dImg.length / 1024.0 / 1024);
             if (dImg.length > 0) {
                 NSLog(@"path: %@", path.path);
@@ -248,16 +244,16 @@
             }
         }
     }
+    [cell layoutIfNeeded];
     if (self.isForCard) {
         cell.bestBefore.text = [self displayBBWithIntro:[managedObject valueForKey:@"bestBefore"]];
         cell.notes.text = [managedObject valueForKey:@"notes"];
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     } else {
-        cell.number.text = [NSString stringWithFormat:@"%ld", (long)[[managedObject valueForKey:@"daysLeft"] integerValue]];
+        cell.number.attributedText = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:cell.number.font];
+        NSLog(@"cell number text: %@", cell.number.attributedText);
         cell.text.text = [managedObject valueForKey:@"notes"];
     }
-    // Check and get fakeDeleteBtn ready if necessary.
-//    [self getFakeDeleteBtn:cell.deleteBtn.frame];
     return cell;
 }
 
@@ -269,53 +265,20 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
-
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView
+heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-}
-
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
+    if (!self.isForCard) {
+        NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
+        if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
+            return (self.box.appRect.size.height - 20) / 4;
+        } else {
+            return (self.box.appRect.size.height - 20) / 6;
+        }
+    }
+    return self.tableView.rowHeight;
 }
 
 #pragma mark - scroll view delegate
