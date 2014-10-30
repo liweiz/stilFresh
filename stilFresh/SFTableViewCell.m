@@ -94,7 +94,7 @@
     if (self.isForCardView) {
         CGFloat gap1 = 10;
         if (!self.bestBefore) {
-            self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(0, self.box.gapToEdge + 20, self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), 44)];
+            self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(0, self.box.gapToEdgeM + 20, self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), 44)];
             self.bestBefore.backgroundColor = [UIColor clearColor];
             self.bestBefore.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
             self.bestBefore.adjustsFontSizeToFitWidth = YES;
@@ -124,7 +124,7 @@
             self.text.backgroundColor = [UIColor clearColor];
             self.text.textColor = [UIColor whiteColor];
             self.text.userInteractionEnabled = NO;
-            self.text.font = [UIFont fontWithName:@"Helvetica-Light" size:self.box.fontSizeM * 2];
+            self.text.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:self.box.fontSizeM * 2];
             self.text.minimumScaleFactor = 1;
             self.text.lineBreakMode = NSLineBreakByWordWrapping;
             self.text.numberOfLines = 5;
@@ -137,7 +137,7 @@
             self.number.textColor = [UIColor whiteColor];
             self.number.numberOfLines = 3;
             self.number.minimumScaleFactor = 1;
-            self.number.font = [UIFont boldSystemFontOfSize:self.box.fontSizeL * 2];
+            self.number.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.box.fontSizeM * 2];
             self.number.lineBreakMode = NSLineBreakByWordWrapping;
             [self.contentView addSubview:self.number];
         }

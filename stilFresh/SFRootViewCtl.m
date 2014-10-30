@@ -60,18 +60,16 @@
     self.view = [[UIView alloc] initWithFrame:self.appRect];
     self.view.backgroundColor = [UIColor whiteColor];
     self.box.appRect = self.appRect;
-    self.box.width = self.appRect.size.width - self.box.originX * 2;
-    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.box.appRect.size.width + self.box.gap, self.box.appRect.size.height)];
+    self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.box.appRect.size.width + self.box.gapToEdgeM, self.box.appRect.size.height)];
     // Four views, from left to right: 1. cam 2. input 3. list 4. menu/card 5. swipe-to-left-to-delete
-    CGSize theContentSize = CGSizeMake((self.box.appRect.size.width + self.box.gap) * 4 , self.box.appRect.size.height);
+    CGSize theContentSize = CGSizeMake((self.box.appRect.size.width + self.box.gapToEdgeM) * 4 , self.box.appRect.size.height);
     self.interfaceBase.contentSize = theContentSize;
-    self.interfaceBase.contentOffset = CGPointMake((self.appRect.size.width + self.box.gap) * 2, 0);
+    self.interfaceBase.contentOffset = CGPointMake((self.appRect.size.width + self.box.gapToEdgeM) * 2, 0);
     self.interfaceBase.bounces = NO;
     self.interfaceBase.showsVerticalScrollIndicator = NO;
     self.interfaceBase.showsHorizontalScrollIndicator = NO;
@@ -87,22 +85,22 @@
     [self.camViewCtl didMoveToParentViewController:self];
     
     // add black gap
-    UIView *g0 = [[UIView alloc] initWithFrame:CGRectMake(self.camViewCtl.view.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    UIView *g0 = [[UIView alloc] initWithFrame:CGRectMake(self.camViewCtl.view.frame.size.width, 0, self.box.gapToEdgeM, self.appRect.size.height)];
     g0.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g0];
     
     // InputView
-    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width + self.box.gap, 0, self.appRect.size.width, self.appRect.size.height)];
+    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width + self.box.gapToEdgeM, 0, self.appRect.size.width, self.appRect.size.height)];
     self.inputView.touchToDismissKeyboardIsOn = YES;
     self.inputView.touchToDismissViewIsOn = YES;
     self.inputView.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.inputView];
     // add black gap
-    UIView *g1 = [[UIView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x + self.inputView.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    UIView *g1 = [[UIView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x + self.inputView.frame.size.width, 0, self.box.gapToEdgeM, self.appRect.size.height)];
     g1.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g1];
     // BestBefore
-    self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.box.originY + 20, self.box.width - self.box.gap - 54, 44)];
+    self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.gapToEdgeL, self.box.gapToEdgeL + 20, self.appRect.size.width - self.box.gapToEdgeL * 2 - self.box.gapToEdgeM - 54, 44)];
     UITapGestureRecognizer *bbTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnBestBefore)];
     [self.bestBefore addGestureRecognizer:bbTap];
     self.bestBefore.userInteractionEnabled = YES;
@@ -114,7 +112,7 @@
     [self.inputView addSubview:self.bestBefore];
     // AddBtn
     self.addBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.addBtn.frame = CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gap, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height);
+    self.addBtn.frame = CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gapToEdgeM, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height);
     [self.addBtn setTitle:@"Done" forState:UIControlStateNormal];
     [self.addBtn setTitle:@"Done" forState:UIControlStateHighlighted];
     [self.addBtn setTitle:@"Done" forState:UIControlStateSelected];
@@ -126,9 +124,8 @@
     self.addBtn.backgroundColor = self.box.sfGreen0;
     [self.addBtn addTarget:self action:@selector(saveItem) forControlEvents:UIControlEventTouchUpInside];
     [self.inputView addSubview:self.addBtn];
-    // Notes
-    self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gap, self.box.width, self.box.oneLineHeight * 2)];
-    
+    // Notes, UIKeyboard w/ bar height: 264, UIKeyboard alone: 216
+    self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeM, self.appRect.size.width - self.box.gapToEdgeL * 2, self.appRect.size.height - 264 - (self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeM) - self.box.gapToEdgeM - self.bestBefore.frame.size.height)];
     self.notes.backgroundColor = [UIColor clearColor];
     self.notes.delegate = self;
     self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeL];
@@ -138,14 +135,14 @@
     fakeNotes.backgroundColor = [UIColor clearColor];
     [self configLayer:fakeNotes.layer box:self.box isClear:YES];
     [self.inputView insertSubview:fakeNotes belowSubview:self.notes];
-    self.notesPlaceHolder = [[UITextField alloc] initWithFrame:CGRectMake(0, -4, self.box.width - self.box.gap - 54, 44)];
+    self.notesPlaceHolder = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.notes.frame.size.width, self.box.fontM.lineHeight)];
     self.notesPlaceHolder.backgroundColor = [UIColor clearColor];
     self.notesPlaceHolder.placeholder = @"Info for this item";
     self.notesPlaceHolder.userInteractionEnabled = NO;
     self.notesPlaceHolder.font = [UIFont systemFontOfSize:self.box.fontSizeL];
     [self.notes addSubview:self.notesPlaceHolder];
     CGFloat th = 44;
-    CGFloat tw = 60;
+    CGFloat tw = 100;
     self.textCount = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.size.width - tw, self.notes.frame.size.height - (th - self.notes.font.lineHeight) / 2 - self.notes.font.lineHeight - 2, tw, th)];
     self.textCount.backgroundColor = [UIColor clearColor];
     self.textCount.textColor = [UIColor grayColor];
@@ -153,7 +150,7 @@
     self.textCount.textAlignment = NSTextAlignmentRight;
     [fakeNotes addSubview:self.textCount];
     // DayAdded
-    self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.notes.frame.origin.y + self.notes.frame.size.height + self.box.gap, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
+    self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + self.box.gapToEdgeM, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
     [self configLayer:self.dateAddedLabel.layer box:self.box isClear:NO];
     self.dateAddedLabel.text = @"Purchased today";
     self.dateAddedLabel.font = [UIFont systemFontOfSize:self.box.fontSizeL];
@@ -164,7 +161,7 @@
     [self.dateAddedSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
     [self.inputView addSubview:self.dateAddedSwitch];
     self.dateAddedSwitch.onTintColor = self.box.sfGreen0;
-    self.dateAdded = [[UILabel alloc] initWithFrame:CGRectMake(self.box.originX, self.box.gap + self.notes.frame.origin.y + self.notes.frame.size.height, self.box.width - self.box.gap - 54, 44)];
+    self.dateAdded = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.box.gapToEdgeM + self.notes.frame.origin.y + self.notes.frame.size.height, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
     UITapGestureRecognizer *daTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnDateAdded)];
     [self.dateAdded addGestureRecognizer:daTap];
     self.dateAdded.userInteractionEnabled = YES;
@@ -185,12 +182,12 @@
     [self.interfaceBase addSubview:self.listViewCtl.tableView];
     [self.listViewCtl didMoveToParentViewController:self];
     // add black gap
-    UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewCtl.tableView.frame.origin.x + self.listViewCtl.tableView.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewCtl.tableView.frame.origin.x + self.listViewCtl.tableView.frame.size.width, 0, self.box.gapToEdgeM, self.appRect.size.height)];
     g2.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g2];
     
     // CardViewCtl
-    self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake((self.box.appRect.size.width + self.box.gap) * 3, 0, self.box.appRect.size.width, self.box.appRect.size.height)];
+    self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake((self.box.appRect.size.width + self.box.gapToEdgeM) * 3, 0, self.box.appRect.size.width, self.box.appRect.size.height)];
     self.cardViewBase.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.cardViewBase];
     self.cardViewCtl = [[SFTableViewController alloc] init];
@@ -201,7 +198,7 @@
     [self.cardViewCtl didMoveToParentViewController:self];
     self.cardViewBase.hidden = YES;
     // add black gap
-    UIView *g3 = [[UIView alloc] initWithFrame:CGRectMake(self.cardViewBase.frame.origin.x + self.cardViewBase.frame.size.width, 0, self.box.gap, self.appRect.size.height)];
+    UIView *g3 = [[UIView alloc] initWithFrame:CGRectMake(self.cardViewBase.frame.origin.x + self.cardViewBase.frame.size.width, 0, self.box.gapToEdgeM, self.appRect.size.height)];
     g3.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g3];
     

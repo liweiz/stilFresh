@@ -31,7 +31,7 @@
     if (self.isForCard) {
         x = 0;
     } else {
-        x = (self.box.appRect.size.width + self.box.gap) * 2;
+        x = (self.box.appRect.size.width + self.box.gapToEdgeM) * 2;
     }
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, self.box.appRect.size.width, self.box.appRect.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];

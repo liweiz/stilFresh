@@ -18,11 +18,6 @@
 @synthesize fResultsCtl;
 @synthesize sortSelection;
 @synthesize warningText;
-@synthesize originX;
-@synthesize originY;
-@synthesize oneLineHeight;
-@synthesize width;
-@synthesize gap;
 @synthesize sfGreen0Highlighted;
 @synthesize sfGreen0;
 @synthesize sfGreen1;
@@ -31,10 +26,12 @@
 @synthesize imgJustSaved;
 @synthesize imgNameJustSaved;
 @synthesize goldenRatio;
-@synthesize gapToEdge;
-@synthesize bestBeforeFrame;
+@synthesize gapToEdgeM;
+@synthesize gapToEdgeL;
 @synthesize placeholderFontColor;
 @synthesize hintIsOn;
+@synthesize fontM;
+@synthesize fontL;
 
 - (id)init
 {
@@ -45,17 +42,16 @@
         [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortDaysLeftA]];
 //        [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortCellTextAlphabetA]];
         self.warningText = [[NSMutableString alloc] init];
-        self.originX = 15;
-        self.originY = 15;
-        self.gap = 2;
-        self.gapToEdge = 15;
-        self.oneLineHeight = 40;
-        self.fontSizeL = 16;
-        self.fontSizeM = 14;
+        self.gapToEdgeM = 10;
+        self.gapToEdgeL = 15;
+        self.fontSizeM = 20;
+        self.fontSizeL = 24;
+        self.fontM = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeM];;
+        self.fontL = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeM];;
         CGFloat alpha = 1;
         // http://stackoverflow.com/questions/10496114/uitextfield-placeholder-font-color-white-ios-5
         self.placeholderFontColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.098/255.0 alpha:0.22];
-        self.sfGreen0 = [UIColor colorWithRed:157 / 255.0 green:225 / 255.0 blue:63 / 255.0 alpha:alpha];
+        self.sfGreen0 = [UIColor colorWithRed:152 / 255.0 green:221 / 255.0 blue:120 / 255.0 alpha:alpha];
         self.sfGreen1 = [UIColor colorWithRed:150 / 255.0 green:206 / 255.0 blue:107 / 255.0 alpha:alpha];
         self.sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:alpha];
         self.sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha];
