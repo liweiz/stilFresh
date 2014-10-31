@@ -35,11 +35,7 @@
     }
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, self.box.appRect.size.width, self.box.appRect.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
-    if (!self.isForCard) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.allowsMultipleSelection = NO;
     self.tableView.dataSource = self;

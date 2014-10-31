@@ -99,26 +99,27 @@
         [self.pic removeFromSuperview];
     }
     if (self.isForCardView) {
-        CGFloat gap1 = 10;
         if (!self.bestBefore) {
-            self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(0, self.box.gapToEdgeM + 20, self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), 44)];
-            self.bestBefore.backgroundColor = [UIColor clearColor];
+            self.bestBefore = [[UILabel alloc] init];
             self.bestBefore.font = self.box.fontL;
-            self.bestBefore.adjustsFontSizeToFitWidth = YES;
             self.bestBefore.textAlignment = NSTextAlignmentLeft;
             self.bestBefore.textColor = [UIColor whiteColor];
+            self.bestBefore.numberOfLines = 0;
             [self.deleteBase addSubview:self.bestBefore];
         }
+        self.bestBefore.frame = CGRectMake(self.box.gapToEdgeL, self.box.gapToEdgeL + 20, self.frame.size.width - self.box.gapToEdgeL * 2, 44);
+        [self.bestBefore sizeToFit];
         if (!self.notes) {
-            self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + gap1 + 20, self.appRect.size.width - gap1 * 2, 80)];
-            self.notes.backgroundColor = self.textBackGroundColor;
-            self.notes.alpha = self.textBackGroundAlpha;
+            self.notes = [[UILabel alloc] init];
             self.notes.userInteractionEnabled = NO;
             self.notes.font = self.box.fontL;
+            self.notes.numberOfLines = 0;
             self.notes.textAlignment = NSTextAlignmentLeft;
             self.notes.textColor = [UIColor whiteColor];
             [self.deleteBase addSubview:self.notes];
         }
+        self.notes.frame = CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeL, self.frame.size.width - self.box.gapToEdgeL * 2, 200);
+        [self.notes sizeToFit];
 //        if (!self.bottomLine) {
 //            CGFloat h1 = 3;
 //            self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, h1)];
@@ -153,8 +154,8 @@
         }
         if (self.pic.image) {
             self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic
-                                         .frame.size.width + self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.pic.frame.size.width, self.contentView.frame.size.height);
-            self.text.numberOfLines = 5;
+                                         .frame.size.width + self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.pic.frame.size.width - self.box.gapToEdgeL * 2, self.contentView.frame.size.height);
+            self.text.numberOfLines = 0;
             self.text.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             self.number.frame = CGRectMake(self.pic.frame.origin.x + self.box.gapToEdgeL, self.pic.frame.origin.y, self.pic.frame.size.width - self.box.gapToEdgeL * 2, self.pic.frame.size.height);
             self.number.numberOfLines = 3;
@@ -175,38 +176,40 @@
             self.text.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
         }
         CGFloat h1 = 1;
-//        if (!self.bottomLine) {
-//            // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
-//            self.bottomLine = [[UIView alloc] init];
-//            self.bottomLine.backgroundColor = [UIColor whiteColor];
-//            [self.contentView addSubview:self.bottomLine];
-//        }
-//        self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
+        if (!self.bottomLine) {
+            // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
+            self.bottomLine = [[UIView alloc] init];
+            self.bottomLine.backgroundColor = [UIColor whiteColor];
+            [self.contentView addSubview:self.bottomLine];
+        }
+        self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
     }
-//    [self bringSubviewToFront:self.bottomLine];
+    [self bringSubviewToFront:self.bottomLine];
     // Change color for freshness
     if (self.isForCardView) {
-        UIView *a;
-        if (!self.pic.image) {
-            a = self.pic;
-        }
+        UIColor *c;
         switch (self.statusCode) {
             case 0:
-                a.backgroundColor = self.box.sfGreen0;
+                c = self.box.sfGreen0;
                 break;
             case 1:
-                a.backgroundColor = self.box.sfGreen1;
+                c = self.box.sfGreen1;
                 break;
             case 2:
-                a.backgroundColor = self.box.sfGreen2;
+                c = self.box.sfGreen2;
                 break;
             case 3:
-                a.backgroundColor = self.box.sfGray;
+                c = self.box.sfGray;
                 break;
             default:
-                a.backgroundColor = [UIColor clearColor];
+                c = [UIColor clearColor];
                 break;
         }
+        if (!self.pic.image) {
+            self.pic.backgroundColor = c;
+        }
+        self.bestBefore.backgroundColor = c;
+        self.notes.backgroundColor = c;
     } else {
         switch (self.statusCode) {
             case 0:

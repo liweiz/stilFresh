@@ -32,7 +32,7 @@
 - (void)addContent
 {
     if (!self.timeLine) {
-        self.timeLine = [[SFTimeLineH alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.box.gapToEdgeM - 50, self.frame.size.width, 50)];
+        self.timeLine = [[SFTimeLineH alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.box.gapToEdgeL - 50, self.frame.size.width, 50)];
         self.timeLine.box = self.box;
         [self addSubview:self.timeLine];
     }
