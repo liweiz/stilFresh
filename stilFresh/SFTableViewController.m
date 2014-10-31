@@ -31,7 +31,7 @@
     if (self.isForCard) {
         x = 0;
     } else {
-        x = (self.box.appRect.size.width + self.box.gapToEdgeM) * 2;
+        x = (self.box.appRect.size.width + self.box.gapToEdgeS) * 2;
     }
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, self.box.appRect.size.width, self.box.appRect.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -250,16 +250,20 @@
         cell.notes.text = [managedObject valueForKey:@"notes"];
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     } else {
-        cell.number.attributedText = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:cell.number.font];
-        NSLog(@"cell number text: %@", cell.number.attributedText);
         cell.text.text = [managedObject valueForKey:@"notes"];
+        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:self.box.fontL];
+        if (cell.pic.image) {
+            cell.number.attributedText = s;
+        } else {
+            cell.number.attributedText = nil;
+            cell.number.text = [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+        }
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (!self.isForCard) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"rowSelected" object:self];
     }
@@ -272,10 +276,16 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (!self.isForCard) {
         NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
+        CGFloat baseH = self.box.appRect.size.width * powf(self.box.goldenRatio / (1 + self.box.goldenRatio), 2);
         if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
-            return (self.box.appRect.size.height - 20) / 4;
+            if ([[managedObject valueForKey:@"notes"] length] == 0) {
+                CGFloat w = self.box.appRect.size.width * self.box.goldenRatio / (1 + self.box.goldenRatio);
+                return baseH * w * 1.9 / (self.box.appRect.size.width * 0.95);
+            } else {
+                return baseH;
+            }
         } else {
-            return (self.box.appRect.size.height - 20) / 6;
+            return baseH / self.box.goldenRatio;
         }
     }
     return self.tableView.rowHeight;

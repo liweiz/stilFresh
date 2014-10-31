@@ -51,7 +51,7 @@
         r2 = NSMakeRange(s.length - 4, 4);
     }
     NSMutableAttributedString * r = [[NSMutableAttributedString alloc] initWithString:s];
-    UIFont *ff = [UIFont fontWithName:f.familyName size:f.pointSize * 0.6];
+    UIFont *ff = [UIFont fontWithName:f.familyName size:f.pointSize * 0.8];
     if (r1.length > 0) {
         [r addAttribute:NSFontAttributeName value:ff range:r1];
     }

@@ -26,6 +26,7 @@
 @synthesize imgJustSaved;
 @synthesize imgNameJustSaved;
 @synthesize goldenRatio;
+@synthesize gapToEdgeS;
 @synthesize gapToEdgeM;
 @synthesize gapToEdgeL;
 @synthesize placeholderFontColor;
@@ -42,6 +43,7 @@
         [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortDaysLeftA]];
 //        [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortCellTextAlphabetA]];
         self.warningText = [[NSMutableString alloc] init];
+        self.gapToEdgeS = 5;
         self.gapToEdgeM = 10;
         self.gapToEdgeL = 15;
         self.fontSizeM = 20;

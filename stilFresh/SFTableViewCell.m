@@ -81,7 +81,14 @@
     self.pic.backgroundColor = [UIColor clearColor];
     if (self.pic.image) {
         if (!self.isForCardView) {
-            self.pic.frame = CGRectMake(0, 0, self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), self.frame.size.height);
+            CGFloat ww;
+            if (self.text.text.length == 0) {
+                // Not able to use goldenRatio here, greater than cell width
+                ww = self.frame.size.width * 0.95;
+            } else {
+                ww = self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1);
+            }
+            self.pic.frame = CGRectMake(0, 0, ww, self.frame.size.height);
             [self.contentView addSubview:self.pic];
         }
         self.pic.clipsToBounds = YES;
@@ -96,7 +103,7 @@
         if (!self.bestBefore) {
             self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(0, self.box.gapToEdgeM + 20, self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), 44)];
             self.bestBefore.backgroundColor = [UIColor clearColor];
-            self.bestBefore.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
+            self.bestBefore.font = self.box.fontL;
             self.bestBefore.adjustsFontSizeToFitWidth = YES;
             self.bestBefore.textAlignment = NSTextAlignmentLeft;
             self.bestBefore.textColor = [UIColor whiteColor];
@@ -107,7 +114,7 @@
             self.notes.backgroundColor = self.textBackGroundColor;
             self.notes.alpha = self.textBackGroundAlpha;
             self.notes.userInteractionEnabled = NO;
-            self.notes.font = [UIFont systemFontOfSize:self.box.fontSizeM * 2];
+            self.notes.font = self.box.fontL;
             self.notes.textAlignment = NSTextAlignmentLeft;
             self.notes.textColor = [UIColor whiteColor];
             [self.deleteBase addSubview:self.notes];
@@ -124,9 +131,10 @@
             self.text.backgroundColor = [UIColor clearColor];
             self.text.textColor = [UIColor whiteColor];
             self.text.userInteractionEnabled = NO;
-            self.text.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:self.box.fontSizeM * 2];
+            self.text.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:self.box.fontL.pointSize];
             self.text.minimumScaleFactor = 1;
             self.text.lineBreakMode = NSLineBreakByWordWrapping;
+            self.text.textAlignment = NSTextAlignmentLeft;
             self.text.numberOfLines = 5;
             [self.contentView addSubview:self.text];
         }
@@ -137,21 +145,22 @@
             self.number.textColor = [UIColor whiteColor];
             self.number.numberOfLines = 3;
             self.number.minimumScaleFactor = 1;
-            self.number.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.box.fontSizeM * 2];
+            self.number.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.box.fontL.pointSize];
             self.number.lineBreakMode = NSLineBreakByWordWrapping;
+            self.number.textAlignment = NSTextAlignmentLeft;
             [self.contentView addSubview:self.number];
         }
         if (self.pic.image) {
             self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic
-                                         .frame.size.width, 0, self.contentView.frame.size.width - self.pic.frame.size.width, self.contentView.frame.size.height);
-            self.text.textAlignment = NSTextAlignmentCenter;
-            self.number.textAlignment = NSTextAlignmentCenter;
-            self.number.frame = self.pic.frame;
+                                         .frame.size.width + self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.pic.frame.size.width, self.contentView.frame.size.height);
+            self.text.numberOfLines = 5;
+            self.number.frame = CGRectMake(self.pic.frame.origin.x + self.box.gapToEdgeL, self.pic.frame.origin.y, self.pic.frame.size.width - self.box.gapToEdgeL * 2, self.pic.frame.size.height);
+            self.number.numberOfLines = 3;
         } else {
-            self.text.frame = CGRectMake(0, 0, self.contentView.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1), self.contentView.frame.size.height);
-            self.text.textAlignment = NSTextAlignmentCenter;
-            self.number.textAlignment = NSTextAlignmentCenter;
-            self.number.frame = CGRectMake(self.text.frame.origin.x + self.text.frame.size.width, 0, self.contentView.frame.size.width - self.text.frame.origin.x - self.text.frame.size.width, self.contentView.frame.size.height);
+            self.number.frame = CGRectMake(self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.box.gapToEdgeL * 2, self.contentView.frame.size.height / 2);
+            self.number.numberOfLines = 1;
+            self.text.frame = CGRectMake(self.box.gapToEdgeL, self.contentView.frame.size.height / 2, self.number.frame.size.width, self.contentView.frame.size.height / 2);
+            self.text.numberOfLines = 1;
         }
         CGFloat h1 = 1;
         if (!self.bottomLine) {

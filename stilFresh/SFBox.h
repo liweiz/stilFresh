@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, SFSort) {
 @property (assign, nonatomic) CGRect appRect;
 @property (assign, nonatomic) CGFloat fontSizeL;
 @property (assign, nonatomic) CGFloat fontSizeM;
+@property (assign, nonatomic) CGFloat gapToEdgeS;
 @property (assign, nonatomic) CGFloat gapToEdgeM;
 @property (assign, nonatomic) CGFloat gapToEdgeL;
 @property (strong, nonatomic) UIFont *fontM;
