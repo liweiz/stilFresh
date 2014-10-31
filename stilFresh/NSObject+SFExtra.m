@@ -21,26 +21,26 @@
         s = @"Best before date passed";
     } else if (i == 1) {
         s = @"1 day\nleft";
-    } if (i < 7) {
-        s = [NSString stringWithFormat:@"%ld days\nleft", i];
+    } else if (i < 7) {
+        s = [NSString stringWithFormat:@"%ld days\nleft", (long)i];
     } else if (i < 11) {
         s = @"About\n1 week\nleft";
     } else if (i < 25) {
-        s = [NSString stringWithFormat:@"About\n%ld weeks\nleft", (NSInteger)(i / 7.0)];
+        s = [NSString stringWithFormat:@"About\n%ld weeks\nleft", (long)(i / 7.0)];
     } else if (i < 35) {
         s = [NSString stringWithFormat:@"About\n1 month\nleft"];
     } else if (i < 30 * 6 - 15) {
-        s = [NSString stringWithFormat:@"About\n%ld months\nleft", (NSInteger)(i / 30.0)];
+        s = [NSString stringWithFormat:@"About\n%ld months\nleft", (long)(i / 30.0)];
     } else if (i < 30 * 6 + 15) {
         s = [NSString stringWithFormat:@"About\nhalf year\nleft"];
     } else if (i < 30 * 12 - 15) {
-        s = [NSString stringWithFormat:@"About\n%ld months\nleft", (NSInteger)(i / 30.0)];
+        s = [NSString stringWithFormat:@"About\n%ld months\nleft", (long)(i / 30.0)];
     } else if (i < 30 * 12 + 15) {
         s = [NSString stringWithFormat:@"About\n1 year\nleft"];
     } else if (i < 365 * 2) {
         s = [NSString stringWithFormat:@"Over\n1 year\nleft"];
     } else {
-        s = [NSString stringWithFormat:@"Over\n%ld years\nleft", (NSInteger)floorf(i / 365.0)];
+        s = [NSString stringWithFormat:@"Over\n%ld years\nleft", (long)floorf(i / 365.0)];
     }
     if ([s containsString:@"About"]) {
         r1 = NSMakeRange(0, 5);

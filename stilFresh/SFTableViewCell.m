@@ -119,12 +119,12 @@
             self.notes.textColor = [UIColor whiteColor];
             [self.deleteBase addSubview:self.notes];
         }
-        if (!self.bottomLine) {
-            CGFloat h1 = 3;
-            self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, h1)];
-            self.bottomLine.backgroundColor = [UIColor blackColor];
-            [self.contentView addSubview:self.bottomLine];
-        }
+//        if (!self.bottomLine) {
+//            CGFloat h1 = 3;
+//            self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, h1)];
+//            self.bottomLine.backgroundColor = [UIColor blackColor];
+//            [self.contentView addSubview:self.bottomLine];
+//        }
     } else {
         if (!self.text) {
             self.text = [[UILabel alloc] init];
@@ -136,6 +136,7 @@
             self.text.lineBreakMode = NSLineBreakByWordWrapping;
             self.text.textAlignment = NSTextAlignmentLeft;
             self.text.numberOfLines = 5;
+            self.text.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             [self.contentView addSubview:self.text];
         }
         self.text.backgroundColor = [UIColor clearColor];
@@ -154,24 +155,35 @@
             self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic
                                          .frame.size.width + self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.pic.frame.size.width, self.contentView.frame.size.height);
             self.text.numberOfLines = 5;
+            self.text.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             self.number.frame = CGRectMake(self.pic.frame.origin.x + self.box.gapToEdgeL, self.pic.frame.origin.y, self.pic.frame.size.width - self.box.gapToEdgeL * 2, self.pic.frame.size.height);
             self.number.numberOfLines = 3;
+            self.number.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         } else {
-            self.number.frame = CGRectMake(self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.box.gapToEdgeL * 2, self.contentView.frame.size.height / 2);
+            CGFloat g = (self.contentView.frame.size.height - self.number.font.lineHeight - self.text.font.lineHeight) / 2.3;
+            CGFloat h1 = self.number.font.lineHeight + g * 2;
+            CGFloat h2 = self.text.font.lineHeight + g * 2;
+            NSLog(@"self.contentView.frame.size.height: %f", self.contentView.frame.size.height);
+            NSLog(@"self.number.font.lineHeight: %f", self.number.font.lineHeight);
+            NSLog(@"self.text.font.lineHeight: %f", self.text.font.lineHeight);
+            NSLog(@"gap: %f", g);
+            self.number.frame = CGRectMake(self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.box.gapToEdgeL * 2, h1);
             self.number.numberOfLines = 1;
-            self.text.frame = CGRectMake(self.box.gapToEdgeL, self.contentView.frame.size.height / 2, self.number.frame.size.width, self.contentView.frame.size.height / 2);
+            self.number.baselineAdjustment = UIBaselineAdjustmentNone;
+            self.text.frame = CGRectMake(self.box.gapToEdgeL, self.contentView.frame.size.height - h2, self.number.frame.size.width, h2);
             self.text.numberOfLines = 1;
+            self.text.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
         }
         CGFloat h1 = 1;
-        if (!self.bottomLine) {
-            // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
-            self.bottomLine = [[UIView alloc] init];
-            self.bottomLine.backgroundColor = [UIColor whiteColor];
-            [self.contentView addSubview:self.bottomLine];
-        }
-        self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
+//        if (!self.bottomLine) {
+//            // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
+//            self.bottomLine = [[UIView alloc] init];
+//            self.bottomLine.backgroundColor = [UIColor whiteColor];
+//            [self.contentView addSubview:self.bottomLine];
+//        }
+//        self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
     }
-    [self bringSubviewToFront:self.bottomLine];
+//    [self bringSubviewToFront:self.bottomLine];
     // Change color for freshness
     if (self.isForCardView) {
         UIView *a;
