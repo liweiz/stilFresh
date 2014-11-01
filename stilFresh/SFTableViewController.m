@@ -208,6 +208,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     NSString *cellIdentifier;
     if (self.isForCard) {
         cellIdentifier = @"card";
@@ -216,13 +217,16 @@
     }
     [self.tableView registerClass:[SFTableViewCell class] forCellReuseIdentifier:cellIdentifier];
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    NSLog(@"cell height: %f", cell.frame.size.height);
     cell.box = self.box;
     NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
     cell.pic.image = nil;
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
+    BOOL hasImg = NO;
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
+        hasImg = YES;
         NSError *err;
         NSURL *libraryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&err];
         if (!err) {
@@ -230,13 +234,9 @@
             NSData *dImg = [NSData dataWithContentsOfURL:path];
             NSLog(@"pic size on local db: %f MB", dImg.length / 1024.0 / 1024);
             if (dImg.length > 0) {
-                NSLog(@"path: %@", path.path);
                 // Try reading from cache, if not available, async process to generate related ones will be underway so that we probably will have those next time.
                 [cell.pic sd_setImageWithURL:path];
-                if (cell.pic.image) {
-                    NSLog(@"has image");
-                } else {
-                    NSLog(@"no image");
+                if (!cell.pic.image) {
                     // Use the original one if nothing is available in cache.
                     cell.pic.image = [UIImage imageWithData:dImg];
                 }
@@ -245,7 +245,7 @@
             }
         }
     }
-    [cell layoutIfNeeded];
+    [cell getViewsReady];
     if (self.isForCard) {
         cell.bestBefore.text = [self displayBBWithIntro:[managedObject valueForKey:@"bestBefore"]];
         cell.notes.text = [managedObject valueForKey:@"notes"];
@@ -260,11 +260,11 @@
             cell.number.text = [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
         }
     }
+    [cell configWithImg:hasImg];
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (!self.isForCard) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"rowSelected" object:self];
     }
@@ -272,8 +272,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 #pragma mark - Table view delegate
 
-- (CGFloat)tableView:(UITableView *)tableView
-heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (!self.isForCard) {
         NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];

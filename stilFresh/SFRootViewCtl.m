@@ -84,7 +84,7 @@
     [self.interfaceBase addSubview:self.camViewCtl.view];
     [self.camViewCtl didMoveToParentViewController:self];
     
-    UIColor *gapColor = [UIColor redColor];
+    UIColor *gapColor = [UIColor blackColor];
     // add black gap
     UIView *g0 = [[UIView alloc] initWithFrame:CGRectMake(self.camViewCtl.view.frame.size.width, 0, self.box.gapToEdgeS, self.appRect.size.height)];
     g0.backgroundColor = gapColor;

@@ -15,8 +15,6 @@
 
 @property (assign, nonatomic) BOOL isForCardView;
 @property (assign, nonatomic) CGRect appRect;
-@property (assign, nonatomic) UIColor *textBackGroundColor;
-@property (assign, nonatomic) CGFloat textBackGroundAlpha;
 @property (strong, nonatomic) SFBox *box;
 
 // Shared view
@@ -36,7 +34,7 @@
 @property (strong, nonatomic) UIScrollView *deleteBase;
 @property (strong, nonatomic) NSMutableString *itemId;
 
-
-
+- (void)getViewsReady;
+- (void)configWithImg:(BOOL)hasImg;
 
 @end

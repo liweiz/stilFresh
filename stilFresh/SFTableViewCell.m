@@ -16,8 +16,6 @@
 @synthesize statusCode;
 @synthesize isForCardView;
 @synthesize appRect;
-@synthesize textBackGroundColor;
-@synthesize textBackGroundAlpha;
 @synthesize notes;
 @synthesize deleteBase;
 @synthesize deleteBtn;
@@ -39,24 +37,23 @@
             self.isForCardView = YES;
         }
         self.appRect = [(SFRootViewCtl *)[UIApplication sharedApplication].keyWindow.rootViewController appRect];
-        self.textBackGroundColor = [UIColor clearColor];
-        self.textBackGroundAlpha = 0.7f;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         if (!self.itemId) {
             self.itemId = [[NSMutableString alloc] init];
         }
         if (!self.pic) {
             self.pic = [[UIImageView alloc] init];
+            self.pic.backgroundColor = [UIColor clearColor];
+            self.pic.contentMode = UIViewContentModeScaleAspectFill;
+            self.clipsToBounds = YES;
         }
+        self.textLabel.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    // In editing mode, contentView's x is 38.0, while in normal mode, it is 0.0. This can be calculated with NSLogging contentView and backgroundView. contentView's width changes to 282.0 as well, while backgroundView's width does not change.
-    self.textLabel.backgroundColor = [UIColor clearColor];
-    self.contentView.backgroundColor = [UIColor clearColor];
+- (void)getViewsReady
+{
     if (!self.backgroundView) {
         self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         self.backgroundView.backgroundColor = [UIColor clearColor];
@@ -75,30 +72,6 @@
             self.pic.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
             [self.deleteBase addSubview:self.pic];
         }
-        self.deleteBase.userInteractionEnabled = YES;
-        [self.deleteBase setContentOffset:CGPointZero animated:NO];
-    }
-    self.pic.backgroundColor = [UIColor clearColor];
-    if (self.pic.image) {
-        if (!self.isForCardView) {
-            CGFloat ww;
-            if (self.text.text.length == 0) {
-                // Not able to use goldenRatio here, greater than cell width
-                ww = self.frame.size.width * 0.95;
-            } else {
-                ww = self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1);
-            }
-            self.pic.frame = CGRectMake(0, 0, ww, self.frame.size.height);
-            [self.contentView addSubview:self.pic];
-        }
-        self.pic.clipsToBounds = YES;
-        self.pic.contentMode = UIViewContentModeScaleAspectFill;
-        self.pic.alpha = 1;
-        [self.pic.superview sendSubviewToBack:self.pic];
-    } else if (!self.isForCardView) {
-        [self.pic removeFromSuperview];
-    }
-    if (self.isForCardView) {
         if (!self.bestBefore) {
             self.bestBefore = [[UILabel alloc] init];
             self.bestBefore.font = self.box.fontL;
@@ -107,8 +80,6 @@
             self.bestBefore.numberOfLines = 0;
             [self.deleteBase addSubview:self.bestBefore];
         }
-        self.bestBefore.frame = CGRectMake(self.box.gapToEdgeL, self.box.gapToEdgeL + 20, self.frame.size.width - self.box.gapToEdgeL * 2, 44);
-        [self.bestBefore sizeToFit];
         if (!self.notes) {
             self.notes = [[UILabel alloc] init];
             self.notes.userInteractionEnabled = NO;
@@ -118,14 +89,6 @@
             self.notes.textColor = [UIColor whiteColor];
             [self.deleteBase addSubview:self.notes];
         }
-        self.notes.frame = CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeL, self.frame.size.width - self.box.gapToEdgeL * 2, 200);
-        [self.notes sizeToFit];
-//        if (!self.bottomLine) {
-//            CGFloat h1 = 3;
-//            self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, h1)];
-//            self.bottomLine.backgroundColor = [UIColor blackColor];
-//            [self.contentView addSubview:self.bottomLine];
-//        }
     } else {
         if (!self.text) {
             self.text = [[UILabel alloc] init];
@@ -140,7 +103,6 @@
             self.text.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             [self.contentView addSubview:self.text];
         }
-        self.text.backgroundColor = [UIColor clearColor];
         if (!self.number) {
             self.number = [[UILabel alloc] init];
             self.number.backgroundColor = [UIColor clearColor];
@@ -152,7 +114,43 @@
             self.number.textAlignment = NSTextAlignmentLeft;
             [self.contentView addSubview:self.number];
         }
-        if (self.pic.image) {
+        if (!self.bottomLine) {
+            // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
+            self.bottomLine = [[UIView alloc] init];
+            self.bottomLine.backgroundColor = [UIColor whiteColor];
+            [self.contentView addSubview:self.bottomLine];
+        }
+    }
+}
+
+- (void)configWithImg:(BOOL)hasImg {
+    // In editing mode, contentView's x is 38.0, while in normal mode, it is 0.0. This can be calculated with NSLogging contentView and backgroundView. contentView's width changes to 282.0 as well, while backgroundView's width does not change.
+    if (hasImg) {
+        if (!self.isForCardView) {
+            CGFloat ww;
+            if (self.text.text.length == 0) {
+                // Not able to use goldenRatio here, greater than cell width
+                ww = self.frame.size.width * 0.95;
+            } else {
+                ww = self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1);
+            }
+            self.pic.frame = CGRectMake(0, 0, ww, self.frame.size.height);
+            [self.contentView addSubview:self.pic];
+        }
+        [self.pic.superview sendSubviewToBack:self.pic];
+    } else if (!self.isForCardView) {
+        [self.pic removeFromSuperview];
+    }
+    if (self.isForCardView) {
+        self.deleteBase.userInteractionEnabled = YES;
+        [self.deleteBase setContentOffset:CGPointZero animated:NO];
+        self.bestBefore.frame = CGRectMake(self.box.gapToEdgeL, self.box.gapToEdgeL + 20, self.frame.size.width - self.box.gapToEdgeL * 2, 44);
+        [self.bestBefore sizeToFit];
+        self.notes.frame = CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeL, self.frame.size.width - self.box.gapToEdgeL * 2, 200);
+        [self.notes sizeToFit];
+    } else {
+        self.text.backgroundColor = [UIColor clearColor];
+        if (hasImg) {
             self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic
                                          .frame.size.width + self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.pic.frame.size.width - self.box.gapToEdgeL * 2, self.contentView.frame.size.height);
             self.text.numberOfLines = 0;
@@ -164,10 +162,6 @@
             CGFloat g = (self.contentView.frame.size.height - self.number.font.lineHeight - self.text.font.lineHeight) / 2.3;
             CGFloat h1 = self.number.font.lineHeight + g * 2;
             CGFloat h2 = self.text.font.lineHeight + g * 2;
-            NSLog(@"self.contentView.frame.size.height: %f", self.contentView.frame.size.height);
-            NSLog(@"self.number.font.lineHeight: %f", self.number.font.lineHeight);
-            NSLog(@"self.text.font.lineHeight: %f", self.text.font.lineHeight);
-            NSLog(@"gap: %f", g);
             self.number.frame = CGRectMake(self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.box.gapToEdgeL * 2, h1);
             self.number.numberOfLines = 1;
             self.number.baselineAdjustment = UIBaselineAdjustmentNone;
@@ -175,15 +169,9 @@
             self.text.numberOfLines = 1;
             self.text.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
         }
-        CGFloat h1 = 1;
-        if (!self.bottomLine) {
-            // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
-            self.bottomLine = [[UIView alloc] init];
-            self.bottomLine.backgroundColor = [UIColor whiteColor];
-            [self.contentView addSubview:self.bottomLine];
-        }
-        self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
     }
+    CGFloat h1 = 1;
+    self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
     [self bringSubviewToFront:self.bottomLine];
     // Change color for freshness
     if (self.isForCardView) {
@@ -205,8 +193,10 @@
                 c = [UIColor clearColor];
                 break;
         }
-        if (!self.pic.image) {
+        if (!hasImg) {
             self.pic.backgroundColor = c;
+        } else {
+            self.pic.backgroundColor = [UIColor clearColor];
         }
         self.bestBefore.backgroundColor = c;
         self.notes.backgroundColor = c;
