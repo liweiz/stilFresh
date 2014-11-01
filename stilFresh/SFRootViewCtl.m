@@ -476,9 +476,7 @@
         [self.box.ctx deleteObject:i];
     }
     if (!self.warning) {
-        CGFloat w = 220;
-        CGFloat h = 75;
-        self.warning = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width - w) * 0.5, (self.view.frame.size.height - h) * 0.5 - 30, w, h)];
+        self.warning = [[UILabel alloc] init];
         [self.view addSubview:self.warning];
         self.warning.font = self.bestBefore.font;
         self.warning.textColor = [UIColor whiteColor];
@@ -487,6 +485,9 @@
         self.warning.numberOfLines = 0;
         self.warning.backgroundColor = self.box.sfGray;
     }
+    CGFloat w = 220;
+    CGFloat h = 120;
+    self.warning.frame = CGRectMake((self.view.frame.size.width - w) * 0.5, (self.view.frame.size.height - h) * 0.5 - 30, w, h);
     if ([notificationName isEqualToString:@"generalError"]) {
         self.warning.text = @"Something went wrong, please try later.";
     } else {
@@ -494,7 +495,7 @@
     }
     self.warning.alpha = 1;
     [self.view bringSubviewToFront:self.warning];
-    [UIView animateWithDuration:4 animations:^{
+    [UIView animateWithDuration:6 animations:^{
         self.warning.alpha = 0;
     } completion:^(BOOL finished){
 //        self.warning.text = nil;
