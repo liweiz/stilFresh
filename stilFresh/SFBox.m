@@ -47,9 +47,9 @@
         self.gapToEdgeM = 10;
         self.gapToEdgeL = 15;
         self.fontSizeM = 20;
-        self.fontSizeL = 24;
+        self.fontSizeL = 38;
         self.fontM = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeM];;
-        self.fontL = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeM];;
+        self.fontL = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeL];;
         CGFloat alpha = 1;
         // http://stackoverflow.com/questions/10496114/uitextfield-placeholder-font-color-white-ios-5
         self.placeholderFontColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.098/255.0 alpha:0.22];

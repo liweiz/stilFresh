@@ -13,12 +13,12 @@
 @implementation NSObject (SFExtra)
 
 #pragma mark - convert number to semantic text
-- (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f {
+- (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f shadowColor:(UIColor *)c {
     NSString *s;
     NSRange r1 = NSMakeRange(0, 0);
     NSRange r2 = NSMakeRange(0, 0);
     if (i < 1) {
-        s = @"Best before date passed";
+        s = @"Best before date\npassed";
     } else if (i == 1) {
         s = @"1 day\nleft";
     } else if (i < 7) {
@@ -46,12 +46,14 @@
         r1 = NSMakeRange(0, 5);
     } else if ([s containsString:@"Over"]){
         r1 = NSMakeRange(0, 4);
+    } else if ([s containsString:@"Best before date"]) {
+        r1 = NSMakeRange(0, 16);
     }
     if ([s containsString:@"left"]) {
         r2 = NSMakeRange(s.length - 4, 4);
     }
     NSMutableAttributedString * r = [[NSMutableAttributedString alloc] initWithString:s];
-    UIFont *ff = [UIFont fontWithName:f.familyName size:f.pointSize * 0.8];
+    UIFont *ff = [UIFont fontWithName:f.familyName size:f.pointSize * 0.4];
     if (r1.length > 0) {
         [r addAttribute:NSFontAttributeName value:ff range:r1];
     }
@@ -60,8 +62,17 @@
     }
     NSRange rd = NSMakeRange(r1.location + r1.length, r.length - r1.length - r2.length);
     [r addAttribute:NSFontAttributeName value:f range:rd];
-    [r addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, s.length)];
+    [self addCommonFontEff:r shadowColor:c];
     return r;
+}
+
+- (void)addCommonFontEff:(NSMutableAttributedString *)s shadowColor:(UIColor *)c {
+    [s addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, s.length)];
+//    NSShadow *h = [[NSShadow alloc] init];
+//    h.shadowColor = c;
+//    h.shadowOffset = CGSizeMake(0, 0);
+//    h.shadowBlurRadius = 1;
+//    [s addAttribute:NSShadowAttributeName value:h range:NSMakeRange(0, s.length)];
 }
 
 #pragma mark - config layer

@@ -95,7 +95,7 @@
             self.text.backgroundColor = [UIColor clearColor];
             self.text.textColor = [UIColor whiteColor];
             self.text.userInteractionEnabled = NO;
-            self.text.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:self.box.fontL.pointSize];
+            self.text.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:self.box.fontM.pointSize];
             self.text.minimumScaleFactor = 1;
             self.text.lineBreakMode = NSLineBreakByWordWrapping;
             self.text.textAlignment = NSTextAlignmentLeft;
@@ -174,8 +174,8 @@
     self.bottomLine.frame = CGRectMake(0, self.contentView.frame.size.height - h1 + 0.5, self.frame.size.width, h1);
     [self bringSubviewToFront:self.bottomLine];
     // Change color for freshness
+    UIColor *c;
     if (self.isForCardView) {
-        UIColor *c;
         switch (self.statusCode) {
             case 0:
                 c = self.box.sfGreen0;
@@ -203,21 +203,23 @@
     } else {
         switch (self.statusCode) {
             case 0:
-                self.contentView.backgroundColor = self.box.sfGreen0;
+                c = self.box.sfGreen0;
                 break;
             case 1:
-                self.contentView.backgroundColor = self.box.sfGreen1;
+                c = self.box.sfGreen1;
                 break;
             case 2:
-                self.contentView.backgroundColor = self.box.sfGreen2;
+                c = self.box.sfGreen2;
                 break;
             case 3:
-                self.contentView.backgroundColor = self.box.sfGray;
+                c = self.box.sfGray;
                 break;
             default:
-                self.contentView.backgroundColor = [UIColor clearColor];
+                c = [UIColor clearColor];
                 break;
         }
+        self.contentView.backgroundColor = c;
+        
     }
 }
 

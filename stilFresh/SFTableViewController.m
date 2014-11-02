@@ -252,12 +252,32 @@
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     } else {
         cell.text.text = [managedObject valueForKey:@"notes"];
-        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:self.box.fontL];
+        UIColor *c;
+        switch (cell.statusCode) {
+            case 0:
+                c = self.box.sfGreen0;
+                break;
+            case 1:
+                c = self.box.sfGreen1;
+                break;
+            case 2:
+                c = self.box.sfGreen2;
+                break;
+            case 3:
+                c = self.box.sfGray;
+                break;
+            default:
+                c = [UIColor clearColor];
+                break;
+        }
+        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:self.box.fontL shadowColor:c];
         if (cell.pic.image) {
             cell.number.attributedText = s;
         } else {
-            cell.number.attributedText = nil;
-            cell.number.text = [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+            NSString *ss = [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+            NSMutableAttributedString *as = [[NSMutableAttributedString alloc] initWithString:ss];
+            [self addCommonFontEff:as shadowColor:c];
+            cell.number.attributedText = as;
         }
     }
     [cell configWithImg:hasImg];

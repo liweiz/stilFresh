@@ -26,7 +26,8 @@
 // Four scales correspond to four colors: 0: green0, 1: green1, 2: green2, 3: gray.
 - (void)resetFreshness:(SFItem *)obj;
 - (NSString *)addHyphensToDateString:(NSString *)date;
-- (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f;
+- (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f shadowColor:(UIColor *)c;
+- (void)addCommonFontEff:(NSMutableAttributedString *)s shadowColor:(UIColor *)c;
 - (UIImage *)convertImageToGrayscale:(UIImage *)image;
 
 - (NSURL *)getFileBaseUrl;
