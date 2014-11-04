@@ -53,16 +53,20 @@
         r2 = NSMakeRange(s.length - 4, 4);
     }
     NSMutableAttributedString * r = [[NSMutableAttributedString alloc] initWithString:s];
-    UIFont *ff = [UIFont fontWithName:f.familyName size:f.pointSize * 0.4];
-    if (r1.length > 0) {
-        [r addAttribute:NSFontAttributeName value:ff range:r1];
+    if (f) {
+        UIFont *ff = [UIFont fontWithName:f.familyName size:f.pointSize * 0.4];
+        if (r1.length > 0) {
+            [r addAttribute:NSFontAttributeName value:ff range:r1];
+        }
+        if (r2.length > 0) {
+            [r addAttribute:NSFontAttributeName value:ff range:r2];
+        }
+        NSRange rd = NSMakeRange(r1.location + r1.length, r.length - r1.length - r2.length);
+        [r addAttribute:NSFontAttributeName value:f range:rd];
     }
-    if (r2.length > 0) {
-        [r addAttribute:NSFontAttributeName value:ff range:r2];
+    if (c) {
+        [self addCommonFontEff:r shadowColor:c];
     }
-    NSRange rd = NSMakeRange(r1.location + r1.length, r.length - r1.length - r2.length);
-    [r addAttribute:NSFontAttributeName value:f range:rd];
-    [self addCommonFontEff:r shadowColor:c];
     return r;
 }
 
@@ -97,6 +101,13 @@
     NSInteger d = [self getDaysLeftFrom:[NSDate date] to:[self stringToDate:[obj valueForKey:@"bestBefore"]]];
     NSNumber *n = [NSNumber numberWithInteger:d];
     [obj setValue:n forKey:@"daysLeft"];
+    [obj setValue:[self resetTimeLeftMsg:[obj valueForKey:@"daysLeft"]] forKey:@"timeLeftMsg"];
+}
+
+- (NSString *)resetTimeLeftMsg:(NSNumber *)daysLeft
+{
+    NSAttributedString *s = [self convertDaysLeftToSemanticText:[daysLeft integerValue] font:nil shadowColor:nil];
+    return [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
 }
 
 // Four scales correspond to four colors: 0: green0, 1: green1, 2: green2, 3: gray.

@@ -12,12 +12,13 @@
 
 
 
-@interface SFTableViewController : UITableViewController
+@interface SFTableViewController : UITableViewController <NSFetchedResultsSectionInfo>
 
 @property (strong, nonatomic) SFBox *box;
 @property (assign, nonatomic) BOOL isForCard;
 @property (assign, nonatomic) BOOL isTransitingFromList;
 @property (strong, nonatomic) NSMutableArray *zViews;
+@property (strong, nonatomic) NSMutableArray *sections;
 @property (strong, nonatomic) UIImageView *fakeDeleteBtn;
 
 - (void)respondToChangeZViews:(NSInteger)rowNo;

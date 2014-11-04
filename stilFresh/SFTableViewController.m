@@ -24,6 +24,7 @@
 @synthesize isForCard;
 @synthesize isTransitingFromList;
 @synthesize zViews;
+@synthesize sections;
 
 - (void)loadView
 {
@@ -51,6 +52,7 @@
         self.tableView.allowsSelection = NO;
         self.zViews = [NSMutableArray arrayWithCapacity:0];
     } else {
+        self.tableView.rowHeight = (self.box.appRect.size.width - 10) / 3 * 2;
         self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
     }
@@ -203,12 +205,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [self.box.fResultsCtl.fetchedObjects count];
+    id <NSFetchedResultsSectionInfo> s = self.box.fResultsCtl.sections[section];
+    return [s numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     NSString *cellIdentifier;
     if (self.isForCard) {
         cellIdentifier = @"card";
@@ -219,7 +221,7 @@
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     NSLog(@"cell height: %f", cell.frame.size.height);
     cell.box = self.box;
-    NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
+    NSManagedObject *managedObject = [self.box.fResultsCtl objectAtIndexPath:indexPath];
     cell.pic.image = nil;
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
@@ -252,33 +254,33 @@
         [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     } else {
         cell.text.text = [managedObject valueForKey:@"notes"];
-        UIColor *c;
-        switch (cell.statusCode) {
-            case 0:
-                c = self.box.sfGreen0;
-                break;
-            case 1:
-                c = self.box.sfGreen1;
-                break;
-            case 2:
-                c = self.box.sfGreen2;
-                break;
-            case 3:
-                c = self.box.sfGray;
-                break;
-            default:
-                c = [UIColor clearColor];
-                break;
-        }
-        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:self.box.fontL shadowColor:c];
-        if (cell.pic.image) {
-            cell.number.attributedText = s;
-        } else {
-            NSString *ss = [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-            NSMutableAttributedString *as = [[NSMutableAttributedString alloc] initWithString:ss];
-            [self addCommonFontEff:as shadowColor:c];
-            cell.number.attributedText = as;
-        }
+//        UIColor *c;
+//        switch (cell.statusCode) {
+//            case 0:
+//                c = self.box.sfGreen0;
+//                break;
+//            case 1:
+//                c = self.box.sfGreen1;
+//                break;
+//            case 2:
+//                c = self.box.sfGreen2;
+//                break;
+//            case 3:
+//                c = self.box.sfGray;
+//                break;
+//            default:
+//                c = [UIColor clearColor];
+//                break;
+//        }
+//        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:self.box.fontL shadowColor:c];
+//        if (cell.pic.image) {
+//            cell.number.attributedText = s;
+//        } else {
+//            NSString *ss = [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+//            NSMutableAttributedString *as = [[NSMutableAttributedString alloc] initWithString:ss];
+//            [self addCommonFontEff:as shadowColor:c];
+//            cell.number.attributedText = as;
+//        }
     }
     [cell configWithImg:hasImg];
     return cell;
@@ -290,26 +292,48 @@
     }
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (!self.isForCard) {
+        id <NSFetchedResultsSectionInfo> x = self.box.fResultsCtl.sections[section];
+        return [x name];
+    }
+    return nil;
+}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 30;
+//}
+//
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    if (self.isForCard) {
+//        return nil;
+//    } else {
+//        [tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:@"daysLeftSection"];
+//        UITableViewHeaderFooterView *x = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"daysLeftSection"];
+//        x.textLabel.text =
+//    }
+//}
+
 #pragma mark - Table view delegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (!self.isForCard) {
-        NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
-        CGFloat baseH = self.box.appRect.size.width * powf(self.box.goldenRatio / (1 + self.box.goldenRatio), 2);
-        if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
-            if ([[managedObject valueForKey:@"notes"] length] == 0) {
-                CGFloat w = self.box.appRect.size.width * self.box.goldenRatio / (1 + self.box.goldenRatio);
-                return baseH * w * 1.9 / (self.box.appRect.size.width * 0.95);
-            } else {
-                return baseH;
-            }
-        } else {
-            return baseH / self.box.goldenRatio;
-        }
-    }
-    return self.tableView.rowHeight;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (!self.isForCard) {
+//        NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
+//        CGFloat baseH = self.box.appRect.size.width * powf(self.box.goldenRatio / (1 + self.box.goldenRatio), 2);
+//        if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
+//            if ([[managedObject valueForKey:@"notes"] length] == 0) {
+//                CGFloat w = self.box.appRect.size.width * self.box.goldenRatio / (1 + self.box.goldenRatio);
+//                return baseH * w * 1.9 / (self.box.appRect.size.width * 0.95);
+//            } else {
+//                return baseH;
+//            }
+//        } else {
+//            return baseH / self.box.goldenRatio;
+//        }
+//    }
+//    return self.tableView.rowHeight;
+//}
 
 #pragma mark - scroll view delegate
 

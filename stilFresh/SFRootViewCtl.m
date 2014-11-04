@@ -521,44 +521,53 @@
 
 - (void)runTableChange:(NSNotification *)n
 {
+    BOOL isForSection = [(NSNumber *)[n.userInfo valueForKey:@"isForSection"] boolValue];
     NSFetchedResultsChangeType type = [(NSNumber *)[n.userInfo valueForKey:@"type"] unsignedIntegerValue];
-    NSIndexPath *indexPath = [n.userInfo valueForKey:@"indexPath"];
-    NSIndexPath *newIndexPath = [n.userInfo valueForKey:@"newIndexPath"];
-    switch(type) {
-            
-        case NSFetchedResultsChangeInsert:
-            // Insertion needs to find the indexPath in the new dataSource
-            [self.listViewCtl.tableView insertRowsAtIndexPaths:@[newIndexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
-            [self.cardViewCtl.tableView insertRowsAtIndexPaths:@[newIndexPath]
-                                              withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            // Removing and updating use the indexPath for existing dataSource
-            // Updating and insertion do not happen at the same loop in this app. So no need to update the dataSource here.
-            [self.listViewCtl.tableView deleteRowsAtIndexPaths:@[indexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
-            [self.cardViewCtl.tableView deleteRowsAtIndexPaths:@[indexPath]
-                                              withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
-            [self.listViewCtl.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.cardViewCtl.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            //[self configureCell:[tableView cellForRowAtIndexPath:indexPath]
-            //atIndexPath:indexPath];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            //                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-            //                                 withRowAnimation:UITableViewRowAnimationFade];
-            //                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-            //                                 withRowAnimation:UITableViewRowAnimationFade];
-            break;
+    if (isForSection) {
+        NSNumber *sectionIndex = [n.userInfo valueForKey:@"sectionIndex"];
+//        id <NSFetchedResultsSectionInfo> sectionInfo = [n.userInfo valueForKey:@"sectionInfo"];
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                // Insertion needs to find the indexPath in the new dataSource
+                [self.listViewCtl.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+            case NSFetchedResultsChangeDelete:
+                [self.listViewCtl.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+            case NSFetchedResultsChangeUpdate:
+                // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
+                [self.listViewCtl.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+            case NSFetchedResultsChangeMove:
+                break;
+        }
+    } else {
+        NSIndexPath *indexPath = [n.userInfo valueForKey:@"indexPath"];
+        NSIndexPath *newIndexPath = [n.userInfo valueForKey:@"newIndexPath"];
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                // Insertion needs to find the indexPath in the new dataSource
+                 [self.listViewCtl.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                 [self.cardViewCtl.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                 break;
+                 case NSFetchedResultsChangeDelete:
+                 // Removing and updating use the indexPath for existing dataSource
+                 // Updating and insertion do not happen at the same loop in this app. So no need to update the dataSource here.
+                 [self.listViewCtl.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                 [self.cardViewCtl.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                 break;
+                 case NSFetchedResultsChangeUpdate:
+                 // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
+                 [self.listViewCtl.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                 [self.cardViewCtl.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                 //[self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+                 break;
+                 case NSFetchedResultsChangeMove:
+                 //                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                 //                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                 break;
+        }
     }
-
 }
 
 - (void)endTableChange

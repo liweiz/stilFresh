@@ -13,10 +13,12 @@
 
 @dynamic bestBefore;
 @dynamic daysLeft;
+@dynamic timeLeftMsg;
 @dynamic freshness;
 @dynamic hasPic;
 @dynamic itemId;
 @dynamic notes;
 @dynamic dateAdded;
+@dynamic timeStamp;
 
 @end

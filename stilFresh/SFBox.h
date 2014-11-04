@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, SFSort) {
     SFSortFreshnessD
 };
 
-@interface SFBox : NSObject <NSFetchedResultsControllerDelegate>
+@interface SFBox : NSObject <NSFetchedResultsControllerDelegate, NSFetchedResultsSectionInfo>
 
 @property (assign, nonatomic) BOOL hintIsOn;
 @property (assign, nonatomic) CGFloat goldenRatio;

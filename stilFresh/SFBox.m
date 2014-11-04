@@ -39,8 +39,9 @@
     self = [super init];
     if (self) {
         self.sortSelection = [NSMutableArray arrayWithCapacity:0];
-        [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortFreshnessD]];
         [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortDaysLeftA]];
+        [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortFreshnessD]];
+        [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortTimeCreatedD]];
 //        [self.sortSelection addObject:[NSNumber numberWithInteger:SFSortCellTextAlphabetA]];
         self.warningText = [[NSMutableString alloc] init];
         self.gapToEdgeS = 5;
@@ -48,8 +49,8 @@
         self.gapToEdgeL = 15;
         self.fontSizeM = 20;
         self.fontSizeL = 38;
-        self.fontM = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeM];;
-        self.fontL = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeL];;
+        self.fontM = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeM];
+        self.fontL = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.fontSizeL];
         CGFloat alpha = 1;
         // http://stackoverflow.com/questions/10496114/uitextfield-placeholder-font-color-white-ios-5
         self.placeholderFontColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.098/255.0 alpha:0.22];
@@ -76,27 +77,27 @@
     }
 }
 
-- (void)prepareDataSource
-{
+- (void)prepareDataSource {
     if (!self.fReq) {
         self.fReq = [NSFetchRequest fetchRequestWithEntityName:@"SFItem"];
     }
     self.fReq.sortDescriptors = [self sortOption:self.sortSelection];
     // Config fetchResultController
-    self.fResultsCtl = [[NSFetchedResultsController alloc] initWithFetchRequest:self.fReq managedObjectContext:self.ctx sectionNameKeyPath:nil cacheName:nil];
+    self.fResultsCtl = [[NSFetchedResultsController alloc] initWithFetchRequest:self.fReq managedObjectContext:self.ctx sectionNameKeyPath:@"timeLeftMsg" cacheName:nil];
     self.fResultsCtl.delegate = self;
     [self.fResultsCtl performFetch:nil];
     [self refreshDb];
 }
 
-- (void)refreshDb
-{
+- (void)refreshDb {
     for (SFItem *i in self.fResultsCtl.fetchedObjects) {
         [self resetDaysLeft:i];
         [self resetFreshness:i];
     }
     if (![self saveToDb]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];
+    } else {
+        
     }
 }
 
@@ -113,6 +114,17 @@
     [d setValue:indexPath forKey:@"indexPath"];
     [d setValue:newIndexPath forKey:@"newIndexPath"];
     [d setValue:[NSNumber numberWithUnsignedInteger:type] forKey:@"type"];
+    [d setValue:[NSNumber numberWithBool:NO] forKey:@"isForSection"];
+    NSNotification *n = [NSNotification notificationWithName:@"runTableChange" object:self userInfo:d];
+    [[NSNotificationCenter defaultCenter] postNotification:n];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
+    [d setValue:sectionInfo forKey:@"sectionInfo"];
+    [d setValue:[NSNumber numberWithUnsignedInteger:sectionIndex] forKey:@"sectionIndex"];
+    [d setValue:[NSNumber numberWithUnsignedInteger:type] forKey:@"type"];
+    [d setValue:[NSNumber numberWithBool:YES] forKey:@"isForSection"];
     NSNotification *n = [NSNotification notificationWithName:@"runTableChange" object:self userInfo:d];
     [[NSNotificationCenter defaultCenter] postNotification:n];
 }
@@ -149,9 +161,9 @@
         case SFSortDaysLeftD:
             return [[NSSortDescriptor alloc] initWithKey:@"daysLeft" ascending:NO];
         case SFSortTimeCreatedA:
-            return [[NSSortDescriptor alloc] initWithKey:@"dateAdded" ascending:YES];
+            return [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:YES];
         case SFSortTimeCreatedD:
-            return [[NSSortDescriptor alloc] initWithKey:@"dateAdded" ascending:NO];
+            return [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:NO];
         case SFSortFreshnessA:
             return [[NSSortDescriptor alloc] initWithKey:@"freshness" ascending:YES];
         case SFSortFreshnessD:
