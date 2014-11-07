@@ -50,6 +50,7 @@ extern CGFloat const gapToEdgeL;
 @property (strong, nonatomic) UIImage *imgJustSaved;
 @property (copy, nonatomic) NSString *imgNameJustSaved;
 
+
 + (instancetype)sharedBox;
 
 - (void)prepareDataSource;

@@ -29,11 +29,7 @@
 - (void)loadView
 {
     CGFloat x;
-    if (self.isForCard) {
-        x = 0;
-    } else {
-        x = ([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 2;
-    }
+    x = 0;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -44,17 +40,11 @@
     self.tableView.showsHorizontalScrollIndicator = NO;
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
-    if (self.isForCard) {
-        self.tableView.rowHeight = [SFBox sharedBox].appRect.size.height;
-        self.tableView.pagingEnabled = YES;
-        
-        self.tableView.allowsSelection = NO;
-        self.zViews = [NSMutableArray arrayWithCapacity:0];
-    } else {
-        self.tableView.rowHeight = ([SFBox sharedBox].appRect.size.width - 10) / 3 * 2;
-        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
-        self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
-    }
+    self.tableView.rowHeight = [SFBox sharedBox].appRect.size.height;
+    self.tableView.pagingEnabled = YES;
+    
+    self.tableView.allowsSelection = NO;
+    self.zViews = [NSMutableArray arrayWithCapacity:0];
 }
 
 - (void)viewDidLoad {
@@ -198,23 +188,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return [[SFBox sharedBox].fResultsCtl.sections count];
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[section];
-    return [s numberOfObjects];
+    return [[SFBox sharedBox].fResultsCtl.fetchedObjects count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentifier;
-    if (self.isForCard) {
-        cellIdentifier = @"card";
-    } else {
-        cellIdentifier = @"cell";
-    }
+    cellIdentifier = @"card";
     [self.tableView registerClass:[SFTableViewCell class] forCellReuseIdentifier:cellIdentifier];
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     NSLog(@"cell height: %f", cell.frame.size.height);
@@ -245,40 +230,9 @@
         }
     }
     [cell getViewsReady];
-    if (self.isForCard) {
-        cell.bestBefore.text = [self displayBBWithIntro:[managedObject valueForKey:@"bestBefore"]];
-        cell.notes.text = [managedObject valueForKey:@"notes"];
-        [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
-    } else {
-        cell.text.text = [managedObject valueForKey:@"notes"];
-//        UIColor *c;
-//        switch (cell.statusCode) {
-//            case 0:
-//                c = [SFBox sharedBox].sfGreen0;
-//                break;
-//            case 1:
-//                c = [SFBox sharedBox].sfGreen1;
-//                break;
-//            case 2:
-//                c = [SFBox sharedBox].sfGreen2;
-//                break;
-//            case 3:
-//                c = [SFBox sharedBox].sfGray;
-//                break;
-//            default:
-//                c = [UIColor clearColor];
-//                break;
-//        }
-//        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:[SFBox sharedBox].fontL shadowColor:c];
-//        if (cell.pic.image) {
-//            cell.number.attributedText = s;
-//        } else {
-//            NSString *ss = [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-//            NSMutableAttributedString *as = [[NSMutableAttributedString alloc] initWithString:ss];
-//            [self addCommonFontEff:as shadowColor:c];
-//            cell.number.attributedText = as;
-//        }
-    }
+    cell.bestBefore.text = [self displayBBWithIntro:[managedObject valueForKey:@"bestBefore"]];
+    cell.notes.text = [managedObject valueForKey:@"notes"];
+    [cell.itemId setString:[managedObject valueForKey:@"itemId"]];
     [cell configWithImg:hasImg];
     return cell;
 }
@@ -297,52 +251,12 @@
     return nil;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    return 30;
-//}
-//
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    if (self.isForCard) {
-//        return nil;
-//    } else {
-//        [tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:@"daysLeftSection"];
-//        UITableViewHeaderFooterView *x = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"daysLeftSection"];
-//        x.textLabel.text =
-//    }
-//}
-
-#pragma mark - Table view delegate
-
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (!self.isForCard) {
-//        NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
-//        CGFloat baseH = [SFBox sharedBox].appRect.size.width * powf([SFBox sharedBox].goldenRatio / (1 + [SFBox sharedBox].goldenRatio), 2);
-//        if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
-//            if ([[managedObject valueForKey:@"notes"] length] == 0) {
-//                CGFloat w = [SFBox sharedBox].appRect.size.width * [SFBox sharedBox].goldenRatio / (1 + [SFBox sharedBox].goldenRatio);
-//                return baseH * w * 1.9 / ([SFBox sharedBox].appRect.size.width * 0.95);
-//            } else {
-//                return baseH;
-//            }
-//        } else {
-//            return baseH / [SFBox sharedBox].goldenRatio;
-//        }
-//    }
-//    return self.tableView.rowHeight;
-//}
-
 #pragma mark - scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (self.isForCard) {
-        if (!self.isTransitingFromList) {
-            [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
-//            if (self.fakeDeleteBtn) {
-//                [self alphaChangeOnFakeDeleteBtn:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
-//            }
-        }
+    if (!self.isTransitingFromList) {
+        [self alphaChangeOnZViews:scrollView.contentOffset.y cellHeight:self.tableView.rowHeight];
     }
 }
 

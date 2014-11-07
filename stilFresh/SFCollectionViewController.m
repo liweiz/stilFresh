@@ -36,18 +36,13 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
 
 - (void)loadView {
     [super loadView];
-    
-
     CGFloat x = ([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 2;
     self.collectionView.frame = CGRectMake(x, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height);
-    
-
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.bounces = YES;
     self.collectionView.allowsMultipleSelection = NO;
     self.collectionView.backgroundColor = [UIColor redColor];
-    
 }
 
 - (void)viewDidLoad {
@@ -125,8 +120,8 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         SFHeader *h = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifierHeader forIndexPath:indexPath];
-        UICollectionViewLayoutAttributes *a = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader withIndexPath:indexPath];
-        a.frame = CGRectMake(0, [self aboveItemBottomY:indexPath], [SFBox sharedBox].appRect.size.width, 30);
+//        UICollectionViewLayoutAttributes *a = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader withIndexPath:indexPath];
+        h.frame = CGRectMake(0, [self aboveItemBottomY:indexPath], [SFBox sharedBox].appRect.size.width, 100);
         id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[indexPath.section];
         h.text.text = [s name];
         NSLog(@"h.text.text: %@", h.text.text);
@@ -139,43 +134,14 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
 
 - (CGFloat)aboveItemBottomY:(NSIndexPath *)sectionIndexPath {
     if (sectionIndexPath.section - 1 < 0) {
-        return 0;
+        return 20;
     } else {
         id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[sectionIndexPath.section - 1];
         NSInteger l = [s numberOfObjects];
         NSIndexPath *p = [NSIndexPath indexPathForItem:(l - 1) inSection:(sectionIndexPath.section - 1)];
         UICollectionViewLayoutAttributes *a = [self.collectionViewLayout layoutAttributesForItemAtIndexPath:p];
-        return (a.frame.origin.y + a.frame.size.height);
+        return CGRectGetMaxY(a.frame);
     }
 }
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end

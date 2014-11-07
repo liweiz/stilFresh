@@ -184,8 +184,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startTableChange) name:@"startTableChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(runTableChange:) name:@"runTableChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endTableChange) name:@"endTableChange" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sectionsChange:) name:@"sectionsChange" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemsChange:) name:@"itemsChange" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(collectionViewChanges:) name:@"collectionViewChanges" object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideDatePicker) name:@"dismiss" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPicDisposeHint) name:@"showPicDisposeHint" object:nil];
@@ -506,8 +506,18 @@
 - (void)runTableChange:(NSNotification *)n
 {
     NSFetchedResultsChangeType type = [(NSNumber *)[n.userInfo valueForKey:@"type"] unsignedIntegerValue];
-    NSIndexPath *indexPath = [n.userInfo valueForKey:@"indexPath"];
-    NSIndexPath *newIndexPath = [n.userInfo valueForKey:@"newIndexPath"];
+    NSNumber *nu = [n.userInfo valueForKey:@"rowNo"];
+    NSUInteger nuv = 99999;
+    if (nu) {
+        nuv = nu.unsignedIntegerValue;
+    }
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nuv inSection:0];
+    NSNumber *nnu = [n.userInfo valueForKey:@"newRowNo"];
+    NSUInteger nnuv = 99999;
+    if (nnu) {
+        nnuv = nnu.unsignedIntegerValue;
+    }
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:nnuv inSection:0];
     switch(type) {
         case NSFetchedResultsChangeInsert:
             // Insertion needs to find the indexPath in the new dataSource
@@ -532,47 +542,35 @@
     [self.cardViewCtl.tableView endUpdates];
 }
 
-- (void)itemsChange:(NSNotification *)n {
-    NSFetchedResultsChangeType type = [(NSNumber *)[n.userInfo valueForKey:@"type"] unsignedIntegerValue];
+- (void)collectionViewChanges:(NSNotification *)n {
+    NSFetchedResultsChangeType itemType = [(NSNumber *)[n.userInfo objectForKey:@"itemChangeType"] unsignedIntegerValue];
+    NSIndexPath *itemIndexPath = [n.userInfo objectForKey:@"itemChangeIndexPath"];
+    NSIndexPath *itemNewIndexPath = [n.userInfo objectForKey:@"itemChangeNewIndexPath"];
+    NSFetchedResultsChangeType sectionType = [(NSNumber *)[n.userInfo objectForKey:@"sectionChangeType"] unsignedIntegerValue];
+    NSNumber *sectionIndex = [n.userInfo objectForKey:@"sectionChangeIndex"];
     [self.listViewCtl.collectionView performBatchUpdates:^{
-        NSIndexPath *indexPath = [n.userInfo valueForKey:@"indexPath"];
-        NSIndexPath *newIndexPath = [n.userInfo valueForKey:@"newIndexPath"];
-        switch(type) {
+        switch(sectionType) {
             case NSFetchedResultsChangeInsert:
                 // Insertion needs to find the indexPath in the new dataSource
-                [self.listViewCtl.collectionView insertItemsAtIndexPaths:@[newIndexPath]];
-                break;
-            case NSFetchedResultsChangeDelete:
-                // Removing and updating use the indexPath for existing dataSource
-                // Updating and insertion do not happen at the same loop in this app. So no need to update the dataSource here.
-                [self.listViewCtl.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-                break;
-            case NSFetchedResultsChangeUpdate:
-                // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
-                [self.listViewCtl.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-                break;
-            case NSFetchedResultsChangeMove:
-                break;
-        }
-    } completion:nil];
-}
-
-- (void)sectionsChange:(NSNotification *)n {
-    NSFetchedResultsChangeType type = [(NSNumber *)[n.userInfo valueForKey:@"type"] unsignedIntegerValue];
-    [self.listViewCtl.collectionView performBatchUpdates:^{
-        NSNumber *sectionIndex = [n.userInfo valueForKey:@"sectionIndex"];
-        switch(type) {
-            case NSFetchedResultsChangeInsert:
-                // Insertion needs to find the indexPath in the new dataSource
-                NSLog(@"sectionIndex.unsignedIntegerValue: %lu", (unsigned long)sectionIndex.unsignedIntegerValue);
                 [self.listViewCtl.collectionView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue]];
                 break;
             case NSFetchedResultsChangeDelete:
                 [self.listViewCtl.collectionView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue]];
                 break;
+        }
+        switch(itemType) {
+            case NSFetchedResultsChangeInsert:
+                // Insertion needs to find the indexPath in the new dataSource
+                [self.listViewCtl.collectionView insertItemsAtIndexPaths:@[itemNewIndexPath]];
+                break;
+            case NSFetchedResultsChangeDelete:
+                // Removing and updating use the indexPath for existing dataSource
+                // Updating and insertion do not happen at the same loop in this app. So no need to update the dataSource here.
+                [self.listViewCtl.collectionView deleteItemsAtIndexPaths:@[itemIndexPath]];
+                break;
             case NSFetchedResultsChangeUpdate:
                 // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
-                [self.listViewCtl.collectionView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue]];
+                [self.listViewCtl.collectionView reloadItemsAtIndexPaths:@[itemIndexPath]];
                 break;
             case NSFetchedResultsChangeMove:
                 break;

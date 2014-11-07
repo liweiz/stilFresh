@@ -17,6 +17,12 @@ CGFloat const gapToEdgeS = 5;
 CGFloat const gapToEdgeM = 10;
 CGFloat const gapToEdgeL = 15;
 
+@interface SFBox ()
+
+@property (strong, nonatomic) NSMutableDictionary *collectionViewChanges;
+
+@end
+
 @implementation SFBox
 
 @dynamic indexTitle;
@@ -55,6 +61,7 @@ CGFloat const gapToEdgeL = 15;
         _sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha];
         _sfGreen0Highlighted = [self.sfGreen0 colorWithAlphaComponent:0.1];
         _hintIsOn = [[NSUserDefaults standardUserDefaults] boolForKey:@"HintIsOn"];
+        _collectionViewChanges = [NSMutableDictionary dictionaryWithCapacity:0];
     }
     return self;
 }
@@ -99,37 +106,40 @@ CGFloat const gapToEdgeL = 15;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startTableChange" object:self];
+    [self.collectionViewChanges removeAllObjects];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
-    [d setValue:indexPath forKey:@"indexPath"];
-    [d setValue:newIndexPath forKey:@"newIndexPath"];
-    [d setValue:[NSNumber numberWithUnsignedInteger:type] forKey:@"type"];
-    NSNotification *nn = [NSNotification notificationWithName:@"itemsChange" object:self userInfo:d];
-//    [[NSNotificationCenter defaultCenter] postNotification:nn];
+    if (indexPath) {
+        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:[self.fResultsCtl objectAtIndexPath:indexPath]]] forKey:@"rowNo"];
+        [self.collectionViewChanges setObject:indexPath forKey:@"itemChangeIndexPath"];
+    }
+    if (newIndexPath) {
+        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:[self.fResultsCtl objectAtIndexPath:newIndexPath]]] forKey:@"newRowNo"];;
+        [self.collectionViewChanges setObject:newIndexPath forKey:@"itemChangeNewIndexPath"];
+    }
+    [d setObject:[NSNumber numberWithUnsignedInteger:type] forKey:@"type"];
+    [self.collectionViewChanges setObject:[NSNumber numberWithUnsignedInteger:type] forKey:@"itemChangeType"];
     NSNotification *n = [NSNotification notificationWithName:@"runTableChange" object:self userInfo:d];
     [[NSNotificationCenter defaultCenter] postNotification:n];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
-    [d setValue:[NSNumber numberWithUnsignedInteger:sectionIndex] forKey:@"sectionIndex"];
-    [d setValue:[NSNumber numberWithUnsignedInteger:type] forKey:@"type"];
-    NSNotification *n = [NSNotification notificationWithName:@"sectionsChange" object:self userInfo:d];
+    [self.collectionViewChanges setObject:[NSNumber numberWithUnsignedInteger:sectionIndex] forKey:@"sectionChangeIndex"];
+    [self.collectionViewChanges setObject:[NSNumber numberWithUnsignedInteger:type] forKey:@"sectionChangeType"];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"endTableChange" object:self];
+    NSNotification *n = [NSNotification notificationWithName:@"collectionViewChanges" object:self userInfo:self.collectionViewChanges];
     [[NSNotificationCenter defaultCenter] postNotification:n];
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"endTableChange" object:self];
-}
 
-
-- (NSArray *)sortOption:(NSArray *)options
-{
+- (NSArray *)sortOption:(NSArray *)options {
     NSMutableArray *ma = [NSMutableArray arrayWithCapacity:0];
     for (NSNumber *n in options) {
         NSSortDescriptor *sd = [self sortBy:n.integerValue];
@@ -138,8 +148,7 @@ CGFloat const gapToEdgeL = 15;
     return ma;
 }
 
-- (NSSortDescriptor *)sortBy:(NSInteger)by
-{
+- (NSSortDescriptor *)sortBy:(NSInteger)by {
     switch (by) {
         case SFSortCellTextAlphabetA:
             return [NSSortDescriptor sortDescriptorWithKey:@"notes" ascending:YES comparator:^(NSString *obj1, NSString *obj2) {
@@ -166,8 +175,7 @@ CGFloat const gapToEdgeL = 15;
     }
 }
 
-- (BOOL)saveToDb
-{
+- (BOOL)saveToDb {
     NSError *err;
     [self.ctx save:&err];
     if (err) {

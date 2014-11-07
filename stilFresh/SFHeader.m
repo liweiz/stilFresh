@@ -17,15 +17,14 @@
     if (self) {
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
-        if (!self.text) {
-            self.text = [[UILabel alloc] init];
-            self.text.backgroundColor = [UIColor clearColor];
-            
-            self.text.textAlignment = NSTextAlignmentLeft;
-            self.text.lineBreakMode = NSLineBreakByWordWrapping;
-            self.text.textColor = [UIColor whiteColor];
-            self.text.numberOfLines = 1;
-            [self addSubview:self.text];
+        if (!_text) {
+            _text = [[UILabel alloc] init];
+            _text.backgroundColor = [UIColor clearColor];
+            _text.textAlignment = NSTextAlignmentLeft;
+            _text.lineBreakMode = NSLineBreakByWordWrapping;
+            _text.textColor = [UIColor whiteColor];
+            _text.numberOfLines = 1;
+            [self addSubview:_text];
         }
         [self setup];
     }
