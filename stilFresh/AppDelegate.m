@@ -9,17 +9,13 @@
 #import "AppDelegate.h"
 #import "SFRootViewCtl.h"
 #import <Crashlytics/Crashlytics.h>
+#import "SFBox.h"
 
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
-@synthesize ctx;
-@synthesize model;
-@synthesize coordinator;
-@synthesize appRect;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [Crashlytics startWithAPIKey:@"d30dc014389e0e949766f2cd80d7559c4af53569"];
@@ -28,21 +24,18 @@
                                  dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"HintIsOn"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     
-    self.appRect = [[UIScreen mainScreen] bounds];
-    self.window = [[UIWindow alloc] initWithFrame:self.appRect];
+    self.window = [[UIWindow alloc] initWithFrame:[SFBox sharedBox].appRect];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     // set TVRootViewController as rootViewController
     SFRootViewCtl *tempViewController = [[SFRootViewCtl alloc] initWithNibName:nil bundle:nil];
-    tempViewController.appRect = self.appRect;
     if (!self.ctx) {
         self.ctx = [self managedObjectContext];
     }
-    tempViewController.box.ctx = self.ctx;
+    [SFBox sharedBox].ctx = self.ctx;
     self.window.rootViewController = tempViewController;
     self.window.tintColor = [UIColor clearColor];
-    //    [Crashlytics startWithAPIKey:@"d30dc014389e0e949766f2cd80d7559c4af53569"];
     return YES;
 }
 

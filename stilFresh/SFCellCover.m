@@ -7,16 +7,9 @@
 //
 
 #import "SFCellCover.h"
+#import "SFBox.h"
 
 @implementation SFCellCover
-
-@synthesize box;
-@synthesize timeLine;
-@synthesize dateAddedTL;
-@synthesize bestBeforeTL;
-@synthesize todayTL;
-@synthesize daysLeftIndicator;
-@synthesize stringDaysLeft;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -32,8 +25,7 @@
 - (void)addContent
 {
     if (!self.timeLine) {
-        self.timeLine = [[SFTimeLineH alloc] initWithFrame:CGRectMake(0, self.frame.size.height - self.box.gapToEdgeL - 50, self.frame.size.width, 50)];
-        self.timeLine.box = self.box;
+        self.timeLine = [[SFTimeLineH alloc] initWithFrame:CGRectMake(0, self.frame.size.height - gapToEdgeL - 50, self.frame.size.width, 50)];
         [self addSubview:self.timeLine];
     }
     self.timeLine.dateAdded = self.dateAddedTL;
@@ -42,7 +34,7 @@
     [self.timeLine reset];
     if (!self.daysLeftIndicator) {
         CGFloat gap1 = 15;
-        CGFloat h1 = self.frame.size.height / (1 + self.box.goldenRatio) * self.box.goldenRatio;
+        CGFloat h1 = self.frame.size.height / (1 + goldenRatio) * goldenRatio;
         self.daysLeftIndicator = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height - h1, self.frame.size.width, self.timeLine.frame.origin.y - gap1 - h1)];
         self.daysLeftIndicator.textAlignment = NSTextAlignmentCenter;
         self.daysLeftIndicator.backgroundColor = [UIColor clearColor];

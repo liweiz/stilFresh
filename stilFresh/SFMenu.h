@@ -7,11 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SFBox.h"
 
 @interface SFMenu : UIScrollView
 
-@property (strong, nonatomic) SFBox *box;
 @property (strong, nonatomic) UISwitch *hintSwitch;
 
 - (void)setup;

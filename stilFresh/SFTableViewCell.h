@@ -8,14 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "SFBox.h"
 #import "SFTimeLine.h"
 
 @interface SFTableViewCell : UITableViewCell <UIScrollViewDelegate>
 
 @property (assign, nonatomic) BOOL isForCardView;
-@property (assign, nonatomic) CGRect appRect;
-@property (strong, nonatomic) SFBox *box;
 
 // Shared view
 @property (strong, nonatomic) UIImageView *pic;

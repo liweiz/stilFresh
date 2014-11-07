@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SFBox.h"
+
 
 @interface SFTimeLineH : UIView
 
-@property (strong, nonatomic) SFBox *box;
 @property (strong, nonatomic) NSDate *dateAdded;
 @property (strong, nonatomic) NSDate *bestBefore;
 @property (strong, nonatomic) NSDate *today;

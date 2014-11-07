@@ -7,18 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SFBox.h"
+
 #import "SFTableViewController.h"
 #import "SFView.h"
 #import "SFCamViewCtl.h"
 #import "CHCSVParser.h"
 #import "SFMenu.h"
+#import "SFCollectionViewController.h"
 
 @interface SFRootViewCtl : UIViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate>
 
-@property (assign, nonatomic) CGRect appRect;
 @property (assign, nonatomic) BOOL isForBestBefore;
-@property (strong, nonatomic) SFBox *box;
 @property (strong, nonatomic) UIScrollView *interfaceBase;
 
 @property (strong, nonatomic) SFCamViewCtl *camViewCtl;
@@ -35,7 +34,7 @@
 @property (strong, nonatomic) NSDate *dateAddedDate;
 @property (strong, nonatomic) UILabel *dateAdded;
 @property (strong, nonatomic) UIView *cardViewBase;
-@property (strong, nonatomic) SFTableViewController *listViewCtl;
+@property (strong, nonatomic) SFCollectionViewController *listViewCtl;
 @property (strong, nonatomic) SFTableViewController *cardViewCtl;
 
 @property (strong, nonatomic) UIView *menuView;

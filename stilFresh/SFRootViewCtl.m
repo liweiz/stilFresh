@@ -11,6 +11,7 @@
 #import "NSObject+SFExtra.h"
 #import "SFHintView.h"
 #import "SFHintBase.h"
+#import "SFBox.h"
 
 @interface SFRootViewCtl ()
 
@@ -18,38 +19,11 @@
 
 @implementation SFRootViewCtl
 
-@synthesize appRect;
-@synthesize box;
-@synthesize interfaceBase;
-@synthesize inputView;
-@synthesize bestBefore;
-@synthesize addBtn;
-@synthesize notes;
-@synthesize notesPlaceHolder;
-@synthesize purchasedOn;
-@synthesize camViewCtl;
-@synthesize listViewCtl;
-@synthesize cardViewCtl;
-@synthesize cardViewBase;
-@synthesize menuView;
-@synthesize itemViewCtl;
-@synthesize warning;
-@synthesize dateAddedLabel;
-@synthesize dateAddedSwitch;
-@synthesize dateAdded;
-@synthesize isForBestBefore;
-@synthesize bestBeforeDate;
-@synthesize dateAddedDate;
-@synthesize menu;
-@synthesize hintViews;
-@synthesize textCount;
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.box = [[SFBox alloc] init];
     }
     return self;
 }
@@ -57,19 +31,18 @@
 - (void)loadView
 {
     [UIApplication sharedApplication].keyWindow.backgroundColor = [UIColor blackColor];
-    self.view = [[UIView alloc] initWithFrame:self.appRect];
+    self.view = [[UIView alloc] initWithFrame:[SFBox sharedBox].appRect];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.box.appRect = self.appRect;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.box.appRect.size.width + self.box.gapToEdgeS, self.box.appRect.size.height)];
+    self.interfaceBase = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, [SFBox sharedBox].appRect.size.width + gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
     // Four views, from left to right: 1. cam 2. input 3. list 4. menu/card 5. swipe-to-left-to-delete
-    CGSize theContentSize = CGSizeMake((self.box.appRect.size.width + self.box.gapToEdgeS) * 4 , self.box.appRect.size.height);
+    CGSize theContentSize = CGSizeMake(([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 4 , [SFBox sharedBox].appRect.size.height);
     self.interfaceBase.contentSize = theContentSize;
-    self.interfaceBase.contentOffset = CGPointMake((self.appRect.size.width + self.box.gapToEdgeS) * 2, 0);
+    self.interfaceBase.contentOffset = CGPointMake(([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 2, 0);
     self.interfaceBase.bounces = NO;
     self.interfaceBase.showsVerticalScrollIndicator = NO;
     self.interfaceBase.showsHorizontalScrollIndicator = NO;
@@ -79,41 +52,40 @@
     [self.view addSubview:self.interfaceBase];
     
     self.camViewCtl = [[SFCamViewCtl alloc] init];
-    self.camViewCtl.box = self.box;
     [self addChildViewController:self.camViewCtl];
     [self.interfaceBase addSubview:self.camViewCtl.view];
     [self.camViewCtl didMoveToParentViewController:self];
     
     UIColor *gapColor = [UIColor blackColor];
     // add black gap
-    UIView *g0 = [[UIView alloc] initWithFrame:CGRectMake(self.camViewCtl.view.frame.size.width, 0, self.box.gapToEdgeS, self.appRect.size.height)];
+    UIView *g0 = [[UIView alloc] initWithFrame:CGRectMake(self.camViewCtl.view.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
     g0.backgroundColor = gapColor;
     [self.interfaceBase addSubview:g0];
     
     // InputView
-    self.inputView = [[SFView alloc] initWithFrame:CGRectMake(self.appRect.size.width + self.box.gapToEdgeS, 0, self.appRect.size.width, self.appRect.size.height)];
+    self.inputView = [[SFView alloc] initWithFrame:CGRectMake([SFBox sharedBox].appRect.size.width + gapToEdgeS, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height)];
     self.inputView.touchToDismissKeyboardIsOn = YES;
     self.inputView.touchToDismissViewIsOn = YES;
     self.inputView.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.inputView];
     // add black gap
-    UIView *g1 = [[UIView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x + self.inputView.frame.size.width, 0, self.box.gapToEdgeS, self.appRect.size.height)];
+    UIView *g1 = [[UIView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x + self.inputView.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
     g1.backgroundColor = gapColor;
     [self.interfaceBase addSubview:g1];
     // BestBefore
-    self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(self.box.gapToEdgeL, self.box.gapToEdgeL + 20, self.appRect.size.width - self.box.gapToEdgeL * 2 - self.box.gapToEdgeS - 54, 44)];
+    self.bestBefore = [[UILabel alloc] initWithFrame:CGRectMake(gapToEdgeL, gapToEdgeL + 20, [SFBox sharedBox].appRect.size.width - gapToEdgeL * 2 - gapToEdgeS - 54, 44)];
     UITapGestureRecognizer *bbTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnBestBefore)];
     [self.bestBefore addGestureRecognizer:bbTap];
     self.bestBefore.userInteractionEnabled = YES;
     [self checkPlaceHolder];
     self.bestBefore.backgroundColor = [UIColor clearColor];
     
-    self.bestBefore.font = self.box.fontM;
-    [self configLayer:self.bestBefore.layer box:self.box isClear:YES];
+    self.bestBefore.font = [SFBox sharedBox].fontM;
+    [self configLayer:self.bestBefore.layer box:[SFBox sharedBox] isClear:YES];
     [self.inputView addSubview:self.bestBefore];
     // AddBtn
     self.addBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.addBtn.frame = CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + self.box.gapToEdgeS, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height);
+    self.addBtn.frame = CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + gapToEdgeS, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height);
     [self.addBtn setTitle:@"Done" forState:UIControlStateNormal];
     [self.addBtn setTitle:@"Done" forState:UIControlStateHighlighted];
     [self.addBtn setTitle:@"Done" forState:UIControlStateSelected];
@@ -121,12 +93,12 @@
     [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     self.addBtn.showsTouchWhenHighlighted = YES;
-    [self configLayer:self.addBtn.layer box:self.box isClear:NO];
-    self.addBtn.backgroundColor = self.box.sfGreen0;
+    [self configLayer:self.addBtn.layer box:[SFBox sharedBox] isClear:NO];
+    self.addBtn.backgroundColor = [SFBox sharedBox].sfGreen0;
     [self.addBtn addTarget:self action:@selector(saveItem) forControlEvents:UIControlEventTouchUpInside];
     [self.inputView addSubview:self.addBtn];
     // Notes, UIKeyboard w/ bar height: 264, UIKeyboard alone: 216
-    self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeS, self.appRect.size.width - self.box.gapToEdgeL * 2, self.appRect.size.height - 264 - (self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeS) - self.box.gapToEdgeS - self.bestBefore.frame.size.height)];
+    self.notes = [[UITextView alloc] initWithFrame:CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + gapToEdgeS, [SFBox sharedBox].appRect.size.width - gapToEdgeL * 2, [SFBox sharedBox].appRect.size.height - 264 - (self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + gapToEdgeS) - gapToEdgeS - self.bestBefore.frame.size.height)];
     self.notes.backgroundColor = [UIColor clearColor];
     self.notes.delegate = self;
     self.notes.font = self.bestBefore.font;
@@ -134,9 +106,9 @@
     [self.inputView addSubview:self.notes];
     UIView *fakeNotes = [[UIView alloc] initWithFrame:self.notes.frame];
     fakeNotes.backgroundColor = [UIColor clearColor];
-    [self configLayer:fakeNotes.layer box:self.box isClear:YES];
+    [self configLayer:fakeNotes.layer box:[SFBox sharedBox] isClear:YES];
     [self.inputView insertSubview:fakeNotes belowSubview:self.notes];
-    self.notesPlaceHolder = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.notes.frame.size.width, self.box.fontM.lineHeight)];
+    self.notesPlaceHolder = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.notes.frame.size.width, [SFBox sharedBox].fontM.lineHeight)];
     self.notesPlaceHolder.backgroundColor = [UIColor clearColor];
     self.notesPlaceHolder.placeholder = @"Info for this item";
     self.notesPlaceHolder.userInteractionEnabled = NO;
@@ -151,8 +123,8 @@
     self.textCount.textAlignment = NSTextAlignmentRight;
     [fakeNotes addSubview:self.textCount];
     // DayAdded
-    self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + self.box.gapToEdgeS, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
-    [self configLayer:self.dateAddedLabel.layer box:self.box isClear:NO];
+    self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + gapToEdgeS, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
+    [self configLayer:self.dateAddedLabel.layer box:[SFBox sharedBox] isClear:NO];
     self.dateAddedLabel.text = @"Purchased today";
     self.dateAddedLabel.font = self.bestBefore.font;
     [self.inputView addSubview:self.dateAddedLabel];
@@ -161,51 +133,47 @@
     
     [self.dateAddedSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
     [self.inputView addSubview:self.dateAddedSwitch];
-    self.dateAddedSwitch.onTintColor = self.box.sfGreen0;
-    self.dateAdded = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.box.gapToEdgeS + self.notes.frame.origin.y + self.notes.frame.size.height, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
+    self.dateAddedSwitch.onTintColor = [SFBox sharedBox].sfGreen0;
+    self.dateAdded = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, gapToEdgeS + self.notes.frame.origin.y + self.notes.frame.size.height, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
     UITapGestureRecognizer *daTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnDateAdded)];
     [self.dateAdded addGestureRecognizer:daTap];
     self.dateAdded.userInteractionEnabled = YES;
-    [self configLayer:self.dateAdded.layer box:self.box isClear:YES];
+    [self configLayer:self.dateAdded.layer box:[SFBox sharedBox] isClear:YES];
     self.dateAdded.backgroundColor = [UIColor clearColor];
 
     self.dateAdded.font = self.bestBefore.font;
     [self.inputView addSubview:self.dateAdded];
     self.dateAdded.hidden = YES;
     
-    [self.box prepareDataSource];
+    [[SFBox sharedBox] prepareDataSource];
     
     // ListViewCtl
-    self.listViewCtl = [[SFTableViewController alloc] init];
-    self.listViewCtl.box = self.box;
-    self.listViewCtl.isForCard = NO;
+    self.listViewCtl = [[SFCollectionViewController alloc] initWithCollectionViewLayout:[self getLayout]];
     [self addChildViewController:self.listViewCtl];
-    [self.interfaceBase addSubview:self.listViewCtl.tableView];
+    [self.interfaceBase addSubview:self.listViewCtl.collectionView];
     [self.listViewCtl didMoveToParentViewController:self];
     // add black gap
-    UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewCtl.tableView.frame.origin.x + self.listViewCtl.tableView.frame.size.width, 0, self.box.gapToEdgeS, self.appRect.size.height)];
+    UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewCtl.collectionView.frame.origin.x + self.listViewCtl.collectionView.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
     g2.backgroundColor = gapColor;
     [self.interfaceBase addSubview:g2];
     
     // CardViewCtl
-    self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake((self.box.appRect.size.width + self.box.gapToEdgeS) * 3, 0, self.box.appRect.size.width, self.box.appRect.size.height)];
+    self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake(([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 3, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height)];
     self.cardViewBase.backgroundColor = [UIColor clearColor];
     [self.interfaceBase addSubview:self.cardViewBase];
     self.cardViewCtl = [[SFTableViewController alloc] init];
-    self.cardViewCtl.box = self.box;
     self.cardViewCtl.isForCard = YES;
     [self addChildViewController:self.cardViewCtl];
     [self.cardViewBase addSubview:self.cardViewCtl.tableView];
     [self.cardViewCtl didMoveToParentViewController:self];
     self.cardViewBase.hidden = YES;
     // add black gap
-    UIView *g3 = [[UIView alloc] initWithFrame:CGRectMake(self.cardViewBase.frame.origin.x + self.cardViewBase.frame.size.width, 0, self.box.gapToEdgeS, self.appRect.size.height)];
+    UIView *g3 = [[UIView alloc] initWithFrame:CGRectMake(self.cardViewBase.frame.origin.x + self.cardViewBase.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
     g3.backgroundColor = gapColor;
     [self.interfaceBase addSubview:g3];
     
     // Menu
     self.menu = [[SFMenu alloc] initWithFrame:self.cardViewBase.frame];
-    self.menu.box = self.box;
     [self.menu setup];
     [self.interfaceBase addSubview:self.menu];
     
@@ -216,7 +184,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startTableChange) name:@"startTableChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(runTableChange:) name:@"runTableChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endTableChange) name:@"endTableChange" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sectionsChange:) name:@"sectionsChange" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemsChange:) name:@"itemsChange" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideDatePicker) name:@"dismiss" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPicDisposeHint) name:@"showPicDisposeHint" object:nil];
@@ -225,9 +194,21 @@
     [self setupCSVForDeletedItem];
 }
 
+- (UICollectionViewFlowLayout *)getLayout {
+    UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
+    l.minimumInteritemSpacing = gapToEdgeS;
+    l.minimumLineSpacing = gapToEdgeS;
+    CGFloat w = ([SFBox sharedBox].appRect.size.width - l.minimumInteritemSpacing * 4) / 3;
+    l.itemSize = CGSizeMake(w, w * 2);
+    l.scrollDirection = UICollectionViewScrollDirectionVertical;
+//    l.sectionInset = UIEdgeInsetsMake(30, 0, 0, 0);
+    l.headerReferenceSize = CGSizeMake([SFBox sharedBox].appRect.size.width, 30);
+    return l;
+}
+
 - (void)turnOffHint
 {
-    [self.box switchHint];
+    [[SFBox sharedBox] switchHint];
     self.menu.hintSwitch.on = NO;
 }
 
@@ -242,7 +223,7 @@
 // To know which to dehighlight, we get that from state change of input pad(keyboard/datePicker)
 - (void)hightlightView:(UIView *)v
 {
-    v.backgroundColor = self.box.sfGreen0Highlighted;
+    v.backgroundColor = [SFBox sharedBox].sfGreen0Highlighted;
     NSSet *s = [NSSet setWithObjects:self.bestBefore, self.notes, self.dateAdded, nil];
     for (UIView *u in s) {
         // Clear rest views to non-highlighted.
@@ -306,7 +287,7 @@
 {
     if (self.bestBefore.text.length == 0) {
         self.bestBefore.text = @"Best before";
-        self.bestBefore.textColor = self.box.placeholderFontColor;
+        self.bestBefore.textColor = [SFBox sharedBox].placeholderFontColor;
     } else {
         self.bestBefore.textColor = [UIColor blackColor];
     }
@@ -316,7 +297,7 @@
 {
     self.bestBefore.text = @"Best before";
     self.bestBeforeDate = nil;
-    self.bestBefore.textColor = self.box.placeholderFontColor;
+    self.bestBefore.textColor = [SFBox sharedBox].placeholderFontColor;
     self.notes.text = @"";
     self.dateAddedSwitch.on = YES;
     [self changeSwitch:self.dateAddedSwitch];
@@ -329,7 +310,7 @@
     if (!base) {
         // http://stackoverflow.com/questions/18970679/ios-7-uidatepicker-height-inconsistency
         CGFloat h = 216;
-        UIScrollView *base = [[UIScrollView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x, self.appRect.size.height - h, self.appRect.size.width, h)];
+        UIScrollView *base = [[UIScrollView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x, [SFBox sharedBox].appRect.size.height - h, [SFBox sharedBox].appRect.size.width, h)];
         base.tag = 999;
         base.backgroundColor = [UIColor clearColor];
         base.contentSize = CGSizeMake(base.frame.size.width, base.frame.size.height * 2);
@@ -385,21 +366,25 @@
 
 - (void)reloadDataForTables
 {
-    [self.listViewCtl.tableView reloadData];
+    [self.listViewCtl.collectionView reloadData];
     [self.cardViewCtl.tableView reloadData];
 }
 
 - (void)showCard
 {
     self.cardViewCtl.isTransitingFromList = YES;
-    [self.cardViewCtl.tableView scrollToRowAtIndexPath:self.listViewCtl.tableView.indexPathForSelectedRow atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    self.cardViewCtl.isTransitingFromList = NO;
-    self.cardViewCtl.tableView.hidden = NO;
-    [self.cardViewCtl.tableView.superview sendSubviewToBack:self.cardViewCtl.tableView];
-    [self.cardViewCtl refreshZViews];
-    [self.cardViewCtl resetZViews:self.listViewCtl.tableView.indexPathForSelectedRow.row];
-    [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
-    [self switchMenuToCard];
+    SFItem *i = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:self.listViewCtl.collectionView.indexPathsForSelectedItems[0]];
+    if (i) {
+        NSIndexPath *p = [NSIndexPath indexPathWithIndex:[[SFBox sharedBox].fResultsCtl.fetchedObjects indexOfObject:i]];
+        [self.cardViewCtl.tableView scrollToRowAtIndexPath:p atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        self.cardViewCtl.isTransitingFromList = NO;
+        self.cardViewCtl.tableView.hidden = NO;
+        [self.cardViewCtl.tableView.superview sendSubviewToBack:self.cardViewCtl.tableView];
+        [self.cardViewCtl refreshZViews];
+        [self.cardViewCtl resetZViews:p.row];
+        [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 3 / 4, 0) animated:YES];
+        [self switchMenuToCard];
+    }
 }
 
 #pragma mark - text view delegate
@@ -472,8 +457,8 @@
 - (void)showWarningWithName:(NSString *)notificationName
 {
     // Clear the item inserted but not saved yet
-    for (SFItem *i in self.box.ctx.insertedObjects) {
-        [self.box.ctx deleteObject:i];
+    for (SFItem *i in [SFBox sharedBox].ctx.insertedObjects) {
+        [[SFBox sharedBox].ctx deleteObject:i];
     }
     if (!self.warning) {
         self.warning = [[UILabel alloc] init];
@@ -483,7 +468,7 @@
         self.warning.textAlignment = NSTextAlignmentCenter;
         self.warning.lineBreakMode = NSLineBreakByWordWrapping;
         self.warning.numberOfLines = 0;
-        self.warning.backgroundColor = self.box.sfGray;
+        self.warning.backgroundColor = [SFBox sharedBox].sfGray;
     }
     CGFloat w = 220;
     CGFloat h = 120;
@@ -491,7 +476,7 @@
     if ([notificationName isEqualToString:@"generalError"]) {
         self.warning.text = @"Something went wrong, please try later.";
     } else {
-        self.warning.text = self.box.warningText;
+        self.warning.text = [SFBox sharedBox].warningText;
     }
     self.warning.alpha = 1;
     [self.view bringSubviewToFront:self.warning];
@@ -515,65 +500,84 @@
 
 - (void)startTableChange
 {
-    [self.listViewCtl.tableView beginUpdates];
     [self.cardViewCtl.tableView beginUpdates];
 }
 
 - (void)runTableChange:(NSNotification *)n
 {
-    BOOL isForSection = [(NSNumber *)[n.userInfo valueForKey:@"isForSection"] boolValue];
     NSFetchedResultsChangeType type = [(NSNumber *)[n.userInfo valueForKey:@"type"] unsignedIntegerValue];
-    if (isForSection) {
-        NSNumber *sectionIndex = [n.userInfo valueForKey:@"sectionIndex"];
-//        id <NSFetchedResultsSectionInfo> sectionInfo = [n.userInfo valueForKey:@"sectionInfo"];
-        switch(type) {
-            case NSFetchedResultsChangeInsert:
-                // Insertion needs to find the indexPath in the new dataSource
-                [self.listViewCtl.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue] withRowAnimation:UITableViewRowAnimationFade];
-                break;
-            case NSFetchedResultsChangeDelete:
-                [self.listViewCtl.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue] withRowAnimation:UITableViewRowAnimationFade];
-                break;
-            case NSFetchedResultsChangeUpdate:
-                // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
-                [self.listViewCtl.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue] withRowAnimation:UITableViewRowAnimationFade];
-                break;
-            case NSFetchedResultsChangeMove:
-                break;
-        }
-    } else {
-        NSIndexPath *indexPath = [n.userInfo valueForKey:@"indexPath"];
-        NSIndexPath *newIndexPath = [n.userInfo valueForKey:@"newIndexPath"];
-        switch(type) {
-            case NSFetchedResultsChangeInsert:
-                // Insertion needs to find the indexPath in the new dataSource
-                 [self.listViewCtl.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-                 [self.cardViewCtl.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-                 break;
-                 case NSFetchedResultsChangeDelete:
-                 // Removing and updating use the indexPath for existing dataSource
-                 // Updating and insertion do not happen at the same loop in this app. So no need to update the dataSource here.
-                 [self.listViewCtl.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                 [self.cardViewCtl.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                 break;
-                 case NSFetchedResultsChangeUpdate:
-                 // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
-                 [self.listViewCtl.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                 [self.cardViewCtl.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                 //[self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-                 break;
-                 case NSFetchedResultsChangeMove:
-                 //                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                 //                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-                 break;
-        }
+    NSIndexPath *indexPath = [n.userInfo valueForKey:@"indexPath"];
+    NSIndexPath *newIndexPath = [n.userInfo valueForKey:@"newIndexPath"];
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            // Insertion needs to find the indexPath in the new dataSource
+            [self.cardViewCtl.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeDelete:
+            // Removing and updating use the indexPath for existing dataSource
+            // Updating and insertion do not happen at the same loop in this app. So no need to update the dataSource here.
+            [self.cardViewCtl.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case NSFetchedResultsChangeUpdate:
+            // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
+            [self.cardViewCtl.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeMove:
+            break;
     }
 }
 
 - (void)endTableChange
 {
-    [self.listViewCtl.tableView endUpdates];
     [self.cardViewCtl.tableView endUpdates];
+}
+
+- (void)itemsChange:(NSNotification *)n {
+    NSFetchedResultsChangeType type = [(NSNumber *)[n.userInfo valueForKey:@"type"] unsignedIntegerValue];
+    [self.listViewCtl.collectionView performBatchUpdates:^{
+        NSIndexPath *indexPath = [n.userInfo valueForKey:@"indexPath"];
+        NSIndexPath *newIndexPath = [n.userInfo valueForKey:@"newIndexPath"];
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                // Insertion needs to find the indexPath in the new dataSource
+                [self.listViewCtl.collectionView insertItemsAtIndexPaths:@[newIndexPath]];
+                break;
+            case NSFetchedResultsChangeDelete:
+                // Removing and updating use the indexPath for existing dataSource
+                // Updating and insertion do not happen at the same loop in this app. So no need to update the dataSource here.
+                [self.listViewCtl.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+                break;
+            case NSFetchedResultsChangeUpdate:
+                // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
+                [self.listViewCtl.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+                break;
+            case NSFetchedResultsChangeMove:
+                break;
+        }
+    } completion:nil];
+}
+
+- (void)sectionsChange:(NSNotification *)n {
+    NSFetchedResultsChangeType type = [(NSNumber *)[n.userInfo valueForKey:@"type"] unsignedIntegerValue];
+    [self.listViewCtl.collectionView performBatchUpdates:^{
+        NSNumber *sectionIndex = [n.userInfo valueForKey:@"sectionIndex"];
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                // Insertion needs to find the indexPath in the new dataSource
+                NSLog(@"sectionIndex.unsignedIntegerValue: %lu", (unsigned long)sectionIndex.unsignedIntegerValue);
+                [self.listViewCtl.collectionView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue]];
+                break;
+            case NSFetchedResultsChangeDelete:
+                [self.listViewCtl.collectionView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue]];
+                break;
+            case NSFetchedResultsChangeUpdate:
+                // this is from http://oleb.net/blog/2013/02/nsfetchedresultscontroller-documentation-bug/
+                [self.listViewCtl.collectionView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex.unsignedIntegerValue]];
+                break;
+            case NSFetchedResultsChangeMove:
+                break;
+        }
+    } completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -587,12 +591,12 @@
 - (void)saveItem
 {
     BOOL errOccured = NO;
-    SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:self.box.ctx];
+    SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:[SFBox sharedBox].ctx];
     
     if (!self.camViewCtl.img && self.notes.text.length == 0) {
         // words or pic is a must.
         errOccured = YES;
-        [self.box.warningText setString:@"A picture or a few words is helpful to remember what the item is."];
+        [[SFBox sharedBox].warningText setString:@"A picture or a few words is helpful to remember what the item is."];
     } else {
         // valid dayAdded is needed.
         if (!self.dateAddedSwitch.on) {
@@ -604,7 +608,7 @@
             // valid bestBefore
             if (!self.bestBeforeDate) {
                 errOccured = YES;
-                [self.box.warningText setString:@"Please select date for best before."];
+                [[SFBox sharedBox].warningText setString:@"Please select date for best before."];
             } else {
                 [i setValue:[self dateToString:self.bestBeforeDate] forKey:@"bestBefore"];
             }
@@ -616,17 +620,17 @@
                     [self resetFreshness:i];
                     if (self.camViewCtl.img) {
                         [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
-                        self.box.imgJustSaved = nil;
-                        self.box.imgNameJustSaved = nil;
-//                        self.box.imgJustSaved = [self convertImageToGrayscale:self.camViewCtl.img];
-                        self.box.imgJustSaved = self.camViewCtl.img;
-                        self.box.imgNameJustSaved = [i valueForKey:@"itemId"];
+                        [SFBox sharedBox].imgJustSaved = nil;
+                        [SFBox sharedBox].imgNameJustSaved = nil;
+//                        [SFBox sharedBox].imgJustSaved = [self convertImageToGrayscale:self.camViewCtl.img];
+                        [SFBox sharedBox].imgJustSaved = self.camViewCtl.img;
+                        [SFBox sharedBox].imgNameJustSaved = [i valueForKey:@"itemId"];
                     } else {
                         [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
                     }
                     NSLog(@"obj to save: %@", i);
                     if (!errOccured) {
-                        if ([self.box saveToDb]) {
+                        if ([[SFBox sharedBox] saveToDb]) {
                             if (self.camViewCtl.img) {
                                 if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
                                     [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
@@ -635,7 +639,7 @@
                                     self.camViewCtl.captureBtn.hidden = NO;
                                 } else {
                                     errOccured = YES;
-                                    [self.box.warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
+                                    [[SFBox sharedBox].warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
                                 }
                             } else {
                                 [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
@@ -649,13 +653,13 @@
                     }
                 } else {
                     errOccured = YES;
-                    [self.box.warningText setString:@"Max: 144 characters"];
+                    [[SFBox sharedBox].warningText setString:@"Max: 144 characters"];
                 }
             }
         }
     }
     if (errOccured) {
-        [self showWarningWithName:self.box.warningText];
+        [self showWarningWithName:[SFBox sharedBox].warningText];
     }
 }
 
@@ -679,12 +683,12 @@
 - (void)deleteItem:(NSNotification *)n
 {
     BOOL errOccured = YES;
-    for (SFItem *i in self.box.fResultsCtl.fetchedObjects) {
+    for (SFItem *i in [SFBox sharedBox].fResultsCtl.fetchedObjects) {
         if ([[i valueForKey:@"itemId"] isEqualToString:[n.userInfo valueForKey:@"itemId"]] && [[i valueForKey:@"itemId"] length] > 0) {
-            NSInteger n = [self.box.fResultsCtl.fetchedObjects indexOfObject:i];
+            NSInteger n = [[SFBox sharedBox].fResultsCtl.fetchedObjects indexOfObject:i];
             NSString *itemIdToDelete = [i valueForKey:@"itemId"];
-            [self.box.ctx deleteObject:i];
-            if ([self.box saveToDb]) {
+            [[SFBox sharedBox].ctx deleteObject:i];
+            if ([[SFBox sharedBox] saveToDb]) {
                 [self.cardViewCtl respondToChangeZViews:n];
                 errOccured = NO;
                 [self addDeletedItemId:itemIdToDelete];
@@ -763,7 +767,7 @@
             [scrollView removeFromSuperview];
         }
     } else if ([scrollView isEqual:self.interfaceBase]) {
-        if (self.box.hintIsOn) {
+        if ([SFBox sharedBox].hintIsOn) {
             NSMutableIndexSet *s;
             if (scrollView.contentOffset.x == 0) {
                 // Reach camView
@@ -803,7 +807,7 @@
 
 - (void)showPicDisposeHint
 {
-    if (self.box.hintIsOn) {
+    if ([SFBox sharedBox].hintIsOn) {
         NSMutableIndexSet *s = [NSMutableIndexSet indexSetWithIndex:5];
         [self processHints:s];
     }
@@ -858,21 +862,21 @@
     CGFloat xToEdge = 20;
     switch (x) {
         case 0:
-            if ([self.listViewCtl.tableView numberOfRowsInSection:0] == 0) {
+            if ([self.listViewCtl.collectionView numberOfItemsInSection:0] == 0) {
                 f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height);
                 s = @"SwipeToCreate";
                 t = @"Swipe to add";
             }
             break;
         case 1:
-            if ([self.listViewCtl.tableView numberOfRowsInSection:0] > 0) {
+            if ([self.listViewCtl.collectionView numberOfItemsInSection:0] > 0) {
                 f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
                 s = @"SwipeToMenu";
                 t = @"Swipe to settings";
             }
             break;
         case 2:
-            if ([self.listViewCtl.tableView numberOfRowsInSection:0] > 0) {
+            if ([self.listViewCtl.collectionView numberOfItemsInSection:0] > 0) {
                 f = CGRectMake(xToEdge, self.view.frame.size.height / 2, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
                 s = @"ColorInfo";
             }
@@ -927,7 +931,7 @@
     l.minimumScaleFactor = 1;
     l.numberOfLines = 0;
     l.lineBreakMode = NSLineBreakByWordWrapping;
-    l.font = [UIFont fontWithName:@"BradleyHandITCTT-Bold" size:self.box.fontSizeM];
+    l.font = [UIFont fontWithName:@"BradleyHandITCTT-Bold" size:fontSizeM];
     return l;
 }
 

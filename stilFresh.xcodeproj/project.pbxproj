@@ -25,8 +25,11 @@
 		EE63B26519E384A200C871C0 /* SFItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE63B26419E384A200C871C0 /* SFItem.m */; };
 		EE781A5E19F7FB5900BEB383 /* SFHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE781A5D19F7FB5900BEB383 /* SFHintView.m */; };
 		EE87B42619EC7FB80022DE0E /* SFCellCover.m in Sources */ = {isa = PBXBuildFile; fileRef = EE87B42519EC7FB80022DE0E /* SFCellCover.m */; };
+		EE9BD5261A0B47C300895864 /* SFHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9BD5251A0B47C300895864 /* SFHeader.m */; };
+		EEB864151A09777100BF756F /* SFCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB864141A09777100BF756F /* SFCollectionViewController.m */; };
 		EECAA75019E5A89200AAE177 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
+		EED0347C1A0A6682000C2590 /* SFCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EED0347B1A0A6682000C2590 /* SFCollectionViewCell.m */; };
 		EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = EED7ED7319FBF6680061BA43 /* SFMenu.m */; };
 		EED7ED7719FC7F950061BA43 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED7ED7619FC7F950061BA43 /* Crashlytics.framework */; };
 		EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECF10119EF005A000A90C3 /* SFTimeLineH.m */; };
@@ -80,8 +83,14 @@
 		EE781A5D19F7FB5900BEB383 /* SFHintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHintView.m; sourceTree = "<group>"; };
 		EE87B42419EC7FB80022DE0E /* SFCellCover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCellCover.h; sourceTree = "<group>"; };
 		EE87B42519EC7FB80022DE0E /* SFCellCover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCellCover.m; sourceTree = "<group>"; };
+		EE9BD5241A0B47C300895864 /* SFHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHeader.h; sourceTree = "<group>"; };
+		EE9BD5251A0B47C300895864 /* SFHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHeader.m; sourceTree = "<group>"; };
+		EEB864131A09777100BF756F /* SFCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCollectionViewController.h; sourceTree = "<group>"; };
+		EEB864141A09777100BF756F /* SFCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCollectionViewController.m; sourceTree = "<group>"; };
 		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
 		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
+		EED0347A1A0A6682000C2590 /* SFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCollectionViewCell.h; sourceTree = "<group>"; };
+		EED0347B1A0A6682000C2590 /* SFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCollectionViewCell.m; sourceTree = "<group>"; };
 		EED7ED7219FBF6680061BA43 /* SFMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMenu.h; sourceTree = "<group>"; };
 		EED7ED7319FBF6680061BA43 /* SFMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMenu.m; sourceTree = "<group>"; };
 		EED7ED7619FC7F950061BA43 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -161,6 +170,12 @@
 				EE3EC7BE19DF995100CA09F8 /* SFTableViewCell.m */,
 				EE3EC7BF19DF995100CA09F8 /* SFTableViewController.h */,
 				EE3EC7C019DF995100CA09F8 /* SFTableViewController.m */,
+				EEB864131A09777100BF756F /* SFCollectionViewController.h */,
+				EEB864141A09777100BF756F /* SFCollectionViewController.m */,
+				EED0347A1A0A6682000C2590 /* SFCollectionViewCell.h */,
+				EED0347B1A0A6682000C2590 /* SFCollectionViewCell.m */,
+				EE9BD5241A0B47C300895864 /* SFHeader.h */,
+				EE9BD5251A0B47C300895864 /* SFHeader.m */,
 				EE3EC7C119DF995100CA09F8 /* SFView.h */,
 				EE3EC7C219DF995100CA09F8 /* SFView.m */,
 				EE63B26319E384A200C871C0 /* SFItem.h */,
@@ -381,7 +396,10 @@
 				EE63B26519E384A200C871C0 /* SFItem.m in Sources */,
 				EE3EC78919DF98C400CA09F8 /* main.m in Sources */,
 				EE3EC7C619DF995100CA09F8 /* SFRootViewCtl.m in Sources */,
+				EED0347C1A0A6682000C2590 /* SFCollectionViewCell.m in Sources */,
 				EE1547BF19E608E8004B6EDC /* CHCSVParser.m in Sources */,
+				EEB864151A09777100BF756F /* SFCollectionViewController.m in Sources */,
+				EE9BD5261A0B47C300895864 /* SFHeader.m in Sources */,
 				EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */,
 				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,

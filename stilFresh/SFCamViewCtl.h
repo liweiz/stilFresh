@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import "SFBox.h"
+
 
 @interface SFCamViewCtl : UIViewController <UIScrollViewDelegate>
 
@@ -17,7 +17,6 @@
 @property (strong, nonatomic) AVCaptureDevice *inputDevice;
 @property (strong, nonatomic) AVCaptureDeviceInput *input;
 @property (strong, nonatomic) AVCaptureStillImageOutput *output;
-@property (strong, nonatomic) SFBox *box;
 
 @property (strong, nonatomic) UIButton *captureBtn;
 @property (assign, nonatomic) BOOL isCapturing;

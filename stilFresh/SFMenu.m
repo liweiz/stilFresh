@@ -7,11 +7,9 @@
 //
 
 #import "SFMenu.h"
+#import "SFBox.h"
 
 @implementation SFMenu
-
-@synthesize box;
-@synthesize hintSwitch;
 
 - (instancetype)initWithFrame:(CGRect)aRect
 {
@@ -40,16 +38,16 @@
     l.text = @"Show hints";
     [self addSubview:l];
     self.hintSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - g - 60, l.frame.origin.y, 60, l.frame.size.height + 16)];
-    self.hintSwitch.on = self.box.hintIsOn;
+    self.hintSwitch.on = [SFBox sharedBox].hintIsOn;
     [self.hintSwitch addTarget:self action:@selector(switchHint:) forControlEvents:UIControlEventValueChanged];
-    self.hintSwitch.onTintColor = self.box.sfGreen0;
+    self.hintSwitch.onTintColor = [SFBox sharedBox].sfGreen0;
     [self addSubview:self.hintSwitch];
 }
 
 // Switch hint
 - (void)switchHint:(UISwitch *)sender
 {
-    [self.box switchHint];
+    [[SFBox sharedBox] switchHint];
 }
 
 /*

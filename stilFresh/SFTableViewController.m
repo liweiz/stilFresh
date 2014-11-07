@@ -13,6 +13,7 @@
 #import "SFCellCover.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "SFHintView.h"
+#import "SFBox.h"
 
 @interface SFTableViewController ()
 
@@ -20,11 +21,10 @@
 
 @implementation SFTableViewController
 
-@synthesize box;
-@synthesize isForCard;
-@synthesize isTransitingFromList;
-@synthesize zViews;
-@synthesize sections;
+@dynamic objects;
+@dynamic name;
+@dynamic numberOfObjects;
+@dynamic indexTitle;
 
 - (void)loadView
 {
@@ -32,27 +32,26 @@
     if (self.isForCard) {
         x = 0;
     } else {
-        x = (self.box.appRect.size.width + self.box.gapToEdgeS) * 2;
+        x = ([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 2;
     }
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, self.box.appRect.size.width, self.box.appRect.size.height) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(x, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.allowsMultipleSelection = NO;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.allowsMultipleSelection = NO;
     self.tableView.showsHorizontalScrollIndicator = NO;
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
     if (self.isForCard) {
-        self.tableView.rowHeight = self.box.appRect.size.height;
+        self.tableView.rowHeight = [SFBox sharedBox].appRect.size.height;
         self.tableView.pagingEnabled = YES;
         
         self.tableView.allowsSelection = NO;
         self.zViews = [NSMutableArray arrayWithCapacity:0];
     } else {
-        self.tableView.rowHeight = (self.box.appRect.size.width - 10) / 3 * 2;
+        self.tableView.rowHeight = ([SFBox sharedBox].appRect.size.width - 10) / 3 * 2;
         self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
     }
@@ -86,9 +85,8 @@
     }
     [self.zViews removeAllObjects];
     
-    for (NSManagedObject *o in self.box.fResultsCtl.fetchedObjects) {
+    for (NSManagedObject *o in [SFBox sharedBox].fResultsCtl.fetchedObjects) {
         SFCellCover *c = [[SFCellCover alloc] initWithFrame:self.tableView.frame];
-        c.box = self.box;
         c.dateAddedTL = [self stringToDate:[o valueForKey:@"dateAdded"]];
         c.bestBeforeTL = [self stringToDate:[o valueForKey:@"bestBefore"]];
         c.todayTL = [self stringToDate:[self dateToString:[NSDate date]]];
@@ -179,7 +177,7 @@
 - (void)alphaChangeOnFakeDeleteBtn:(CGFloat)scrollViewOffsetY cellHeight:(CGFloat)h
 {
     // btn is visible in the range of first half of the height of the cell.
-    if ([self.box.fResultsCtl.fetchedObjects count] > 0) {
+    if ([[SFBox sharedBox].fResultsCtl.fetchedObjects count] > 0) {
         CGFloat r = fmodf(scrollViewOffsetY, h) / h;
         CGFloat x = 0.25;
         if (r > 0 && r <= x) {
@@ -200,12 +198,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return [self.box.fResultsCtl.sections count];
+    return [[SFBox sharedBox].fResultsCtl.sections count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    id <NSFetchedResultsSectionInfo> s = self.box.fResultsCtl.sections[section];
+    id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[section];
     return [s numberOfObjects];
 }
 
@@ -220,8 +218,7 @@
     [self.tableView registerClass:[SFTableViewCell class] forCellReuseIdentifier:cellIdentifier];
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     NSLog(@"cell height: %f", cell.frame.size.height);
-    cell.box = self.box;
-    NSManagedObject *managedObject = [self.box.fResultsCtl objectAtIndexPath:indexPath];
+    NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
     cell.pic.image = nil;
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
@@ -242,8 +239,8 @@
                     // Use the original one if nothing is available in cache.
                     cell.pic.image = [UIImage imageWithData:dImg];
                 }
-            } else if (self.box.imgJustSaved && [self.box.imgNameJustSaved isEqualToString:[managedObject valueForKey:@"itemId"]]) {
-                cell.pic.image = self.box.imgJustSaved;
+            } else if ([SFBox sharedBox].imgJustSaved && [[SFBox sharedBox].imgNameJustSaved isEqualToString:[managedObject valueForKey:@"itemId"]]) {
+                cell.pic.image = [SFBox sharedBox].imgJustSaved;
             }
         }
     }
@@ -257,22 +254,22 @@
 //        UIColor *c;
 //        switch (cell.statusCode) {
 //            case 0:
-//                c = self.box.sfGreen0;
+//                c = [SFBox sharedBox].sfGreen0;
 //                break;
 //            case 1:
-//                c = self.box.sfGreen1;
+//                c = [SFBox sharedBox].sfGreen1;
 //                break;
 //            case 2:
-//                c = self.box.sfGreen2;
+//                c = [SFBox sharedBox].sfGreen2;
 //                break;
 //            case 3:
-//                c = self.box.sfGray;
+//                c = [SFBox sharedBox].sfGray;
 //                break;
 //            default:
 //                c = [UIColor clearColor];
 //                break;
 //        }
-//        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:self.box.fontL shadowColor:c];
+//        NSAttributedString *s = [self convertDaysLeftToSemanticText:[[managedObject valueForKey:@"daysLeft"] integerValue] font:[SFBox sharedBox].fontL shadowColor:c];
 //        if (cell.pic.image) {
 //            cell.number.attributedText = s;
 //        } else {
@@ -294,7 +291,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (!self.isForCard) {
-        id <NSFetchedResultsSectionInfo> x = self.box.fResultsCtl.sections[section];
+        id <NSFetchedResultsSectionInfo> x = [SFBox sharedBox].fResultsCtl.sections[section];
         return [x name];
     }
     return nil;
@@ -319,17 +316,17 @@
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 //{
 //    if (!self.isForCard) {
-//        NSManagedObject *managedObject = [self.box.fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
-//        CGFloat baseH = self.box.appRect.size.width * powf(self.box.goldenRatio / (1 + self.box.goldenRatio), 2);
+//        NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
+//        CGFloat baseH = [SFBox sharedBox].appRect.size.width * powf([SFBox sharedBox].goldenRatio / (1 + [SFBox sharedBox].goldenRatio), 2);
 //        if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
 //            if ([[managedObject valueForKey:@"notes"] length] == 0) {
-//                CGFloat w = self.box.appRect.size.width * self.box.goldenRatio / (1 + self.box.goldenRatio);
-//                return baseH * w * 1.9 / (self.box.appRect.size.width * 0.95);
+//                CGFloat w = [SFBox sharedBox].appRect.size.width * [SFBox sharedBox].goldenRatio / (1 + [SFBox sharedBox].goldenRatio);
+//                return baseH * w * 1.9 / ([SFBox sharedBox].appRect.size.width * 0.95);
 //            } else {
 //                return baseH;
 //            }
 //        } else {
-//            return baseH / self.box.goldenRatio;
+//            return baseH / [SFBox sharedBox].goldenRatio;
 //        }
 //    }
 //    return self.tableView.rowHeight;

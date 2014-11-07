@@ -8,21 +8,9 @@
 
 #import "SFTimeLineH.h"
 #import "NSObject+SFExtra.h"
+#import "SFBox.h"
 
 @implementation SFTimeLineH
-
-@synthesize box;
-@synthesize dateAdded;
-@synthesize bestBefore;
-@synthesize today;
-@synthesize dateSequence;
-@synthesize bbBaseView;
-@synthesize afterBbBaseView;
-@synthesize timeLineWidth;
-@synthesize axisPoint;
-@synthesize timeLineHeight;
-@synthesize singleLineHeight;
-@synthesize labelWidth;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -223,13 +211,13 @@
 - (void)addColorToTimeLineBeforeBb
 {
     UIView *v0 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bbBaseView.frame.size.width, self.bbBaseView.frame.size.height / 3)];
-    v0.backgroundColor = self.box.sfGreen0;
+    v0.backgroundColor = [SFBox sharedBox].sfGreen0;
     [self.bbBaseView addSubview:v0];
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, self.bbBaseView.frame.size.height / 3, self.bbBaseView.frame.size.width, self.bbBaseView.frame.size.height / 3)];
-    v1.backgroundColor = self.box.sfGreen1;
+    v1.backgroundColor = [SFBox sharedBox].sfGreen1;
     [self.bbBaseView addSubview:v1];
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, self.bbBaseView.frame.size.height * 2 / 3, self.bbBaseView.frame.size.width, self.bbBaseView.frame.size.height / 3)];
-    v2.backgroundColor = self.box.sfGreen2;
+    v2.backgroundColor = [SFBox sharedBox].sfGreen2;
     [self.bbBaseView addSubview:v2];
 }
 

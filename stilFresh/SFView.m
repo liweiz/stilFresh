@@ -10,10 +10,6 @@
 
 @implementation SFView
 
-@synthesize touchToDismissKeyboardIsOn;
-@synthesize touchToDismissViewIsOn;
-@synthesize ctlInCharge;
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

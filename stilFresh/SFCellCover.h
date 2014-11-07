@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SFBox.h"
+
 #import "SFTimeLineH.h"
 
 @interface SFCellCover : UIView
 
-@property (strong, nonatomic) SFBox *box;
 @property (strong, nonatomic) SFTimeLineH *timeLine;
 @property (strong, nonatomic) NSDate *dateAddedTL;
 @property (strong, nonatomic) NSDate *bestBeforeTL;

@@ -8,24 +8,9 @@
 
 #import "SFTableViewCell.h"
 #import "SFRootViewCtl.h"
+#import "SFBox.h"
 
 @implementation SFTableViewCell
-
-@synthesize pic;
-@synthesize statusColor;
-@synthesize statusCode;
-@synthesize isForCardView;
-@synthesize appRect;
-@synthesize notes;
-@synthesize deleteBase;
-@synthesize deleteBtn;
-@synthesize deleteTap;
-@synthesize itemId;
-@synthesize box;
-@synthesize bottomLine;
-@synthesize number;
-@synthesize text;
-@synthesize bestBefore;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -36,7 +21,6 @@
         } else {
             self.isForCardView = YES;
         }
-        self.appRect = [(SFRootViewCtl *)[UIApplication sharedApplication].keyWindow.rootViewController appRect];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         if (!self.itemId) {
             self.itemId = [[NSMutableString alloc] init];
@@ -60,7 +44,7 @@
     }
     if (self.isForCardView) {
         if (!self.deleteBase) {
-            self.deleteBase = [[UIScrollView alloc] initWithFrame:self.box.appRect];
+            self.deleteBase = [[UIScrollView alloc] initWithFrame:[SFBox sharedBox].appRect];
             self.deleteBase.backgroundColor = [UIColor clearColor];
             self.deleteBase.contentSize = CGSizeMake(self.deleteBase.frame.size.width * 2, self.deleteBase.frame.size.height);
             self.deleteBase.pagingEnabled = YES;
@@ -74,7 +58,7 @@
         }
         if (!self.bestBefore) {
             self.bestBefore = [[UILabel alloc] init];
-            self.bestBefore.font = self.box.fontL;
+            self.bestBefore.font = [SFBox sharedBox].fontL;
             self.bestBefore.textAlignment = NSTextAlignmentLeft;
             self.bestBefore.textColor = [UIColor whiteColor];
             self.bestBefore.numberOfLines = 0;
@@ -83,7 +67,7 @@
         if (!self.notes) {
             self.notes = [[UILabel alloc] init];
             self.notes.userInteractionEnabled = NO;
-            self.notes.font = self.box.fontL;
+            self.notes.font = [SFBox sharedBox].fontL;
             self.notes.numberOfLines = 0;
             self.notes.textAlignment = NSTextAlignmentLeft;
             self.notes.textColor = [UIColor whiteColor];
@@ -95,7 +79,7 @@
             self.text.backgroundColor = [UIColor clearColor];
             self.text.textColor = [UIColor whiteColor];
             self.text.userInteractionEnabled = NO;
-            self.text.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:self.box.fontM.pointSize];
+            self.text.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:[SFBox sharedBox].fontM.pointSize];
             self.text.minimumScaleFactor = 1;
             self.text.lineBreakMode = NSLineBreakByWordWrapping;
             self.text.textAlignment = NSTextAlignmentLeft;
@@ -109,7 +93,7 @@
 //            self.number.textColor = [UIColor whiteColor];
 //            self.number.numberOfLines = 3;
 //            self.number.minimumScaleFactor = 1;
-//            self.number.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:self.box.fontL.pointSize];
+//            self.number.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:[SFBox sharedBox].fontL.pointSize];
 //            self.number.lineBreakMode = NSLineBreakByWordWrapping;
 //            self.number.textAlignment = NSTextAlignmentLeft;
 //            [self.contentView addSubview:self.number];
@@ -132,9 +116,9 @@
 //                // Not able to use goldenRatio here, greater than cell width
 //                ww = self.frame.size.width * 0.95;
 //            } else {
-//                ww = self.frame.size.width * self.box.goldenRatio / (self.box.goldenRatio + 1);
+//                ww = self.frame.size.width * [SFBox sharedBox].goldenRatio / ([SFBox sharedBox].goldenRatio + 1);
 //            }
-            self.pic.frame = CGRectMake(self.box.gapToEdgeM, 0, self.frame.size.width - self.box.gapToEdgeM, self.frame.size.height);
+            self.pic.frame = CGRectMake(gapToEdgeM, 0, self.frame.size.width - gapToEdgeM, self.frame.size.height);
             [self.contentView addSubview:self.pic];
         }
         [self.pic.superview sendSubviewToBack:self.pic];
@@ -144,9 +128,9 @@
     if (self.isForCardView) {
         self.deleteBase.userInteractionEnabled = YES;
         [self.deleteBase setContentOffset:CGPointZero animated:NO];
-        self.bestBefore.frame = CGRectMake(self.box.gapToEdgeL, self.box.gapToEdgeL + 20, self.frame.size.width - self.box.gapToEdgeL * 2, 44);
+        self.bestBefore.frame = CGRectMake(gapToEdgeL, gapToEdgeL + 20, self.frame.size.width - gapToEdgeL * 2, 44);
         [self.bestBefore sizeToFit];
-        self.notes.frame = CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + self.box.gapToEdgeL, self.frame.size.width - self.box.gapToEdgeL * 2, 200);
+        self.notes.frame = CGRectMake(self.bestBefore.frame.origin.x, self.bestBefore.frame.origin.y + self.bestBefore.frame.size.height + gapToEdgeL, self.frame.size.width - gapToEdgeL * 2, 200);
         [self.notes sizeToFit];
     } else {
         self.text.backgroundColor = [UIColor clearColor];
@@ -156,17 +140,17 @@
                                          .frame.size.width / 3, self.contentView.frame.size.height);
 //            self.text.numberOfLines = 0;
 //            self.text.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-//            self.number.frame = CGRectMake(self.pic.frame.origin.x + self.box.gapToEdgeL, self.pic.frame.origin.y, self.pic.frame.size.width - self.box.gapToEdgeL * 2, self.pic.frame.size.height);
+//            self.number.frame = CGRectMake(self.pic.frame.origin.x + gapToEdgeL, self.pic.frame.origin.y, self.pic.frame.size.width - gapToEdgeL * 2, self.pic.frame.size.height);
 //            self.number.numberOfLines = 3;
 //            self.number.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         } else {
 //            CGFloat g = (self.contentView.frame.size.height - self.number.font.lineHeight - self.text.font.lineHeight) / 2.3;
 //            CGFloat h1 = self.number.font.lineHeight + g * 2;
 //            CGFloat h2 = self.text.font.lineHeight + g * 2;
-//            self.number.frame = CGRectMake(self.box.gapToEdgeL, 0, self.contentView.frame.size.width - self.box.gapToEdgeL * 2, h1);
+//            self.number.frame = CGRectMake(gapToEdgeL, 0, self.contentView.frame.size.width - gapToEdgeL * 2, h1);
 //            self.number.numberOfLines = 1;
 //            self.number.baselineAdjustment = UIBaselineAdjustmentNone;
-            self.text.frame = CGRectMake(self.box.gapToEdgeL, 0, self.pic
+            self.text.frame = CGRectMake(gapToEdgeL, 0, self.pic
                                          .frame.size.width / 3, self.contentView.frame.size.height);
 //            self.text.numberOfLines = 1;
 //            self.text.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
@@ -180,16 +164,16 @@
     if (self.isForCardView) {
         switch (self.statusCode) {
             case 0:
-                c = self.box.sfGreen0;
+                c = [SFBox sharedBox].sfGreen0;
                 break;
             case 1:
-                c = self.box.sfGreen1;
+                c = [SFBox sharedBox].sfGreen1;
                 break;
             case 2:
-                c = self.box.sfGreen2;
+                c = [SFBox sharedBox].sfGreen2;
                 break;
             case 3:
-                c = self.box.sfGray;
+                c = [SFBox sharedBox].sfGray;
                 break;
             default:
                 c = [UIColor clearColor];
@@ -205,16 +189,16 @@
     } else {
         switch (self.statusCode) {
             case 0:
-                c = self.box.sfGreen0;
+                c = [SFBox sharedBox].sfGreen0;
                 break;
             case 1:
-                c = self.box.sfGreen1;
+                c = [SFBox sharedBox].sfGreen1;
                 break;
             case 2:
-                c = self.box.sfGreen2;
+                c = [SFBox sharedBox].sfGreen2;
                 break;
             case 3:
-                c = self.box.sfGray;
+                c = [SFBox sharedBox].sfGray;
                 break;
             default:
                 c = [UIColor clearColor];

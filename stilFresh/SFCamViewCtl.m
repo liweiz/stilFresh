@@ -7,6 +7,7 @@
 //
 
 #import "SFCamViewCtl.h"
+#import "SFBox.h"
 
 @interface SFCamViewCtl ()
 
@@ -14,18 +15,10 @@
 
 @implementation SFCamViewCtl
 
-@synthesize session;
-@synthesize streamView;
-@synthesize inputDevice;
-@synthesize input;
-@synthesize box;
-@synthesize captureBtn;
-@synthesize isCapturing;
-@synthesize img;
 
 - (void)loadView
 {
-    self.view = [[UIView alloc] initWithFrame:self.box.appRect];
+    self.view = [[UIView alloc] initWithFrame:[SFBox sharedBox].appRect];
 }
 
 - (void)viewDidLoad {
@@ -39,7 +32,7 @@
     if (!self.streamView) {
         self.streamView = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
         self.streamView.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        self.streamView.frame = self.box.appRect;
+        self.streamView.frame = [SFBox sharedBox].appRect;
         [self.view.layer addSublayer:self.streamView];
     }
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -80,7 +73,7 @@
         CGFloat side = 80.0f;
         self.captureBtn.frame = CGRectMake((self.view.frame.size.width - side) / 2.0f, self.view.frame.size.height -gapToBottom - side, side, side);
         NSLog(@"btn: %f, %f, %f, %f", self.captureBtn.frame.origin.x, self.captureBtn.frame.origin.y, self.captureBtn.frame.size.height, self.captureBtn.frame.size.width);
-        self.captureBtn.backgroundColor = self.box.sfGreen0;
+        self.captureBtn.backgroundColor = [SFBox sharedBox].sfGreen0;
         self.captureBtn.layer.cornerRadius = side / 2.0f;
         [self.view addSubview:self.captureBtn];
         [self showCaptureBtn];

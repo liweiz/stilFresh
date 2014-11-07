@@ -8,13 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "SFBox.h"
 
 
 
 @interface SFTableViewController : UITableViewController <NSFetchedResultsSectionInfo>
 
-@property (strong, nonatomic) SFBox *box;
 @property (assign, nonatomic) BOOL isForCard;
 @property (assign, nonatomic) BOOL isTransitingFromList;
 @property (strong, nonatomic) NSMutableArray *zViews;
