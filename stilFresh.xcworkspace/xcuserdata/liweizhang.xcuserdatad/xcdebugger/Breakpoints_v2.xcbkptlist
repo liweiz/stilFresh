@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stilFresh/SFCollectionViewController.m"
-            timestampString = "437327799.942791"
+            timestampString = "437342342.821856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
             landmarkName = "-getVisibaleSectionsYsInCollectionView:"
             landmarkType = "5">
          </BreakpointContent>

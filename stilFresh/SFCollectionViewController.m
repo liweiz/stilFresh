@@ -199,6 +199,7 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
             [currentOnes setObject:l forKey:s1];
         }
     }
+    
 }
 
 - (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view {
@@ -222,7 +223,7 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
             } else {
                 CGFloat y1 = [[d objectForKey:[NSNumber numberWithInteger:(s - 1)]] floatValue];
                 CGFloat y2 = [[d objectForKey:[NSNumber numberWithInteger:s]] floatValue];
-                return CGRectMake(0, y1 - view.contentOffset.y, view.frame.size.width, y2 - view.contentOffset.y);
+                return CGRectMake(0, y1 - view.contentOffset.y, view.frame.size.width, y2 - y1);
             }
         } else {
             for (NSNumber *n in d.allKeys) {
@@ -252,6 +253,7 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
 
 - (NSDictionary *)getVisibaleSectionsYsInCollectionView:(UICollectionView *)view {
     // To get the sections' Ys, we only need the dots between the two ends. We do not need the points of both ends since they are already there. So we assign sectionNo as the key and its lower end point as the object.
+    // For consistency purpose, in which we have sectionNo/lower-end-point pair as key/value in the dictionary, we add lower end of the view as the last point.
     NSArray *a = [self ascendSections:[view indexPathsForVisibleItems]];
     NSLog(@"array: %@", a);
     NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
@@ -262,8 +264,19 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
                 UICollectionViewCell *c = [view cellForItemAtIndexPath:i];
                 [d setObject:[NSNumber numberWithFloat:CGRectGetMaxY(c.frame)] forKey:[NSNumber numberWithInteger:i.section]];
             }
+        } else {
+            // Last item visible
+            UICollectionViewCell *c = [view cellForItemAtIndexPath:i];
+            if (CGRectGetMaxY(c.frame) - view.contentOffset.y < CGRectGetHeight(c.frame)) {
+                // Lower edge is the bottomline of the cell
+                [d setObject:[NSNumber numberWithFloat:CGRectGetMaxY(c.frame)] forKey:[NSNumber numberWithInteger:i.section]];
+            } else {
+                // Lower edge is the bottomline of the view
+                [d setObject:[NSNumber numberWithFloat:(view.frame.size.height + view.contentOffset.y)] forKey:[NSNumber numberWithInteger:i.section]];
+            }
         }
     }
+    
     NSLog(@"dic: %@", d);
     return d;
 }
