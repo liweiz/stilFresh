@@ -152,7 +152,7 @@
     [self addChildViewController:self.listViewCtl];
     [self.interfaceBase addSubview:self.listViewCtl.collectionView];
     [self.listViewCtl didMoveToParentViewController:self];
-    [self.interfaceBase addSubview:self.listViewCtl.dynamicDaysLeftDisplayBase];
+    
     // add black gap
     UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewCtl.collectionView.frame.origin.x + self.listViewCtl.collectionView.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
     g2.backgroundColor = gapColor;

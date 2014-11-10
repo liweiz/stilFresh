@@ -61,7 +61,13 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
     [self.collectionView registerClass:[SFCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifierCell];
 //    [self.collectionView registerClass:[SFHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:reuseIdentifierHeader];
     // Do any additional setup after loading the view.
-    
+    // There is no way to detect the completion of the loading of all the visible cells. So we set a delay here.
+    [[NSRunLoop currentRunLoop] addTimer:[NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(addDynamicDaysLeftDisplayBase) userInfo:nil repeats:NO] forMode:NSDefaultRunLoopMode];
+}
+
+- (void)addDynamicDaysLeftDisplayBase {
+    [self.collectionView.superview addSubview:self.dynamicDaysLeftDisplayBase];
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -247,6 +253,7 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
 - (NSDictionary *)getVisibaleSectionsYsInCollectionView:(UICollectionView *)view {
     // To get the sections' Ys, we only need the dots between the two ends. We do not need the points of both ends since they are already there. So we assign sectionNo as the key and its lower end point as the object.
     NSArray *a = [self ascendSections:[view indexPathsForVisibleItems]];
+    NSLog(@"array: %@", a);
     NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
     for (NSIndexPath *i in a) {
         if ([a indexOfObject:i] + 1 < [a count]) {
@@ -257,6 +264,7 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
             }
         }
     }
+    NSLog(@"dic: %@", d);
     return d;
 }
 
