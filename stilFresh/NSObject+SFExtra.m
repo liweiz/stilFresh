@@ -433,4 +433,26 @@
     return libraryDirectory;
 }
 
+- (UIColor *)getStatusColor:(NSInteger)statusCode {
+    UIColor *c;
+    switch (statusCode) {
+        case 0:
+            c = [SFBox sharedBox].sfGreen0;
+            break;
+        case 1:
+            c = [SFBox sharedBox].sfGreen1;
+            break;
+        case 2:
+            c = [SFBox sharedBox].sfGreen2;
+            break;
+        case 3:
+            c = [SFBox sharedBox].sfGray;
+            break;
+        default:
+            c = [UIColor clearColor];
+            break;
+    }
+    return c;
+}
+
 @end

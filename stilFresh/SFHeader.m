@@ -18,11 +18,11 @@
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
         if (!_text) {
-            _text = [[UILabel alloc] init];
+            _text = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
             _text.backgroundColor = [UIColor clearColor];
-            _text.textAlignment = NSTextAlignmentLeft;
+            _text.textAlignment = NSTextAlignmentCenter;
             _text.lineBreakMode = NSLineBreakByWordWrapping;
-            _text.textColor = [UIColor whiteColor];
+            _text.textColor = [UIColor lightGrayColor];
             _text.numberOfLines = 1;
             [self addSubview:_text];
         }
@@ -40,7 +40,6 @@
 }
 
 - (void)setup {
-    self.text.frame = self.frame;
     self.text.font = [SFBox sharedBox].fontM;
 }
 

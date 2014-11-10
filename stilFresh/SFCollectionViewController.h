@@ -12,6 +12,6 @@
 
 @interface SFCollectionViewController : UICollectionViewController <NSFetchedResultsSectionInfo>
 
-
+@property (strong, nonatomic) UIView *dynamicDaysLeftDisplayBase;
 
 @end

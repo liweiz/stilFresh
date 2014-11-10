@@ -36,4 +36,6 @@
 - (NSString *)displayDayString:(NSString *)date;
 - (NSString *)displayBBWithIntro:(NSString *)date;
 
+- (UIColor *)getStatusColor:(NSInteger)statusCode;
+
 @end

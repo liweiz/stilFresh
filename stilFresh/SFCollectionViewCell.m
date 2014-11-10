@@ -15,24 +15,25 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.contentView.backgroundColor = [UIColor greenColor];
-        if (!self.pic) {
-            self.pic = [[UIImageView alloc] init];
-            self.pic.backgroundColor = [UIColor yellowColor];
-            self.pic.contentMode = UIViewContentModeScaleAspectFill;
-            self.clipsToBounds = YES;
-            [self.contentView addSubview:self.pic];
+        if (!_pic) {
+            _pic = [[UIImageView alloc] init];
+            _pic.backgroundColor = [UIColor clearColor];
+            _pic.contentMode = UIViewContentModeScaleAspectFill;
+            _pic.clipsToBounds = YES;
+            [self.contentView addSubview:_pic];
         }
-        if (!self.text) {
-            self.text = [[UILabel alloc] init];
-            self.text.backgroundColor = [UIColor clearColor];
-            self.text.font = [SFBox sharedBox].fontM;
-            self.text.textAlignment = NSTextAlignmentLeft;
-            self.text.lineBreakMode = NSLineBreakByWordWrapping;
-            self.text.textColor = [UIColor whiteColor];
-            self.text.numberOfLines = 3;
-            [self.contentView addSubview:self.text];
+        if (!_text) {
+            _text = [[UILabel alloc] init];
+            _text.backgroundColor = [UIColor clearColor];
+            _text.font = [SFBox sharedBox].fontM;
+            _text.textAlignment = NSTextAlignmentLeft;
+            _text.lineBreakMode = NSLineBreakByWordWrapping;
+            _text.textColor = [UIColor whiteColor];
+            _text.numberOfLines = 3;
+            [self.contentView addSubview:_text];
         }
+        self.contentView.layer.borderColor = [UIColor whiteColor].CGColor;
+        self.contentView.layer.borderWidth = 1.5;
         [self setup];
     }
     return self;
