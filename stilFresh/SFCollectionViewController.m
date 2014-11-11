@@ -32,6 +32,7 @@
 static NSString * const reuseIdentifierCell = @"Bloc";
 static NSString * const reuseIdentifierHeader = @"HeaderView";
 static CGFloat const minFontSize = 20;
+static CGFloat const gapBetweenSections = 3;
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
     self = [super initWithCollectionViewLayout:layout];
@@ -168,7 +169,7 @@ static CGFloat const minFontSize = 20;
     if (section == 0) {
         return CGSizeMake(collectionView.frame.size.width, 20);
     } else {
-        return CGSizeMake(collectionView.frame.size.width, 3);
+        return CGSizeMake(collectionView.frame.size.width, gapBetweenSections);
     }
 }
 
@@ -235,9 +236,9 @@ static CGFloat const minFontSize = 20;
             }];
             if (s == [a[0] integerValue]) {
                 CGFloat y = [[d objectForKey:a[0]] floatValue];
-                return CGRectMake(0, 0, view.frame.size.width, y - view.contentOffset.y);
+                return CGRectMake(0, 20, view.frame.size.width, y - view.contentOffset.y);
             } else {
-                CGFloat y1 = [[d objectForKey:[NSNumber numberWithInteger:(s - 1)]] floatValue];
+                CGFloat y1 = [[d objectForKey:[NSNumber numberWithInteger:(s - 1)]] floatValue] + gapBetweenSections;
                 CGFloat y2 = [[d objectForKey:[NSNumber numberWithInteger:s]] floatValue];
                 return CGRectMake(0, y1 - view.contentOffset.y, view.frame.size.width, y2 - y1);
             }
