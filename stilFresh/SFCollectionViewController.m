@@ -194,6 +194,7 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
             CGRect f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view];
             NSLog(@"frame: %@", NSStringFromCGRect(f));
             UILabel *l = [self getDynamicDisplayWithFrame:f];
+            [self adjustOneFontSize:l];
             l.text = [[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] name];
             [self.dynamicDaysLeftDisplayBase addSubview:l];
             [currentOnes setObject:l forKey:s1];
@@ -242,10 +243,13 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
     l.backgroundColor = [UIColor clearColor];
     l.textAlignment = NSTextAlignmentCenter;
     l.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-    l.minimumScaleFactor = 0.5;
+    l.font = [SFBox sharedBox].fontL;
+    l.minimumScaleFactor = 10 / l.font.pointSize;
     l.lineBreakMode = NSLineBreakByWordWrapping;
-    l.numberOfLines = 1;
-    l.textColor = [UIColor whiteColor];
+    l.numberOfLines = 0;
+//    l.adjustsFontSizeToFitWidth = YES;
+    l.alpha = 0.5;
+    l.textColor = [UIColor blackColor];
     l.layer.borderColor = [UIColor redColor].CGColor;
     l.layer.borderWidth = 2;
     return l;
@@ -301,10 +305,49 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
     }];
 }
 
+#pragma mark - Adjust Font Size
+
+- (void)adjustAllFontSize:(NSArray *)labels {
+    CGFloat m = [SFBox sharedBox].fontL.pointSize;
+    CGFloat maxH = [SFBox sharedBox].fontL.lineHeight;
+    CGFloat minH = [UIFont fontWithName:[SFBox sharedBox].fontL.fontName size:20].lineHeight;
+    for (UILabel *l in labels) {
+        [self adjustFontSize:l maxFontSize:m maxHeight:maxH minHeight:minH];
+    }
+}
+
+- (void)adjustOneFontSize:(UILabel *)l {
+    CGFloat m = [SFBox sharedBox].fontL.pointSize;
+    CGFloat maxH = [SFBox sharedBox].fontL.lineHeight;
+    CGFloat minH = [UIFont fontWithName:[SFBox sharedBox].fontL.fontName size:20].lineHeight;
+    [self adjustFontSize:l maxFontSize:m maxHeight:maxH minHeight:minH];
+}
+
+- (void)adjustFontSize:(UILabel *)l maxFontSize:(CGFloat)s maxHeight:(CGFloat)maxH minHeight:(CGFloat)minH {
+    if (l.font.lineHeight > l.frame.size.height / 2.5 && l.font.lineHeight >= minH) {
+        for (CGFloat i = l.font.pointSize ; i > 0; i = i - 0.1) {
+            UIFont *f = [UIFont fontWithName:l.font.fontName size:i];
+            if (f.lineHeight < l.frame.size.height / 2.5 && f.lineHeight >= minH) {
+                l.font = f;
+                break;
+            }
+        }
+    } else if (l.font.lineHeight <= l.frame.size.height / 2.5 && l.font.lineHeight <= maxH) {
+        for (CGFloat i = s ; i > 0; i = i - 0.1) {
+            UIFont *f = [UIFont fontWithName:l.font.fontName size:i];
+            if (f.lineHeight < l.frame.size.height / 2.5 && f.lineHeight <= maxH) {
+                l.font = f;
+                break;
+            }
+        }
+    } else if (l.font.)
+}
+
 #pragma mark <UIScrollViewDelegate>
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView];
+    [self adjustAllFontSize:self.dynamicDaysLeftDisplay.allValues];
 //    for (UILabel *l in self.dynamicDaysLeftDisplay.allValues) {
 //        NSLog(@"frame: %@", NSStringFromCGRect(l.frame));
 //    }
