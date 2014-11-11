@@ -71,6 +71,7 @@ static CGFloat const gapBetweenSections = 3;
     // Do any additional setup after loading the view.
     // There is no way to detect the completion of the loading of all the visible cells. So we set a delay here.
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(addDynamicDaysLeftDisplayBase) userInfo:nil repeats:NO] forMode:NSDefaultRunLoopMode];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDynamicDisplays) name:@"refreshDynamicDisplays" object:nil];
 }
 
 - (void)addDynamicDaysLeftDisplayBase {
@@ -78,9 +79,18 @@ static CGFloat const gapBetweenSections = 3;
     [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView];
 }
 
+- (void)refreshDynamicDisplays {
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView];
+    [self adjustAllFontSize:self.dynamicDaysLeftDisplay.allValues];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 /*
@@ -133,7 +143,9 @@ static CGFloat const gapBetweenSections = 3;
         }
     }
     cell.contentView.backgroundColor = [self getStatusColor:cell.statusCode];
-    cell.text.text = [managedObject valueForKey:@"notes"];
+    if (!cell.pic.image) {
+        cell.text.text = [managedObject valueForKey:@"notes"];
+    }
     if (self.lineHeightFrameHeightRatio == 0) {
         self.lineHeightFrameHeightRatio = self.maxLineHeight / cell.frame.size.height;
     }
@@ -161,6 +173,10 @@ static CGFloat const gapBetweenSections = 3;
         UICollectionViewLayoutAttributes *a = [self.collectionViewLayout layoutAttributesForItemAtIndexPath:p];
         return CGRectGetMaxY(a.frame);
     }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"rowSelected" object:self];
 }
 
 #pragma mark <UICollectionViewDelegateFlowLayout>
@@ -360,8 +376,7 @@ static CGFloat const gapBetweenSections = 3;
 #pragma mark <UIScrollViewDelegate>
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView];
-    [self adjustAllFontSize:self.dynamicDaysLeftDisplay.allValues];
+    [self refreshDynamicDisplays];
 //    for (UILabel *l in self.dynamicDaysLeftDisplay.allValues) {
 //        NSLog(@"frame: %@", NSStringFromCGRect(l.frame));
 //    }

@@ -237,12 +237,6 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!self.isForCard) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"rowSelected" object:self];
-    }
-}
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (!self.isForCard) {
         id <NSFetchedResultsSectionInfo> x = [SFBox sharedBox].fResultsCtl.sections[section];

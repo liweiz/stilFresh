@@ -374,7 +374,7 @@
     self.cardViewCtl.isTransitingFromList = YES;
     SFItem *i = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:self.listViewCtl.collectionView.indexPathsForSelectedItems[0]];
     if (i) {
-        NSIndexPath *p = [NSIndexPath indexPathWithIndex:[[SFBox sharedBox].fResultsCtl.fetchedObjects indexOfObject:i]];
+        NSIndexPath *p = [NSIndexPath indexPathForRow:[[SFBox sharedBox].fResultsCtl.fetchedObjects indexOfObject:i] inSection:0];
         [self.cardViewCtl.tableView scrollToRowAtIndexPath:p atScrollPosition:UITableViewScrollPositionTop animated:NO];
         self.cardViewCtl.isTransitingFromList = NO;
         self.cardViewCtl.tableView.hidden = NO;
@@ -495,7 +495,7 @@
 }
 
 
-#pragma mark - change tables
+#pragma mark - List/cards Update Animation
 
 - (void)startTableChange
 {
@@ -574,7 +574,9 @@
             case NSFetchedResultsChangeMove:
                 break;
         }
-    } completion:nil];
+    } completion:^(BOOL done) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshDynamicDisplays" object:self];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
