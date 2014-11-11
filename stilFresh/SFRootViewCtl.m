@@ -198,12 +198,10 @@
 - (UICollectionViewFlowLayout *)getLayout {
     UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
     l.minimumInteritemSpacing = 0;
-    l.minimumLineSpacing = 0;
+    l.minimumLineSpacing = 0.5;
     CGFloat w = [SFBox sharedBox].appRect.size.width;
-    l.itemSize = CGSizeMake(w, w * 0.5);
+    l.itemSize = CGSizeMake(w, w * 1 / (goldenRatio + 1));
     l.scrollDirection = UICollectionViewScrollDirectionVertical;
-//    l.sectionInset = UIEdgeInsetsMake(30, 0, 0, 0);
-//    l.headerReferenceSize = CGSizeMake([SFBox sharedBox].appRect.size.width, 44);
     return l;
 }
 

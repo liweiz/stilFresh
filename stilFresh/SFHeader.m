@@ -16,31 +16,31 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor clearColor];
-        if (!_text) {
-            _text = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-            _text.backgroundColor = [UIColor clearColor];
-            _text.textAlignment = NSTextAlignmentCenter;
-            _text.lineBreakMode = NSLineBreakByWordWrapping;
-            _text.textColor = [UIColor lightGrayColor];
-            _text.numberOfLines = 1;
-            [self addSubview:_text];
-        }
-        [self setup];
+        self.backgroundColor = [UIColor whiteColor];
+//        if (!_text) {
+//            _text = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+//            _text.backgroundColor = [UIColor whiteColor];
+//            _text.textAlignment = NSTextAlignmentCenter;
+//            _text.lineBreakMode = NSLineBreakByWordWrapping;
+//            _text.textColor = [UIColor lightGrayColor];
+//            _text.numberOfLines = 1;
+//            [self addSubview:_text];
+//        }
+//        [self setup];
     }
     return self;
 }
 
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    //    self.contentView.backgroundColor = [UIColor clearColor];
-    [self setup];
-    self.text.text = nil;
-    self.text.attributedText = nil;
-}
-
-- (void)setup {
-    self.text.font = [SFBox sharedBox].fontM;
-}
+//- (void)prepareForReuse {
+//    [super prepareForReuse];
+//    //    self.contentView.backgroundColor = [UIColor clearColor];
+//    [self setup];
+//    self.text.text = nil;
+//    self.text.attributedText = nil;
+//}
+//
+//- (void)setup {
+//    self.text.font = [SFBox sharedBox].fontM;
+//}
 
 @end

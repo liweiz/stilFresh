@@ -9,9 +9,9 @@
 #import "SFCollectionViewController.h"
 #import "SFCollectionViewCell.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-#import "SFHeader.h"
 #import "SFBox.h"
 #import "NSObject+SFExtra.h"
+#import "SFHeader.h"
 
 @interface SFCollectionViewController ()
 
@@ -66,7 +66,7 @@ static CGFloat const minFontSize = 20;
     
     // Register cell classes
     [self.collectionView registerClass:[SFCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifierCell];
-//    [self.collectionView registerClass:[SFHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:reuseIdentifierHeader];
+    [self.collectionView registerClass:[SFHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:reuseIdentifierHeader];
     // Do any additional setup after loading the view.
     // There is no way to detect the completion of the loading of all the visible cells. So we set a delay here.
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(addDynamicDaysLeftDisplayBase) userInfo:nil repeats:NO] forMode:NSDefaultRunLoopMode];
@@ -141,31 +141,36 @@ static CGFloat const minFontSize = 20;
 
 #pragma mark <UICollectionViewDelegate>
 
-//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-//    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-//        SFHeader *h = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifierHeader forIndexPath:indexPath];
-////        UICollectionViewLayoutAttributes *a = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader withIndexPath:indexPath];
-////        h.frame = CGRectMake(0, [self aboveItemBottomY:indexPath], [SFBox sharedBox].appRect.size.width, 30);
-//        id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[indexPath.section];
-//        h.text.text = [s name];
-//        NSLog(@"h.text.text: %@", h.text.text);
-//        NSLog(@"h.frame.origin.y: %f", h.frame.origin.y);
-//        return h;
-//    }
-//    return nil;
-//}
-//
-//- (CGFloat)aboveItemBottomY:(NSIndexPath *)sectionIndexPath {
-//    if (sectionIndexPath.section - 1 < 0) {
-//        return 20;
-//    } else {
-//        id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[sectionIndexPath.section - 1];
-//        NSInteger l = [s numberOfObjects];
-//        NSIndexPath *p = [NSIndexPath indexPathForItem:(l - 1) inSection:(sectionIndexPath.section - 1)];
-//        UICollectionViewLayoutAttributes *a = [self.collectionViewLayout layoutAttributesForItemAtIndexPath:p];
-//        return CGRectGetMaxY(a.frame);
-//    }
-//}
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        SFHeader *h = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifierHeader forIndexPath:indexPath];
+        NSLog(@"h.frame.origin.y: %f", h.frame.origin.y);
+        return h;
+    }
+    return nil;
+}
+
+- (CGFloat)aboveItemBottomY:(NSIndexPath *)sectionIndexPath {
+    if (sectionIndexPath.section - 1 < 0) {
+        return 20;
+    } else {
+        id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[sectionIndexPath.section - 1];
+        NSInteger l = [s numberOfObjects];
+        NSIndexPath *p = [NSIndexPath indexPathForItem:(l - 1) inSection:(sectionIndexPath.section - 1)];
+        UICollectionViewLayoutAttributes *a = [self.collectionViewLayout layoutAttributesForItemAtIndexPath:p];
+        return CGRectGetMaxY(a.frame);
+    }
+}
+
+#pragma mark <UICollectionViewDelegateFlowLayout>
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return CGSizeMake(collectionView.frame.size.width, 20);
+    } else {
+        return CGSizeMake(collectionView.frame.size.width, 3);
+    }
+}
 
 #pragma mark - Dynamic Display
 
@@ -251,17 +256,15 @@ static CGFloat const minFontSize = 20;
 - (UILabel *)getDynamicDisplayWithFrame:(CGRect)frame {
     UILabel *l = [[UILabel alloc] initWithFrame:frame];
     l.backgroundColor = [UIColor clearColor];
-    l.textAlignment = NSTextAlignmentCenter;
+    l.textAlignment = NSTextAlignmentRight;
     l.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     l.font = [SFBox sharedBox].fontL;
     l.minimumScaleFactor = 10 / l.font.pointSize;
     l.lineBreakMode = NSLineBreakByWordWrapping;
     l.numberOfLines = 0;
 //    l.adjustsFontSizeToFitWidth = YES;
-    l.alpha = 0.5;
-    l.textColor = [UIColor blackColor];
-    l.layer.borderColor = [UIColor redColor].CGColor;
-    l.layer.borderWidth = 2;
+    l.alpha = 1;
+    l.textColor = [UIColor colorWithWhite:1 alpha:0.2];
     return l;
 }
 

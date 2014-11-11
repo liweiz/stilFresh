@@ -30,10 +30,8 @@
             _text.lineBreakMode = NSLineBreakByWordWrapping;
             _text.textColor = [UIColor whiteColor];
             _text.numberOfLines = 3;
-            [self.contentView addSubview:_text];
+            [self.contentView addSubview:_text]; 
         }
-        self.contentView.layer.borderColor = [UIColor whiteColor].CGColor;
-        self.contentView.layer.borderWidth = 1.5;
         [self setup];
     }
     return self;
@@ -50,8 +48,8 @@
 }
 
 - (void)setup {
-    self.pic.frame = CGRectMake(gapToEdgeS, gapToEdgeS, self.frame.size.width - gapToEdgeS * 2, self.frame.size.height - gapToEdgeS * 2);
-    self.text.frame = self.pic.frame;
+    self.pic.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    self.text.frame = CGRectMake(gapToEdgeS, 0, self.frame.size.width - gapToEdgeS * 2, self.frame.size.height);
 }
 
 @end

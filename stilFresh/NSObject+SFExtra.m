@@ -18,7 +18,7 @@
     NSRange r1 = NSMakeRange(0, 0);
     NSRange r2 = NSMakeRange(0, 0);
     if (i < 1) {
-        s = @"Best before date\npassed";
+        s = @"No longer fresh";
     } else if (i == 1) {
         s = @"1 day\nleft";
     } else if (i < 7) {
