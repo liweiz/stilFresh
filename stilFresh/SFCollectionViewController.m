@@ -16,6 +16,9 @@
 @interface SFCollectionViewController ()
 
 @property (strong, nonatomic) NSMutableDictionary *dynamicDaysLeftDisplay;
+@property (assign, nonatomic) CGFloat lineHeightFrameHeightRatio;
+@property (assign, nonatomic) CGFloat maxLineHeight;
+@property (assign, nonatomic) CGFloat minLineHeight;
 
 @end
 
@@ -28,6 +31,7 @@
 
 static NSString * const reuseIdentifierCell = @"Bloc";
 static NSString * const reuseIdentifierHeader = @"HeaderView";
+static CGFloat const minFontSize = 20;
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
     self = [super initWithCollectionViewLayout:layout];
@@ -54,6 +58,9 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
     self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor clearColor];
     self.dynamicDaysLeftDisplayBase.userInteractionEnabled = NO;
     
+    self.maxLineHeight = [SFBox sharedBox].fontL.lineHeight;
+    self.minLineHeight = [UIFont fontWithName:[SFBox sharedBox].fontL.fontName size:minFontSize].lineHeight;
+    self.lineHeightFrameHeightRatio = 0;
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -126,6 +133,9 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
     }
     cell.contentView.backgroundColor = [self getStatusColor:cell.statusCode];
     cell.text.text = [managedObject valueForKey:@"notes"];
+    if (self.lineHeightFrameHeightRatio == 0) {
+        self.lineHeightFrameHeightRatio = self.maxLineHeight / cell.frame.size.height;
+    }
     return cell;
 }
 
@@ -308,39 +318,39 @@ static NSString * const reuseIdentifierHeader = @"HeaderView";
 #pragma mark - Adjust Font Size
 
 - (void)adjustAllFontSize:(NSArray *)labels {
-    CGFloat m = [SFBox sharedBox].fontL.pointSize;
-    CGFloat maxH = [SFBox sharedBox].fontL.lineHeight;
-    CGFloat minH = [UIFont fontWithName:[SFBox sharedBox].fontL.fontName size:20].lineHeight;
     for (UILabel *l in labels) {
-        [self adjustFontSize:l maxFontSize:m maxHeight:maxH minHeight:minH];
+        [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontL.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
     }
 }
 
 - (void)adjustOneFontSize:(UILabel *)l {
-    CGFloat m = [SFBox sharedBox].fontL.pointSize;
-    CGFloat maxH = [SFBox sharedBox].fontL.lineHeight;
-    CGFloat minH = [UIFont fontWithName:[SFBox sharedBox].fontL.fontName size:20].lineHeight;
-    [self adjustFontSize:l maxFontSize:m maxHeight:maxH minHeight:minH];
+    [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontL.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
 }
 
 - (void)adjustFontSize:(UILabel *)l maxFontSize:(CGFloat)s maxHeight:(CGFloat)maxH minHeight:(CGFloat)minH {
-    if (l.font.lineHeight > l.frame.size.height / 2.5 && l.font.lineHeight >= minH) {
-        for (CGFloat i = l.font.pointSize ; i > 0; i = i - 0.1) {
-            UIFont *f = [UIFont fontWithName:l.font.fontName size:i];
-            if (f.lineHeight < l.frame.size.height / 2.5 && f.lineHeight >= minH) {
-                l.font = f;
-                break;
+    if (l.font.lineHeight > l.frame.size.height * self.lineHeightFrameHeightRatio && l.font.lineHeight > minH) {
+        if (l.frame.size.height * self.lineHeightFrameHeightRatio <= minH) {
+            l.font = [UIFont fontWithName:l.font.fontName size:minFontSize];
+        } else {
+            for (CGFloat i = l.font.pointSize ; i >= minFontSize; i = i - 0.1) {
+                if ([UIFont fontWithName:l.font.fontName size:i].lineHeight <= l.frame.size.height * self.lineHeightFrameHeightRatio && [UIFont fontWithName:l.font.fontName size:i].lineHeight >= minH) {
+                    l.font = [UIFont fontWithName:l.font.fontName size:i];
+                    break;
+                }
             }
         }
-    } else if (l.font.lineHeight <= l.frame.size.height / 2.5 && l.font.lineHeight <= maxH) {
-        for (CGFloat i = s ; i > 0; i = i - 0.1) {
-            UIFont *f = [UIFont fontWithName:l.font.fontName size:i];
-            if (f.lineHeight < l.frame.size.height / 2.5 && f.lineHeight <= maxH) {
-                l.font = f;
-                break;
+    } else if (l.font.lineHeight < l.frame.size.height * self.lineHeightFrameHeightRatio && l.font.lineHeight < maxH) {
+        if (l.frame.size.height * self.lineHeightFrameHeightRatio >= maxH) {
+            l.font = [SFBox sharedBox].fontL;
+        } else {
+            for (CGFloat i = s ; i > 0; i = i - 0.1) {
+                if ([UIFont fontWithName:l.font.fontName size:i].lineHeight <= l.frame.size.height * self.lineHeightFrameHeightRatio && [UIFont fontWithName:l.font.fontName size:i].lineHeight <= maxH) {
+                    l.font = [UIFont fontWithName:l.font.fontName size:i];
+                    break;
+                }
             }
         }
-    } else if (l.font.)
+    }
 }
 
 #pragma mark <UIScrollViewDelegate>
