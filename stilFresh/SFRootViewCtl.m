@@ -148,13 +148,16 @@
     [[SFBox sharedBox] prepareDataSource];
     
     // ListViewCtl
+    self.listViewBase = [[UIView alloc] initWithFrame:CGRectMake(([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 2, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height)];
+    self.listViewBase.backgroundColor = [UIColor clearColor];
+    [self.interfaceBase addSubview:self.listViewBase];
     self.listViewCtl = [[SFCollectionViewController alloc] initWithCollectionViewLayout:[self getLayout]];
     [self addChildViewController:self.listViewCtl];
-    [self.interfaceBase addSubview:self.listViewCtl.collectionView];
+    [self.listViewBase addSubview:self.listViewCtl.collectionView];
     [self.listViewCtl didMoveToParentViewController:self];
     
     // add black gap
-    UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewCtl.collectionView.frame.origin.x + self.listViewCtl.collectionView.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
+    UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewBase.frame.origin.x + self.listViewBase.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
     g2.backgroundColor = gapColor;
     [self.interfaceBase addSubview:g2];
     
@@ -199,7 +202,7 @@
     UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
     l.minimumInteritemSpacing = 0;
     l.minimumLineSpacing = 0.5;
-    CGFloat w = [SFBox sharedBox].appRect.size.width;
+    CGFloat w = [SFBox sharedBox].appRect.size.width * goldenRatio / (goldenRatio + 1);
     l.itemSize = CGSizeMake(w, w * 1 / (goldenRatio + 1));
     l.scrollDirection = UICollectionViewScrollDirectionVertical;
     return l;

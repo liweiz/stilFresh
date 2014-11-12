@@ -44,8 +44,7 @@ static CGFloat const gapBetweenSections = 3;
 
 - (void)loadView {
     [super loadView];
-    CGFloat x = ([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 2;
-    self.collectionView.frame = CGRectMake(x, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height);
+    self.collectionView.frame = CGRectMake(0, 0, [SFBox sharedBox].appRect.size.width * goldenRatio / (1 + goldenRatio), [SFBox sharedBox].appRect.size.height);
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.bounces = YES;
@@ -55,8 +54,8 @@ static CGFloat const gapBetweenSections = 3;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.dynamicDaysLeftDisplayBase = [[UIView alloc] initWithFrame:self.collectionView.frame];
-    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor clearColor];
+    self.dynamicDaysLeftDisplayBase = [[UIView alloc] initWithFrame:CGRectMake(self.collectionView.frame.size.width, 0, [SFBox sharedBox].appRect.size.width - self.collectionView.frame.size.width, self.collectionView.frame.size.height)];
+    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor blueColor];
     self.dynamicDaysLeftDisplayBase.userInteractionEnabled = NO;
     
     self.maxLineHeight = [SFBox sharedBox].fontL.lineHeight;
@@ -232,13 +231,14 @@ static CGFloat const gapBetweenSections = 3;
             [currentOnes setObject:l forKey:s1];
         }
     }
-    
 }
 
 - (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view {
     NSDictionary *d = [self getVisibaleSectionsYsInCollectionView:view];
+    CGFloat w = [SFBox sharedBox].appRect.size.width - view.frame.size.width;
+    CGFloat ox = view.frame.size.width - w;
     if ([d.allKeys count] == 0) {
-        return CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+        return CGRectMake(0, 0, w, view.frame.size.height);
     } else {
         NSNumber *x = [d objectForKey:[NSNumber numberWithInteger:s]];
         if (x) {
@@ -252,17 +252,17 @@ static CGFloat const gapBetweenSections = 3;
             }];
             if (s == [a[0] integerValue]) {
                 CGFloat y = [[d objectForKey:a[0]] floatValue];
-                return CGRectMake(0, 20, view.frame.size.width, y - view.contentOffset.y);
+                return CGRectMake(0, 20, w, y - view.contentOffset.y);
             } else {
                 CGFloat y1 = [[d objectForKey:[NSNumber numberWithInteger:(s - 1)]] floatValue] + gapBetweenSections;
                 CGFloat y2 = [[d objectForKey:[NSNumber numberWithInteger:s]] floatValue];
-                return CGRectMake(0, y1 - view.contentOffset.y, view.frame.size.width, y2 - y1);
+                return CGRectMake(0, y1 - view.contentOffset.y, w, y2 - y1);
             }
         } else {
             for (NSNumber *n in d.allKeys) {
                 if (s - 1 == n.integerValue) {
                     CGFloat y = [[d objectForKey:n] floatValue];
-                    return CGRectMake(0, y - view.contentOffset.y, view.frame.size.width, view.frame.size.height - (y - view.contentOffset.y));
+                    return CGRectMake(0, y - view.contentOffset.y, w, view.frame.size.height - (y - view.contentOffset.y));
                 }
             }
         }
@@ -281,7 +281,7 @@ static CGFloat const gapBetweenSections = 3;
     l.numberOfLines = 0;
 //    l.adjustsFontSizeToFitWidth = YES;
     l.alpha = 1;
-    l.textColor = [UIColor colorWithWhite:1 alpha:0.2];
+    l.textColor = [UIColor blackColor]; //[UIColor colorWithWhite:0.5 alpha:0.5];
     return l;
 }
 

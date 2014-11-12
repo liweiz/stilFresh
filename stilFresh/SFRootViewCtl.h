@@ -33,6 +33,7 @@
 @property (strong, nonatomic) UISwitch *dateAddedSwitch;
 @property (strong, nonatomic) NSDate *dateAddedDate;
 @property (strong, nonatomic) UILabel *dateAdded;
+@property (strong, nonatomic) UIView *listViewBase;
 @property (strong, nonatomic) UIView *cardViewBase;
 @property (strong, nonatomic) SFCollectionViewController *listViewCtl;
 @property (strong, nonatomic) SFTableViewController *cardViewCtl;
