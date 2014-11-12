@@ -309,22 +309,19 @@
     if (!base) {
         // http://stackoverflow.com/questions/18970679/ios-7-uidatepicker-height-inconsistency
         CGFloat h = 216;
-        UIScrollView *base = [[UIScrollView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x, [SFBox sharedBox].appRect.size.height - h, [SFBox sharedBox].appRect.size.width, h)];
+        base = [[UIScrollView alloc] initWithFrame:CGRectMake(self.inputView.frame.origin.x, [SFBox sharedBox].appRect.size.height - h, [SFBox sharedBox].appRect.size.width, h)];
         base.tag = 999;
         base.backgroundColor = [UIColor clearColor];
         base.contentSize = CGSizeMake(base.frame.size.width, base.frame.size.height * 2);
         base.userInteractionEnabled = YES;
         base.delegate = self;
-        UIDatePicker *p = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, base.frame.size.height, base
-                                                                         .frame.size.width, base.frame.size.height)];
+        UIDatePicker *p = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, base.frame.size.height, base.frame.size.width, base.frame.size.height)];
         p.tag = 998;
         [p addTarget:self action:@selector(dateUpdated:) forControlEvents:UIControlEventValueChanged];
         p.datePickerMode = UIDatePickerModeDate;
         [base addSubview:p];
         [self.interfaceBase addSubview:base];
-        [base setContentOffset:CGPointMake(0, base.frame.size.height) animated:YES];
-    } else {
-        // This happens when existing datePicker is scrolling back, but new request comes in to demand a datePicker.
+    } else {// This happens when existing datePicker is scrolling back, but new request comes in to demand a datePicker.
     }
     [base setContentOffset:CGPointMake(0, base.frame.size.height) animated:YES];
     if ([l isEqual:self.bestBefore]) {
@@ -367,6 +364,8 @@
 {
     [self.listViewCtl.collectionView reloadData];
     [self.cardViewCtl.tableView reloadData];
+    [SFBox sharedBox].oldRowIndexPathPairs = nil;
+    [SFBox sharedBox].oldRowIndexPathPairs = [[SFBox sharedBox] generateAllRowsIndexPathPairs];
 }
 
 - (void)showCard
@@ -386,7 +385,7 @@
     }
 }
 
-#pragma mark - text view delegate
+#pragma mark <UITextViewDelegate>
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
@@ -539,6 +538,9 @@
 - (void)endTableChange
 {
     [self.cardViewCtl.tableView endUpdates];
+    // Current new is the new old. Refresh them here after the changes are made.
+    [SFBox sharedBox].oldRowIndexPathPairs = nil;
+    [SFBox sharedBox].oldRowIndexPathPairs = [[SFBox sharedBox] generateAllRowsIndexPathPairs];
 }
 
 - (void)collectionViewChanges:(NSNotification *)n {
@@ -575,6 +577,8 @@
                 break;
         }
     } completion:^(BOOL done) {
+        [SFBox sharedBox].oldRowIndexPathPairs = nil;
+        [SFBox sharedBox].oldRowIndexPathPairs = [[SFBox sharedBox] generateAllRowsIndexPathPairs];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshDynamicDisplays" object:self];
     }];
 }
@@ -629,6 +633,7 @@
                     }
                     NSLog(@"obj to save: %@", i);
                     if (!errOccured) {
+                        [i setValue:[NSDate date] forKey:@"timeStamp"];
                         if ([[SFBox sharedBox] saveToDb]) {
                             if (self.camViewCtl.img) {
                                 if ([self saveImage:self.camViewCtl.img fileName:[i valueForKey:@"itemId"]]) {
@@ -757,7 +762,7 @@
     return [NSArray arrayWithContentsOfCSVURL:path];
 }
 
-#pragma mark - scrollViewDelegate
+#pragma mark <UIScrollViewDelegate>
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.tag == 999) {

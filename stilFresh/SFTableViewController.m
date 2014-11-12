@@ -202,8 +202,7 @@
     cellIdentifier = @"card";
     [self.tableView registerClass:[SFTableViewCell class] forCellReuseIdentifier:cellIdentifier];
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    NSLog(@"cell height: %f", cell.frame.size.height);
-    NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
+    NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
     cell.pic.image = nil;
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.

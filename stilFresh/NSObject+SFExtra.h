@@ -12,6 +12,7 @@
 
 @interface NSObject (SFExtra)
 
+- (NSIndexPath *)keyForIndexPath:(NSIndexPath *)indexPath;
 - (NSDate *)stringToDate:(NSString *)string;
 - (NSArray *)getDateElemFromString:(NSString *)string;
 - (NSString *)combineToGetStringDate:(NSDateComponents *)c;

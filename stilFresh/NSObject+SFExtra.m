@@ -12,6 +12,15 @@
 
 @implementation NSObject (SFExtra)
 
+// http://stackoverflow.com/questions/18919459/ios-7-beginupdates-endupdates-inconsistent/18920573#18920573
+- (NSIndexPath *)keyForIndexPath:(NSIndexPath *)indexPath
+{
+    if ([indexPath class] == [NSIndexPath class]) {
+        return indexPath;
+    }
+    return [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
+}
+
 #pragma mark - convert number to semantic text
 - (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f shadowColor:(UIColor *)c {
     NSString *s;

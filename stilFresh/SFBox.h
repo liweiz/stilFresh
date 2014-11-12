@@ -49,12 +49,13 @@ extern CGFloat const gapToEdgeL;
 // When a new image is saving to local, the tableView may already start to update. This leads to no image for the cell that needs the image since the local image has not yet been successfully saved. So we store the image to this property for the cell to use. 
 @property (strong, nonatomic) UIImage *imgJustSaved;
 @property (copy, nonatomic) NSString *imgNameJustSaved;
-
+@property (copy, nonatomic) NSDictionary *oldRowIndexPathPairs;
 
 + (instancetype)sharedBox;
 
 - (void)prepareDataSource;
 - (BOOL)saveToDb;
 - (void)switchHint;
+- (NSDictionary *)generateAllRowsIndexPathPairs;
 
 @end

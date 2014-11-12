@@ -87,6 +87,8 @@ CGFloat const gapToEdgeL = 15;
     self.fResultsCtl = [[NSFetchedResultsController alloc] initWithFetchRequest:self.fReq managedObjectContext:self.ctx sectionNameKeyPath:@"timeLeftMsg" cacheName:nil];
     self.fResultsCtl.delegate = self;
     [self.fResultsCtl performFetch:nil];
+    self.oldRowIndexPathPairs = nil;
+    self.oldRowIndexPathPairs = [self generateAllRowsIndexPathPairs];
     [self refreshDb];
 }
 
@@ -102,7 +104,17 @@ CGFloat const gapToEdgeL = 15;
     }
 }
 
-#pragma mark - fetchedResultsController delegate callbacks
+#pragma mark - Get IndexPath/row Pairs
+- (NSDictionary *)generateAllRowsIndexPathPairs {
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
+    for (SFItem *i in self.fResultsCtl.fetchedObjects) {
+        NSIndexPath *p = [self.fResultsCtl indexPathForObject:i];
+        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:i]] forKey:p];
+    }
+    return d;
+}
+
+#pragma mark - <NSFetchedResultsControllerDelegate>
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startTableChange" object:self];
@@ -114,11 +126,13 @@ CGFloat const gapToEdgeL = 15;
       newIndexPath:(NSIndexPath *)newIndexPath {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
     if (indexPath) {
-        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:[self.fResultsCtl objectAtIndexPath:indexPath]]] forKey:@"rowNo"];
+        NSIndexPath *i = [self keyForIndexPath:indexPath];
+        [d setObject:[self.oldRowIndexPathPairs objectForKey:i] forKey:@"rowNo"];
         [self.collectionViewChanges setObject:indexPath forKey:@"itemChangeIndexPath"];
     }
     if (newIndexPath) {
-        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:[self.fResultsCtl objectAtIndexPath:newIndexPath]]] forKey:@"newRowNo"];;
+        NSIndexPath *i = [self keyForIndexPath:newIndexPath];
+        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:[self.fResultsCtl objectAtIndexPath:i]]] forKey:@"newRowNo"];;
         [self.collectionViewChanges setObject:newIndexPath forKey:@"itemChangeNewIndexPath"];
     }
     [d setObject:[NSNumber numberWithUnsignedInteger:type] forKey:@"type"];
