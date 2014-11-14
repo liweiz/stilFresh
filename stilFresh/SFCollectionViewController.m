@@ -16,6 +16,7 @@
 @interface SFCollectionViewController ()
 
 @property (strong, nonatomic) NSMutableDictionary *dynamicDaysLeftDisplay;
+@property (strong, nonatomic) NSMutableDictionary *dynamicDaysLeftDisplayBackGroundViews;
 @property (assign, nonatomic) CGFloat lineHeightFrameHeightRatio;
 @property (assign, nonatomic) CGFloat maxLineHeight;
 @property (assign, nonatomic) CGFloat minLineHeight;
@@ -37,6 +38,7 @@ static CGFloat const minFontSize = 10;
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         _dynamicDaysLeftDisplay = [NSMutableDictionary dictionaryWithCapacity:0];
+        _dynamicDaysLeftDisplayBackGroundViews = [NSMutableDictionary dictionaryWithCapacity:0];
     }
     return self;
 }
@@ -74,13 +76,15 @@ static CGFloat const minFontSize = 10;
 }
 
 - (void)addDynamicDaysLeftDisplayBase {
-    [self.collectionView.superview addSubview:self.dynamicDaysLeftDisplayBase];
-    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView];
+    [self.collectionView.superview insertSubview:self.dynamicDaysLeftDisplayBase belowSubview:self.collectionView];
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeS width:(self.collectionView.frame.size.width / 4 - gapToEdgeS * 2)];
+    [self refreshDynamicDisplayBackGroundViews];
 }
 
 - (void)refreshDynamicDisplays {
-    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView];
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeS width:(self.collectionView.frame.size.width / 4 - gapToEdgeS * 2)];
     [self adjustAllFontSize:self.dynamicDaysLeftDisplay.allValues];
+    [self refreshDynamicDisplayBackGroundViews];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -118,14 +122,17 @@ static CGFloat const minFontSize = 10;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SFCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifierCell forIndexPath:indexPath];
     NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
+    cell.pic.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         if ([[managedObject valueForKey:@"notes"] length] > 0) {
             cell.text.frame = CGRectMake(gapToEdgeS, cell.frame.size.height - (self.collectionView.frame.size.height - 20) / 14, cell.frame.size.width - gapToEdgeS * 2, (self.collectionView.frame.size.height - 20) / 14);
             cell.text.numberOfLines = 1;
-            cell.pic.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height - cell.text.frame.size.height);
+        } else {
+            cell.text.frame = CGRectMake(gapToEdgeS, 0, cell.frame.size.width - gapToEdgeS * 2, cell.frame.size.height);
         }
     } else {
         cell.text.numberOfLines = 3;
+        cell.text.frame = CGRectMake(gapToEdgeS, 0, cell.frame.size.width - gapToEdgeS * 2, cell.frame.size.height);
     }
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
@@ -212,7 +219,7 @@ static CGFloat const minFontSize = 10;
 
 #pragma mark - Dynamic Display
 
-- (void)refreshDynamicDisplays:(NSMutableDictionary *)currentOnes inCollectionView:(UICollectionView *)view {
+- (void)refreshDynamicDisplays:(NSMutableDictionary *)currentOnes inCollectionView:(UICollectionView *)view onView:(UIView *)parentView x:(CGFloat)x width:(CGFloat)w {
     NSDictionary *d = [self getVisibaleSectionsLowerYsInCollectionView:view];
     // Remove ones not needed
     for (NSNumber *s1 in currentOnes.allKeys) {
@@ -231,7 +238,7 @@ static CGFloat const minFontSize = 10;
     // Update frame for exsiting ones
     for (NSNumber *s in currentOnes.allKeys) {
         UILabel *l = [currentOnes objectForKey:s];
-        l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view];
+        l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view x:x width:w];
     }
     // Add new ones
     for (NSNumber *s1 in d.allKeys) {
@@ -243,32 +250,47 @@ static CGFloat const minFontSize = 10;
             }
         }
         if (!matched) {
-            CGRect f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view];
+            CGRect f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w];
             UILabel *l = [self getDynamicDisplayWithFrame:f];
-            [self adjustOneFontSize:l];
-            l.text = [[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] name];
-            [self.dynamicDaysLeftDisplayBase addSubview:l];
+            if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
+                l.backgroundColor = [UIColor clearColor];
+                l.text = [[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] name];
+                [self adjustOneFontSize:l];
+            } else {
+                l.backgroundColor = [SFBox sharedBox].sfGreen0;
+                l.alpha = 0.3;
+            }
+            [parentView addSubview:l];
             [currentOnes setObject:l forKey:s1];
         }
     }
 }
 
-- (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view {
+- (void)refreshDynamicDisplayBackGroundViews {
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplayBackGroundViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeS width:(self.collectionView.frame.size.width - gapToEdgeS * 2)];
+    [self keepDynamicDisplayBackGroundViewsBack];
+}
+
+- (void)keepDynamicDisplayBackGroundViewsBack {
+    for (UIView *v in self.dynamicDaysLeftDisplayBackGroundViews.allValues) {
+        [v.superview sendSubviewToBack:v];
+    }
+}
+
+- (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view x:(CGFloat)x width:(CGFloat)w {
     NSDictionary *dUp = [self getVisibaleSectionsUpperYsInCollectionView:view];
     NSDictionary *dLow = [self getVisibaleSectionsLowerYsInCollectionView:view];
-    CGFloat w = [SFBox sharedBox].appRect.size.width / 4;
-    NSNumber *x = [dLow objectForKey:[NSNumber numberWithInteger:s]];
-    if (x) {
+    NSNumber *n = [dLow objectForKey:[NSNumber numberWithInteger:s]];
+    if (n) {
         CGFloat y1 = [[dUp objectForKey:[NSNumber numberWithInteger:s]] floatValue];
         CGFloat y2 = [[dLow objectForKey:[NSNumber numberWithInteger:s]] floatValue];
-        return CGRectMake(gapToEdgeS, y1 - view.contentOffset.y, w - gapToEdgeS * 2, y2 - y1);
+        return CGRectMake(x, y1 - view.contentOffset.y, w, y2 - y1);
     }
     return CGRectZero;
 }
 
 - (UILabel *)getDynamicDisplayWithFrame:(CGRect)frame {
     UILabel *l = [[UILabel alloc] initWithFrame:frame];
-    l.backgroundColor = [UIColor lightTextColor];
     l.textAlignment = NSTextAlignmentRight;
     l.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     l.font = [SFBox sharedBox].fontM;
