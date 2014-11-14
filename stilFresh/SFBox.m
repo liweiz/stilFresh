@@ -11,6 +11,7 @@
 #import "NSObject+SFExtra.h"
 
 CGFloat const goldenRatio = 1.61803398875;
+CGFloat const fontSizeS = 10;
 CGFloat const fontSizeM = 20;
 CGFloat const fontSizeL = 38;
 CGFloat const gapToEdgeS = 5;
@@ -50,6 +51,7 @@ CGFloat const gapToEdgeL = 15;
         [_sortSelection addObject:[NSNumber numberWithInteger:SFSortFreshnessD]];
         [_sortSelection addObject:[NSNumber numberWithInteger:SFSortTimeCreatedD]];
         _warningText = [[NSMutableString alloc] init];
+        _fontS = [UIFont fontWithName:@"HelveticaNeue-Medium" size:fontSizeS];
         _fontM = [UIFont fontWithName:@"HelveticaNeue-Medium" size:fontSizeM];
         _fontL = [UIFont fontWithName:@"HelveticaNeue-Medium" size:fontSizeL];
         CGFloat alpha = 1;

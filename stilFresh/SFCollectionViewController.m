@@ -31,7 +31,7 @@
 
 static NSString * const reuseIdentifierCell = @"Bloc";
 static NSString * const reuseIdentifierHeader = @"HeaderView";
-static CGFloat const minFontSize = 20;
+static CGFloat const minFontSize = 1;
 static CGFloat const gapBetweenSections = 3;
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
@@ -44,7 +44,7 @@ static CGFloat const gapBetweenSections = 3;
 
 - (void)loadView {
     [super loadView];
-    self.collectionView.frame = CGRectMake(0, 0, [SFBox sharedBox].appRect.size.width * goldenRatio / (1 + goldenRatio), [SFBox sharedBox].appRect.size.height);
+    self.collectionView.frame = CGRectMake([SFBox sharedBox].appRect.size.width / 4, 0, [SFBox sharedBox].appRect.size.width / 4 * 3, [SFBox sharedBox].appRect.size.height);
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.bounces = YES;
@@ -54,8 +54,8 @@ static CGFloat const gapBetweenSections = 3;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.dynamicDaysLeftDisplayBase = [[UIView alloc] initWithFrame:CGRectMake(self.collectionView.frame.size.width, 0, [SFBox sharedBox].appRect.size.width - self.collectionView.frame.size.width, self.collectionView.frame.size.height)];
-    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor blueColor];
+    self.dynamicDaysLeftDisplayBase = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [SFBox sharedBox].appRect.size.width - self.collectionView.frame.size.width, self.collectionView.frame.size.height)];
+    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor clearColor];
     self.dynamicDaysLeftDisplayBase.userInteractionEnabled = NO;
     
     self.maxLineHeight = [SFBox sharedBox].fontL.lineHeight;
@@ -102,6 +102,7 @@ static CGFloat const gapBetweenSections = 3;
 }
 */
 
+
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -117,6 +118,15 @@ static CGFloat const gapBetweenSections = 3;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SFCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifierCell forIndexPath:indexPath];
     NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
+    if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
+        if ([[managedObject valueForKey:@"notes"] length] > 0) {
+            cell.text.frame = CGRectMake(gapToEdgeS, cell.frame.size.height - (self.collectionView.frame.size.height - 20) / 14, cell.frame.size.width - gapToEdgeS * 2, (self.collectionView.frame.size.height - 20) / 14);
+            cell.text.numberOfLines = 1;
+            cell.pic.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height - cell.text.frame.size.height);
+        }
+    } else {
+        cell.text.numberOfLines = 3;
+    }
     NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
@@ -142,9 +152,7 @@ static CGFloat const gapBetweenSections = 3;
         }
     }
     cell.contentView.backgroundColor = [self getStatusColor:cell.statusCode];
-    if (!cell.pic.image) {
-        cell.text.text = [managedObject valueForKey:@"notes"];
-    }
+    cell.text.text = [managedObject valueForKey:@"notes"];
     if (self.lineHeightFrameHeightRatio == 0) {
         self.lineHeightFrameHeightRatio = self.maxLineHeight / cell.frame.size.height;
     }
@@ -184,14 +192,28 @@ static CGFloat const gapBetweenSections = 3;
     if (section == 0) {
         return CGSizeMake(collectionView.frame.size.width, 20);
     } else {
-        return CGSizeMake(collectionView.frame.size.width, gapBetweenSections);
+        return CGSizeMake(collectionView.frame.size.width, gapToEdgeL * 4);
+    }
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGFloat w = [SFBox sharedBox].appRect.size.width / 4 * 3 - gapToEdgeL * 2;
+    NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
+    if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
+        if ([[managedObject valueForKey:@"notes"] length] > 0) {
+            return CGSizeMake(w, (self.view.frame.size.height - 20) / 4);
+        } else {
+            return CGSizeMake(w, (self.view.frame.size.height - 20) / 5);
+        }
+    } else {
+        return CGSizeMake(w, (self.view.frame.size.height - 20) / 7);
     }
 }
 
 #pragma mark - Dynamic Display
 
 - (void)refreshDynamicDisplays:(NSMutableDictionary *)currentOnes inCollectionView:(UICollectionView *)view {
-    NSDictionary *d = [self getVisibaleSectionsYsInCollectionView:view];
+    NSDictionary *d = [self getVisibaleSectionsLowerYsInCollectionView:view];
     // Remove ones not needed
     for (NSNumber *s1 in currentOnes.allKeys) {
         BOOL matched = NO;
@@ -209,7 +231,6 @@ static CGFloat const gapBetweenSections = 3;
     // Update frame for exsiting ones
     for (NSNumber *s in currentOnes.allKeys) {
         UILabel *l = [currentOnes objectForKey:s];
-        NSLog(@"frame: %@", NSStringFromCGRect([self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view]));
         l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view];
     }
     // Add new ones
@@ -223,7 +244,6 @@ static CGFloat const gapBetweenSections = 3;
         }
         if (!matched) {
             CGRect f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view];
-            NSLog(@"frame: %@", NSStringFromCGRect(f));
             UILabel *l = [self getDynamicDisplayWithFrame:f];
             [self adjustOneFontSize:l];
             l.text = [[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] name];
@@ -234,48 +254,24 @@ static CGFloat const gapBetweenSections = 3;
 }
 
 - (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view {
-    NSDictionary *d = [self getVisibaleSectionsYsInCollectionView:view];
+    NSDictionary *dUp = [self getVisibaleSectionsUpperYsInCollectionView:view];
+    NSDictionary *dLow = [self getVisibaleSectionsLowerYsInCollectionView:view];
     CGFloat w = [SFBox sharedBox].appRect.size.width - view.frame.size.width;
-    CGFloat ox = view.frame.size.width - w;
-    if ([d.allKeys count] == 0) {
-        return CGRectMake(0, 0, w, view.frame.size.height);
-    } else {
-        NSNumber *x = [d objectForKey:[NSNumber numberWithInteger:s]];
-        if (x) {
-            NSArray *a = [d.allKeys sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                if ([obj1 integerValue] > [obj2 integerValue]) {
-                    return NSOrderedDescending;
-                } else if ([obj1 integerValue] < [obj2 integerValue]) {
-                    return NSOrderedAscending;
-                }
-                return NSOrderedSame;
-            }];
-            if (s == [a[0] integerValue]) {
-                CGFloat y = [[d objectForKey:a[0]] floatValue];
-                return CGRectMake(0, 20, w, y - view.contentOffset.y);
-            } else {
-                CGFloat y1 = [[d objectForKey:[NSNumber numberWithInteger:(s - 1)]] floatValue] + gapBetweenSections;
-                CGFloat y2 = [[d objectForKey:[NSNumber numberWithInteger:s]] floatValue];
-                return CGRectMake(0, y1 - view.contentOffset.y, w, y2 - y1);
-            }
-        } else {
-            for (NSNumber *n in d.allKeys) {
-                if (s - 1 == n.integerValue) {
-                    CGFloat y = [[d objectForKey:n] floatValue];
-                    return CGRectMake(0, y - view.contentOffset.y, w, view.frame.size.height - (y - view.contentOffset.y));
-                }
-            }
-        }
+    NSNumber *x = [dLow objectForKey:[NSNumber numberWithInteger:s]];
+    if (x) {
+        CGFloat y1 = [[dUp objectForKey:[NSNumber numberWithInteger:s]] floatValue];
+        CGFloat y2 = [[dLow objectForKey:[NSNumber numberWithInteger:s]] floatValue];
+        return CGRectMake(gapToEdgeS, y1 - view.contentOffset.y, w - gapToEdgeS * 2, y2 - y1);
     }
     return CGRectZero;
 }
 
 - (UILabel *)getDynamicDisplayWithFrame:(CGRect)frame {
     UILabel *l = [[UILabel alloc] initWithFrame:frame];
-    l.backgroundColor = [UIColor clearColor];
+    l.backgroundColor = [UIColor lightTextColor];
     l.textAlignment = NSTextAlignmentRight;
     l.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-    l.font = [SFBox sharedBox].fontL;
+    l.font = [SFBox sharedBox].fontM;
     l.minimumScaleFactor = 10 / l.font.pointSize;
     l.lineBreakMode = NSLineBreakByWordWrapping;
     l.numberOfLines = 0;
@@ -285,33 +281,54 @@ static CGFloat const gapBetweenSections = 3;
     return l;
 }
 
-- (NSDictionary *)getVisibaleSectionsYsInCollectionView:(UICollectionView *)view {
+- (NSDictionary *)getVisibaleSectionsUpperYsInCollectionView:(UICollectionView *)view {
     // To get the sections' Ys, we only need the dots between the two ends. We do not need the points of both ends since they are already there. So we assign sectionNo as the key and its lower end point as the object.
     // For consistency purpose, in which we have sectionNo/lower-end-point pair as key/value in the dictionary, we add lower end of the view as the last point.
     NSArray *a = [self ascendSections:[view indexPathsForVisibleItems]];
-    NSLog(@"array: %@", a);
     NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
     for (NSIndexPath *i in a) {
-        if ([a indexOfObject:i] + 1 < [a count]) {
-            NSIndexPath *j = a[[a indexOfObject:i] + 1];
-            if (i.section < j.section) {
-                UICollectionViewCell *c = [view cellForItemAtIndexPath:i];
-                [d setObject:[NSNumber numberWithFloat:CGRectGetMaxY(c.frame)] forKey:[NSNumber numberWithInteger:i.section]];
-            }
-        } else {
-            // Last item visible
+        if (i.item == 0) {
             UICollectionViewCell *c = [view cellForItemAtIndexPath:i];
-            if (CGRectGetMaxY(c.frame) - view.contentOffset.y < CGRectGetHeight(c.frame)) {
-                // Lower edge is the bottomline of the cell
+            if (c) {
+                if (c.frame.origin.y - view.contentOffset.y > 0) {
+                    [d setObject:[NSNumber numberWithFloat:CGRectGetMinY(c.frame)] forKey:[NSNumber numberWithInteger:i.section]];
+                } else {
+                    [d setObject:[NSNumber numberWithFloat:view.contentOffset.y] forKey:[NSNumber numberWithInteger:i.section]];
+                }
+            }
+        } else if ([a indexOfObject:i] == 0) {
+            [d setObject:[NSNumber numberWithFloat:view.contentOffset.y] forKey:[NSNumber numberWithInteger:i.section]];
+        }
+    }
+    return d;
+}
+
+- (NSDictionary *)getVisibaleSectionsLowerYsInCollectionView:(UICollectionView *)view {
+    // To get the sections' Ys, we only need the dots between the two ends. We do not need the points of both ends since they are already there. So we assign sectionNo as the key and its lower end point as the object.
+    // For consistency purpose, in which we have sectionNo/lower-end-point pair as key/value in the dictionary, we add lower end of the view as the last point.
+    NSArray *a = [self ascendSections:[view indexPathsForVisibleItems]];
+    NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
+    for (NSIndexPath *i in a) {
+        if (i.item == 0 && ![a[0] isEqual:i]) {
+            NSIndexPath *j = a[[a indexOfObject:i] - 1];
+            UICollectionViewCell *c = [view cellForItemAtIndexPath:j];
+            if (c) {
+                if (CGRectGetMaxY(c.frame) - view.contentOffset.y > 0) {
+                    [d setObject:[NSNumber numberWithFloat:CGRectGetMaxY(c.frame)] forKey:[NSNumber numberWithInteger:j.section]];
+                }
+            }
+        }
+        if ([i isEqual:[a lastObject]]) {
+            UICollectionViewCell *c = [view cellForItemAtIndexPath:i];
+            if ([(id <NSFetchedResultsSectionInfo>)[SFBox sharedBox].fResultsCtl.sections[i.section] numberOfObjects] - 1 > i.item) {
+                [d setObject:[NSNumber numberWithFloat:(view.contentOffset.y + view.frame.size.height)] forKey:[NSNumber numberWithInteger:i.section]];
+            } else if (view.contentOffset.y + view.frame.size.height > CGRectGetMaxY(c.frame)) {
                 [d setObject:[NSNumber numberWithFloat:CGRectGetMaxY(c.frame)] forKey:[NSNumber numberWithInteger:i.section]];
-            } else {
-                // Lower edge is the bottomline of the view
-                [d setObject:[NSNumber numberWithFloat:(view.frame.size.height + view.contentOffset.y)] forKey:[NSNumber numberWithInteger:i.section]];
+            } else if (view.contentOffset.y + view.frame.size.height <= CGRectGetMaxY(c.frame)) {
+                [d setObject:[NSNumber numberWithFloat:(view.contentOffset.y + view.frame.size.height)] forKey:[NSNumber numberWithInteger:i.section]];
             }
         }
     }
-    
-    NSLog(@"dic: %@", d);
     return d;
 }
 
@@ -339,12 +356,12 @@ static CGFloat const gapBetweenSections = 3;
 
 - (void)adjustAllFontSize:(NSArray *)labels {
     for (UILabel *l in labels) {
-        [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontL.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
+        [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontM.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
     }
 }
 
 - (void)adjustOneFontSize:(UILabel *)l {
-    [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontL.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
+    [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontM.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
 }
 
 - (void)adjustFontSize:(UILabel *)l maxFontSize:(CGFloat)s maxHeight:(CGFloat)maxH minHeight:(CGFloat)minH {
@@ -361,7 +378,7 @@ static CGFloat const gapBetweenSections = 3;
         }
     } else if (l.font.lineHeight < l.frame.size.height * self.lineHeightFrameHeightRatio && l.font.lineHeight < maxH) {
         if (l.frame.size.height * self.lineHeightFrameHeightRatio >= maxH) {
-            l.font = [SFBox sharedBox].fontL;
+            l.font = [SFBox sharedBox].fontM;
         } else {
             for (CGFloat i = s ; i > 0; i = i - 0.1) {
                 if ([UIFont fontWithName:l.font.fontName size:i].lineHeight <= l.frame.size.height * self.lineHeightFrameHeightRatio && [UIFont fontWithName:l.font.fontName size:i].lineHeight <= maxH) {

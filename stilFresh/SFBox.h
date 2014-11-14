@@ -38,6 +38,7 @@ extern CGFloat const gapToEdgeL;
 @property (readonly, nonatomic) UIColor *sfGreen1;
 @property (readonly, nonatomic) UIColor *sfGreen2;
 @property (readonly, nonatomic) UIColor *sfGray;
+@property (readonly, nonatomic) UIFont *fontS;
 @property (readonly, nonatomic) UIFont *fontM;
 @property (readonly, nonatomic) UIFont *fontL;
 @property (readonly, nonatomic) CGRect appRect;

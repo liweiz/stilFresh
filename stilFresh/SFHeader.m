@@ -16,7 +16,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIApplication sharedApplication].keyWindow.rootViewController.view.backgroundColor;
 //        if (!_text) {
 //            _text = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 //            _text.backgroundColor = [UIColor whiteColor];

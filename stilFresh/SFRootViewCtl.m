@@ -32,7 +32,7 @@
 {
     [UIApplication sharedApplication].keyWindow.backgroundColor = [UIColor blackColor];
     self.view = [[UIView alloc] initWithFrame:[SFBox sharedBox].appRect];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
 }
 
 - (void)viewDidLoad {
@@ -201,9 +201,9 @@
 - (UICollectionViewFlowLayout *)getLayout {
     UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
     l.minimumInteritemSpacing = 0;
-    l.minimumLineSpacing = 0.5;
-    CGFloat w = [SFBox sharedBox].appRect.size.width * goldenRatio / (goldenRatio + 1);
-    l.itemSize = CGSizeMake(w, w * 1 / (goldenRatio + 1));
+    l.minimumLineSpacing = gapToEdgeL;
+    CGFloat w = [SFBox sharedBox].appRect.size.width / 4 * 3;
+    l.itemSize = CGSizeMake(w, w / 16 * 9);
     l.scrollDirection = UICollectionViewScrollDirectionVertical;
     return l;
 }
