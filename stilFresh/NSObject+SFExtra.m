@@ -9,8 +9,17 @@
 #import "NSObject+SFExtra.h"
 #import <QuartzCore/QuartzCore.h>
 
-
 @implementation NSObject (SFExtra)
+
+- (UICollectionViewFlowLayout *)getLayout {
+    UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
+    l.minimumInteritemSpacing = gapToEdgeL;
+    l.minimumLineSpacing = gapToEdgeL;
+    CGFloat w = [SFBox sharedBox].appRect.size.width;
+    l.itemSize = CGSizeMake(w, w / 16 * 9);
+    l.scrollDirection = UICollectionViewScrollDirectionVertical;
+    return l;
+}
 
 // http://stackoverflow.com/questions/18919459/ios-7-beginupdates-endupdates-inconsistent/18920573#18920573
 - (NSIndexPath *)keyForIndexPath:(NSIndexPath *)indexPath

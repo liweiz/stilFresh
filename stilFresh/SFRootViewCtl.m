@@ -13,6 +13,7 @@
 #import "SFHintBase.h"
 #import "SFBox.h"
 
+
 @interface SFRootViewCtl ()
 
 @end
@@ -196,16 +197,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(turnOffHint) name:@"turnOffHint" object:nil];
     // Create a CSV file in NSLibraryDirectory to store all the deleted items' itemIds to locate and delete their corresponding image files.
     [self setupCSVForDeletedItem];
-}
-
-- (UICollectionViewFlowLayout *)getLayout {
-    UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
-    l.minimumInteritemSpacing = 0;
-    l.minimumLineSpacing = gapToEdgeL;
-    CGFloat w = [SFBox sharedBox].appRect.size.width / 4 * 3;
-    l.itemSize = CGSizeMake(w, w / 16 * 9);
-    l.scrollDirection = UICollectionViewScrollDirectionVertical;
-    return l;
 }
 
 - (void)turnOffHint

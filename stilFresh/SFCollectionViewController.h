@@ -14,7 +14,6 @@
 
 @property (strong, nonatomic) UIView *dynamicDaysLeftDisplayBase;
 
-
 //- (void)refreshDynamicDisplays:(NSMutableDictionary *)currentOnes inCollectionView:(UICollectionView *)view;
 
 @end

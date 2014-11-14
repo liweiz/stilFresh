@@ -31,8 +31,7 @@
 
 static NSString * const reuseIdentifierCell = @"Bloc";
 static NSString * const reuseIdentifierHeader = @"HeaderView";
-static CGFloat const minFontSize = 1;
-static CGFloat const gapBetweenSections = 3;
+static CGFloat const minFontSize = 10;
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
     self = [super initWithCollectionViewLayout:layout];
@@ -44,12 +43,13 @@ static CGFloat const gapBetweenSections = 3;
 
 - (void)loadView {
     [super loadView];
-    self.collectionView.frame = CGRectMake([SFBox sharedBox].appRect.size.width / 4, 0, [SFBox sharedBox].appRect.size.width / 4 * 3, [SFBox sharedBox].appRect.size.height);
+    self.collectionView.frame = [SFBox sharedBox].appRect;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.bounces = YES;
     self.collectionView.allowsMultipleSelection = NO;
     self.collectionView.backgroundColor = [UIColor clearColor];
+    self.collectionView.contentInset = UIEdgeInsetsMake(0, self.collectionView.frame.size.width / 4, 0, gapToEdgeL);
 }
 
 - (void)viewDidLoad {
@@ -103,7 +103,7 @@ static CGFloat const gapBetweenSections = 3;
 */
 
 
-#pragma mark <UICollectionViewDataSource>
+#pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return [[SFBox sharedBox].fResultsCtl.sections count];
@@ -159,7 +159,7 @@ static CGFloat const gapBetweenSections = 3;
     return cell;
 }
 
-#pragma mark <UICollectionViewDelegate>
+#pragma mark - <UICollectionViewDelegate>
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
@@ -186,18 +186,18 @@ static CGFloat const gapBetweenSections = 3;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"rowSelected" object:self];
 }
 
-#pragma mark <UICollectionViewDelegateFlowLayout>
+#pragma mark - <UICollectionViewDelegateFlowLayout>
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         return CGSizeMake(collectionView.frame.size.width, 20);
     } else {
-        return CGSizeMake(collectionView.frame.size.width, gapToEdgeL * 4);
+        return CGSizeMake(collectionView.frame.size.width, gapToEdgeL * 2);
     }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat w = [SFBox sharedBox].appRect.size.width / 4 * 3 - gapToEdgeL * 2;
+    CGFloat w = [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeL;
     NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         if ([[managedObject valueForKey:@"notes"] length] > 0) {
@@ -256,7 +256,7 @@ static CGFloat const gapBetweenSections = 3;
 - (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view {
     NSDictionary *dUp = [self getVisibaleSectionsUpperYsInCollectionView:view];
     NSDictionary *dLow = [self getVisibaleSectionsLowerYsInCollectionView:view];
-    CGFloat w = [SFBox sharedBox].appRect.size.width - view.frame.size.width;
+    CGFloat w = [SFBox sharedBox].appRect.size.width / 4;
     NSNumber *x = [dLow objectForKey:[NSNumber numberWithInteger:s]];
     if (x) {
         CGFloat y1 = [[dUp objectForKey:[NSNumber numberWithInteger:s]] floatValue];
@@ -390,7 +390,7 @@ static CGFloat const gapBetweenSections = 3;
     }
 }
 
-#pragma mark <UIScrollViewDelegate>
+#pragma mark - <UIScrollViewDelegate>
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [self refreshDynamicDisplays];

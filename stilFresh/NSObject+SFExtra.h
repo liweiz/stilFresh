@@ -12,6 +12,8 @@
 
 @interface NSObject (SFExtra)
 
+- (UICollectionViewFlowLayout *)getLayout;
+
 - (NSIndexPath *)keyForIndexPath:(NSIndexPath *)indexPath;
 - (NSDate *)stringToDate:(NSString *)string;
 - (NSArray *)getDateElemFromString:(NSString *)string;
