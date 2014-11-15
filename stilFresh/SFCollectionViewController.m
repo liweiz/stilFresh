@@ -171,7 +171,6 @@ static CGFloat const minFontSize = 10;
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         SFHeader *h = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifierHeader forIndexPath:indexPath];
-        NSLog(@"h.frame.origin.y: %f", h.frame.origin.y);
         return h;
     }
     return nil;
@@ -238,7 +237,11 @@ static CGFloat const minFontSize = 10;
     // Update frame for exsiting ones
     for (NSNumber *s in currentOnes.allKeys) {
         UILabel *l = [currentOnes objectForKey:s];
-        l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view x:x width:w];
+        if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
+            l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view x:x width:w extraY:0];
+        } else {
+            l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view x:x width:w extraY:gapToEdgeM];
+        }
     }
     // Add new ones
     for (NSNumber *s1 in d.allKeys) {
@@ -250,7 +253,12 @@ static CGFloat const minFontSize = 10;
             }
         }
         if (!matched) {
-            CGRect f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w];
+            CGRect f;
+            if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
+                f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:0];
+            } else {
+                f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:gapToEdgeM];
+            }
             UILabel *l = [self getDynamicDisplayWithFrame:f];
             if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
                 l.backgroundColor = [UIColor clearColor];
@@ -277,14 +285,14 @@ static CGFloat const minFontSize = 10;
     }
 }
 
-- (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view x:(CGFloat)x width:(CGFloat)w {
+- (CGRect)getDynamicDisplayFrameForSection:(NSInteger)s inCollectionView:(UICollectionView *)view x:(CGFloat)x width:(CGFloat)w extraY:(CGFloat)eY {
     NSDictionary *dUp = [self getVisibaleSectionsUpperYsInCollectionView:view];
     NSDictionary *dLow = [self getVisibaleSectionsLowerYsInCollectionView:view];
     NSNumber *n = [dLow objectForKey:[NSNumber numberWithInteger:s]];
     if (n) {
         CGFloat y1 = [[dUp objectForKey:[NSNumber numberWithInteger:s]] floatValue];
         CGFloat y2 = [[dLow objectForKey:[NSNumber numberWithInteger:s]] floatValue];
-        return CGRectMake(x, y1 - view.contentOffset.y, w, y2 - y1);
+        return CGRectMake(x, y1 - view.contentOffset.y - eY, w, y2 - y1 + eY * 2);
     }
     return CGRectZero;
 }
@@ -299,7 +307,7 @@ static CGFloat const minFontSize = 10;
     l.numberOfLines = 0;
 //    l.adjustsFontSizeToFitWidth = YES;
     l.alpha = 1;
-    l.textColor = [UIColor blackColor]; //[UIColor colorWithWhite:0.5 alpha:0.5];
+    l.textColor = [UIColor whiteColor]; //[UIColor colorWithWhite:0.5 alpha:0.5];
     return l;
 }
 
