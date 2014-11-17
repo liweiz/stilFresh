@@ -17,6 +17,7 @@
 
 @property (strong, nonatomic) NSMutableDictionary *dynamicDaysLeftDisplay;
 @property (strong, nonatomic) NSMutableDictionary *dynamicDaysLeftDisplayBackGroundViews;
+@property (strong, nonatomic) NSMutableDictionary *dynamicDaysLeftDisplaySeparatorViews;
 @property (assign, nonatomic) CGFloat lineHeightFrameHeightRatio;
 @property (assign, nonatomic) CGFloat maxLineHeight;
 @property (assign, nonatomic) CGFloat minLineHeight;
@@ -33,12 +34,14 @@
 static NSString * const reuseIdentifierCell = @"Bloc";
 static NSString * const reuseIdentifierHeader = @"HeaderView";
 static CGFloat const minFontSize = 10;
+static CGFloat const picGapToTop = 10;
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         _dynamicDaysLeftDisplay = [NSMutableDictionary dictionaryWithCapacity:0];
         _dynamicDaysLeftDisplayBackGroundViews = [NSMutableDictionary dictionaryWithCapacity:0];
+        _dynamicDaysLeftDisplaySeparatorViews = [NSMutableDictionary dictionaryWithCapacity:0];
     }
     return self;
 }
@@ -51,7 +54,7 @@ static CGFloat const minFontSize = 10;
     self.collectionView.bounces = YES;
     self.collectionView.allowsMultipleSelection = NO;
     self.collectionView.backgroundColor = [UIColor clearColor];
-    self.collectionView.contentInset = UIEdgeInsetsMake(0, self.collectionView.frame.size.width / 4, 0, gapToEdgeL);
+    self.collectionView.contentInset = UIEdgeInsetsMake(0, self.collectionView.frame.size.width / 4, 0, gapToEdgeM);
 }
 
 - (void)viewDidLoad {
@@ -72,19 +75,32 @@ static CGFloat const minFontSize = 10;
     // Do any additional setup after loading the view.
     // There is no way to detect the completion of the loading of all the visible cells. So we set a delay here.
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(addDynamicDaysLeftDisplayBase) userInfo:nil repeats:NO] forMode:NSDefaultRunLoopMode];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rebuildDynamicDisplays) name:@"rebuildDynamicDisplays" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDynamicDisplays) name:@"refreshDynamicDisplays" object:nil];
 }
 
 - (void)addDynamicDaysLeftDisplayBase {
     [self.collectionView.superview insertSubview:self.dynamicDaysLeftDisplayBase belowSubview:self.collectionView];
-    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeS width:(self.collectionView.frame.size.width / 4 - gapToEdgeS * 2)];
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeM width:(self.collectionView.frame.size.width / 4 - gapToEdgeM * 2)];
     [self refreshDynamicDisplayBackGroundViews];
+    [self refreshDynamicDisplaySeparatorViews];
+}
+
+- (void)rebuildDynamicDisplays {
+    [self.dynamicDaysLeftDisplay removeAllObjects];
+    [self.dynamicDaysLeftDisplayBackGroundViews removeAllObjects];
+    [self.dynamicDaysLeftDisplaySeparatorViews removeAllObjects];
+    for (UIView *v in self.dynamicDaysLeftDisplayBase.subviews) {
+        [v removeFromSuperview];
+    }
+    [self refreshDynamicDisplays];
 }
 
 - (void)refreshDynamicDisplays {
-    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeS width:(self.collectionView.frame.size.width / 4 - gapToEdgeS * 2)];
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplay inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeM width:(self.collectionView.frame.size.width / 4 - gapToEdgeM * 2)];
     [self adjustAllFontSize:self.dynamicDaysLeftDisplay.allValues];
     [self refreshDynamicDisplayBackGroundViews];
+    [self refreshDynamicDisplaySeparatorViews];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -122,19 +138,19 @@ static CGFloat const minFontSize = 10;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SFCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifierCell forIndexPath:indexPath];
     NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
-    cell.pic.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         if ([[managedObject valueForKey:@"notes"] length] > 0) {
             cell.text.frame = CGRectMake(gapToEdgeS, cell.frame.size.height - (self.collectionView.frame.size.height - 20) / 14, cell.frame.size.width - gapToEdgeS * 2, (self.collectionView.frame.size.height - 20) / 14);
             cell.text.numberOfLines = 1;
+            cell.pic.frame = CGRectMake(cell.text.frame.origin.x, picGapToTop, cell.text.frame.size.width, cell.frame.size.height - picGapToTop - cell.text.frame.size.height);
         } else {
             cell.text.frame = CGRectMake(gapToEdgeS, 0, cell.frame.size.width - gapToEdgeS * 2, cell.frame.size.height);
+            cell.pic.frame = CGRectMake(cell.text.frame.origin.x, picGapToTop, cell.text.frame.size.width, cell.frame.size.height - picGapToTop * 2);
         }
     } else {
         cell.text.numberOfLines = 3;
         cell.text.frame = CGRectMake(gapToEdgeS, 0, cell.frame.size.width - gapToEdgeS * 2, cell.frame.size.height);
     }
-    NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
     BOOL hasImg = NO;
@@ -158,7 +174,7 @@ static CGFloat const minFontSize = 10;
             }
         }
     }
-    cell.contentView.backgroundColor = [self getStatusColor:cell.statusCode];
+    cell.contentView.backgroundColor = [UIColor clearColor]; // [self getStatusColor:cell.statusCode];
     cell.text.text = [managedObject valueForKey:@"notes"];
     if (self.lineHeightFrameHeightRatio == 0) {
         self.lineHeightFrameHeightRatio = self.maxLineHeight / cell.frame.size.height;
@@ -196,14 +212,15 @@ static CGFloat const minFontSize = 10;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return CGSizeMake(collectionView.frame.size.width, 20);
+        // This is because we increaed the upper and bottom margins of each section's backgroundView.
+        return CGSizeMake(collectionView.frame.size.width, 20 + gapToEdgeM);
     } else {
-        return CGSizeMake(collectionView.frame.size.width, gapToEdgeL * 2);
+        return CGSizeMake(collectionView.frame.size.width, gapToEdgeL * 2 - 8);
     }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat w = [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeL;
+    CGFloat w = [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM;
     NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
     if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
         if ([[managedObject valueForKey:@"notes"] length] > 0) {
@@ -262,11 +279,11 @@ static CGFloat const minFontSize = 10;
             UILabel *l = [self getDynamicDisplayWithFrame:f];
             if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
                 l.backgroundColor = [UIColor clearColor];
-                l.text = [[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] name];
+                l.text = [[[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] objects][0] valueForKey:@"timeLeftMsg"];
                 [self adjustOneFontSize:l];
             } else {
                 l.backgroundColor = [SFBox sharedBox].sfGreen0;
-                l.alpha = 0.3;
+                l.alpha = 1;
             }
             [parentView addSubview:l];
             [currentOnes setObject:l forKey:s1];
@@ -274,8 +291,20 @@ static CGFloat const minFontSize = 10;
     }
 }
 
+- (void)refreshDynamicDisplaySeparatorViews {
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplaySeparatorViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:self.collectionView.contentInset.left width:self.collectionView.frame.size.width - self.collectionView.contentInset.left];
+    for (UIView *v in self.dynamicDaysLeftDisplaySeparatorViews.allValues) {
+        //  http://stackoverflow.com/questions/970475/how-to-compare-uicolors
+        if (![v.backgroundColor isEqual:[UIColor whiteColor]]) {
+            v.backgroundColor = [UIColor whiteColor];
+            v.alpha = 1;
+        }
+        v.frame = CGRectMake(v.frame.origin.x, v.frame.origin.y + gapToEdgeM, [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM, v.frame.size.height - gapToEdgeM * 2);
+    }
+}
+
 - (void)refreshDynamicDisplayBackGroundViews {
-    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplayBackGroundViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:gapToEdgeS width:(self.collectionView.frame.size.width - gapToEdgeS * 2)];
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplayBackGroundViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:0 width:self.collectionView.frame.size.width];
     [self keepDynamicDisplayBackGroundViewsBack];
 }
 
@@ -299,7 +328,7 @@ static CGFloat const minFontSize = 10;
 
 - (UILabel *)getDynamicDisplayWithFrame:(CGRect)frame {
     UILabel *l = [[UILabel alloc] initWithFrame:frame];
-    l.textAlignment = NSTextAlignmentRight;
+    l.textAlignment = NSTextAlignmentLeft;
     l.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     l.font = [SFBox sharedBox].fontM;
     l.minimumScaleFactor = 10 / l.font.pointSize;

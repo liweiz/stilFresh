@@ -13,8 +13,8 @@
 
 - (UICollectionViewFlowLayout *)getLayout {
     UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
-    l.minimumInteritemSpacing = gapToEdgeL;
-    l.minimumLineSpacing = gapToEdgeL;
+    l.minimumInteritemSpacing = 0;
+    l.minimumLineSpacing = 1;
     CGFloat w = [SFBox sharedBox].appRect.size.width;
     l.itemSize = CGSizeMake(w, w / 16 * 9);
     l.scrollDirection = UICollectionViewScrollDirectionVertical;

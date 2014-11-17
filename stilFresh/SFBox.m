@@ -80,15 +80,18 @@ CGFloat const gapToEdgeL = 15;
     }
 }
 
+#pragma mark - Data Source Getter
+
 - (void)prepareDataSource {
     if (!self.fReq) {
         self.fReq = [NSFetchRequest fetchRequestWithEntityName:@"SFItem"];
     }
     self.fReq.sortDescriptors = [self sortOption:self.sortSelection];
     // Config fetchResultController
-    self.fResultsCtl = [[NSFetchedResultsController alloc] initWithFetchRequest:self.fReq managedObjectContext:self.ctx sectionNameKeyPath:@"timeLeftMsg" cacheName:nil];
+    self.fResultsCtl = [[NSFetchedResultsController alloc] initWithFetchRequest:self.fReq managedObjectContext:self.ctx sectionNameKeyPath:@"daysLeft" cacheName:nil];
     self.fResultsCtl.delegate = self;
-    [self.fResultsCtl performFetch:nil];
+    NSError *e;
+    [self.fResultsCtl performFetch:&e];
     self.oldRowIndexPathPairs = nil;
     self.oldRowIndexPathPairs = [self generateAllRowsIndexPathPairs];
     [self refreshDb];
@@ -104,16 +107,6 @@ CGFloat const gapToEdgeL = 15;
     } else {
         
     }
-}
-
-#pragma mark - Get IndexPath/row Pairs
-- (NSDictionary *)generateAllRowsIndexPathPairs {
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
-    for (SFItem *i in self.fResultsCtl.fetchedObjects) {
-        NSIndexPath *p = [self.fResultsCtl indexPathForObject:i];
-        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:i]] forKey:p];
-    }
-    return d;
 }
 
 #pragma mark - <NSFetchedResultsControllerDelegate>
@@ -144,16 +137,36 @@ CGFloat const gapToEdgeL = 15;
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    for (id<NSFetchedResultsSectionInfo> i in controller.sections) {
+        NSLog(@"section: %@", [i name]);
+    }
     [self.collectionViewChanges setObject:[NSNumber numberWithUnsignedInteger:sectionIndex] forKey:@"sectionChangeIndex"];
     [self.collectionViewChanges setObject:[NSNumber numberWithUnsignedInteger:type] forKey:@"sectionChangeType"];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    NSLog(@"content: %@", controller.fetchedObjects);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"endTableChange" object:self];
     NSNotification *n = [NSNotification notificationWithName:@"collectionViewChanges" object:self userInfo:self.collectionViewChanges];
     [[NSNotificationCenter defaultCenter] postNotification:n];
 }
 
+#pragma mark - Get IndexPath/row Pairs
+- (NSDictionary *)generateAllRowsIndexPathPairs {
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
+    for (SFItem *i in self.fResultsCtl.fetchedObjects) {
+        NSLog(@"obj: %@", i);
+        NSIndexPath *p = [self.fResultsCtl indexPathForObject:i];
+        NSLog(@"NSIndexPath: %ld, %ld", p.section, p.item);
+        if (p) {
+            [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:i]] forKey:p];
+        }
+    }
+    return d;
+}
+
+
+#pragma mark - Sort
 
 - (NSArray *)sortOption:(NSArray *)options {
     NSMutableArray *ma = [NSMutableArray arrayWithCapacity:0];
@@ -190,6 +203,8 @@ CGFloat const gapToEdgeL = 15;
             return nil;
     }
 }
+
+#pragma mark - Save To Db
 
 - (BOOL)saveToDb {
     NSError *err;

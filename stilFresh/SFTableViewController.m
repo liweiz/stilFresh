@@ -204,7 +204,6 @@
     SFTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl.fetchedObjects objectAtIndex:indexPath.row];
     cell.pic.image = nil;
-    NSLog(@"obj: %@", managedObject);
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
     BOOL hasImg = NO;

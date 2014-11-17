@@ -15,6 +15,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        if (!self.backgroundView) {
+            self.backgroundView = [[UIView alloc] init];
+            self.backgroundView.alpha = 1;
+            self.backgroundView.backgroundColor = [SFBox sharedBox].sfGreen0;
+        }
         if (!_pic) {
             _pic = [[UIImageView alloc] init];
             _pic.backgroundColor = [UIColor clearColor];

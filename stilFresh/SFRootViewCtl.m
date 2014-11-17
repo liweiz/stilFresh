@@ -33,7 +33,7 @@
 {
     [UIApplication sharedApplication].keyWindow.backgroundColor = [UIColor blackColor];
     self.view = [[UIView alloc] initWithFrame:[SFBox sharedBox].appRect];
-    self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewDidLoad {
@@ -159,9 +159,8 @@
     
     // add black gap
     UIView *g2 = [[UIView alloc] initWithFrame:CGRectMake(self.listViewBase.frame.origin.x + self.listViewBase.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
-    g2.backgroundColor = gapColor;
+    g2.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g2];
-    
     // CardViewCtl
     self.cardViewBase = [[UIView alloc] initWithFrame:CGRectMake(([SFBox sharedBox].appRect.size.width + gapToEdgeS) * 3, 0, [SFBox sharedBox].appRect.size.width, [SFBox sharedBox].appRect.size.height)];
     self.cardViewBase.backgroundColor = [UIColor clearColor];
@@ -174,7 +173,7 @@
     self.cardViewBase.hidden = YES;
     // add black gap
     UIView *g3 = [[UIView alloc] initWithFrame:CGRectMake(self.cardViewBase.frame.origin.x + self.cardViewBase.frame.size.width, 0, gapToEdgeS, [SFBox sharedBox].appRect.size.height)];
-    g3.backgroundColor = gapColor;
+    g3.backgroundColor = [UIColor blackColor];
     [self.interfaceBase addSubview:g3];
     
     // Menu
@@ -195,6 +194,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideDatePicker) name:@"dismiss" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPicDisposeHint) name:@"showPicDisposeHint" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(turnOffHint) name:@"turnOffHint" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCardsAndMenu) name:@"addCardsAndMenu" object:nil];
+    
     // Create a CSV file in NSLibraryDirectory to store all the deleted items' itemIds to locate and delete their corresponding image files.
     [self setupCSVForDeletedItem];
 }
@@ -571,9 +572,16 @@
                 break;
         }
     } completion:^(BOOL done) {
-        [SFBox sharedBox].oldRowIndexPathPairs = nil;
-        [SFBox sharedBox].oldRowIndexPathPairs = [[SFBox sharedBox] generateAllRowsIndexPathPairs];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshDynamicDisplays" object:self];
+        if (done) {
+            [SFBox sharedBox].oldRowIndexPathPairs = nil;
+            [SFBox sharedBox].oldRowIndexPathPairs = [[SFBox sharedBox] generateAllRowsIndexPathPairs];
+            // When sections change, the section order changes as well. We need to refresh all the pairs so that we can build the new ones later.
+            if (sectionType == NSFetchedResultsChangeInsert || sectionType == NSFetchedResultsChangeDelete) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"rebuildDynamicDisplays" object:self];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshDynamicDisplays" object:self];
+            }
+        }
     }];
 }
 
@@ -582,7 +590,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - save / delete record
+#pragma mark - Save / Delete Record
 
 // Save calendar date as a string. Reason:http://stackoverflow.com/questions/7054411/determining-day-components-of-an-nsdate-object-time-zone-issues
 - (void)saveItem
@@ -756,7 +764,7 @@
     return [NSArray arrayWithContentsOfCSVURL:path];
 }
 
-#pragma mark <UIScrollViewDelegate>
+#pragma mark - <UIScrollViewDelegate>
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.tag == 999) {

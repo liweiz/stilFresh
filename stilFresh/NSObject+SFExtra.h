@@ -22,6 +22,7 @@
 - (NSInteger)getDaysLeftFrom:(NSDate *)start to:(NSDate *)end;
 - (BOOL)validateDateInput:(NSString *)input;
 - (BOOL)validateNotesInput:(NSString *)input;
+
 - (void)configLayer:(CALayer *)layer box:(SFBox *)b isClear:(BOOL)isClear;
 
 - (void)resetDaysLeft:(SFItem *)obj;
