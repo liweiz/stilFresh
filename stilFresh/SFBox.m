@@ -47,6 +47,7 @@ CGFloat const gapToEdgeL = 15;
         CGRect c = [[UIScreen mainScreen] bounds];
         _appRect = CGRectMake(CGRectGetMinX(c), CGRectGetMinY(c), CGRectGetWidth(c), CGRectGetHeight(c));
         _sortSelection = [NSMutableArray arrayWithCapacity:0];
+        [_sortSelection addObject:[NSNumber numberWithInteger:SFSortDaysLeftMsgRankA]];
         [_sortSelection addObject:[NSNumber numberWithInteger:SFSortDaysLeftA]];
         [_sortSelection addObject:[NSNumber numberWithInteger:SFSortFreshnessD]];
         [_sortSelection addObject:[NSNumber numberWithInteger:SFSortTimeCreatedD]];
@@ -88,7 +89,7 @@ CGFloat const gapToEdgeL = 15;
     }
     self.fReq.sortDescriptors = [self sortOption:self.sortSelection];
     // Config fetchResultController
-    self.fResultsCtl = [[NSFetchedResultsController alloc] initWithFetchRequest:self.fReq managedObjectContext:self.ctx sectionNameKeyPath:@"daysLeft" cacheName:nil];
+    self.fResultsCtl = [[NSFetchedResultsController alloc] initWithFetchRequest:self.fReq managedObjectContext:self.ctx sectionNameKeyPath:@"timeLeftMsgRank" cacheName:nil];
     self.fResultsCtl.delegate = self;
     NSError *e;
     [self.fResultsCtl performFetch:&e];
@@ -137,9 +138,6 @@ CGFloat const gapToEdgeL = 15;
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-    for (id<NSFetchedResultsSectionInfo> i in controller.sections) {
-        NSLog(@"section: %@", [i name]);
-    }
     [self.collectionViewChanges setObject:[NSNumber numberWithUnsignedInteger:sectionIndex] forKey:@"sectionChangeIndex"];
     [self.collectionViewChanges setObject:[NSNumber numberWithUnsignedInteger:type] forKey:@"sectionChangeType"];
 }
@@ -155,12 +153,8 @@ CGFloat const gapToEdgeL = 15;
 - (NSDictionary *)generateAllRowsIndexPathPairs {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:0];
     for (SFItem *i in self.fResultsCtl.fetchedObjects) {
-        NSLog(@"obj: %@", i);
         NSIndexPath *p = [self.fResultsCtl indexPathForObject:i];
-        NSLog(@"NSIndexPath: %ld, %ld", p.section, p.item);
-        if (p) {
-            [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:i]] forKey:p];
-        }
+        [d setObject:[NSNumber numberWithUnsignedInteger:[self.fResultsCtl.fetchedObjects indexOfObject:i]] forKey:p];
     }
     return d;
 }
@@ -179,6 +173,8 @@ CGFloat const gapToEdgeL = 15;
 
 - (NSSortDescriptor *)sortBy:(NSInteger)by {
     switch (by) {
+        case SFSortDaysLeftMsgRankA:
+            return [[NSSortDescriptor alloc] initWithKey:@"timeLeftMsgRank" ascending:YES];
         case SFSortCellTextAlphabetA:
             return [NSSortDescriptor sortDescriptorWithKey:@"notes" ascending:YES comparator:^(NSString *obj1, NSString *obj2) {
                 return [obj1 localizedCompare:obj2];

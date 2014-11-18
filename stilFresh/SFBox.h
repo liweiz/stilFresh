@@ -11,6 +11,7 @@
 #import <CoreData/CoreData.h>
 
 typedef NS_ENUM(NSInteger, SFSort) {
+    SFSortDaysLeftMsgRankA,
     SFSortCellTextAlphabetA,
     SFSortCellTextAlphabetD,
     SFSortDaysLeftA,

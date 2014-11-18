@@ -9,9 +9,10 @@
         <attribute name="itemId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timeLeftMsg" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeLeftMsgRank" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="timeStamp" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <elements>
-        <element name="SFItem" positionX="-36" positionY="9" width="128" height="180"/>
+        <element name="SFItem" positionX="-36" positionY="9" width="128" height="195"/>
     </elements>
 </model>

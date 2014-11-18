@@ -33,6 +33,7 @@
 - (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f shadowColor:(UIColor *)c;
 - (void)addCommonFontEff:(NSMutableAttributedString *)s shadowColor:(UIColor *)c;
 - (UIImage *)convertImageToGrayscale:(UIImage *)image;
+- (NSNumber *)rankDaysLeft:(NSInteger)i;
 
 - (NSURL *)getFileBaseUrl;
 - (NSString *)displayDateString:(NSString *)date;

@@ -88,6 +88,38 @@
     return r;
 }
 
+- (NSNumber *)rankDaysLeft:(NSInteger)i {
+    NSInteger s = 99999;
+    if (i < 1) {
+        s = 0; // No longer fresh
+    } else if (i < 7) {
+        s = 10 + i; // i day(s) left
+    } else if (i < 11) {
+        s = 20 + 1; // About 1 week left
+    } else if (i < 25) {
+        NSInteger j = [NSString stringWithFormat:@"%ld", (long)(i / 7.0)].integerValue;
+        s = 20 + j; // About j weeks left
+    } else if (i < 35) {
+        s = 30 + 1; // About 1 month left
+    } else if (i < 30 * 6 - 15) {
+        NSInteger j = [NSString stringWithFormat:@"%ld", (long)(i / 30.0)].integerValue;
+        s = 40 + j; // About j months left
+    } else if (i < 30 * 6 + 15) {
+        s = 50; // About half year left
+    } else if (i < 30 * 12 - 15) {
+        NSInteger j = [NSString stringWithFormat:@"%ld", (long)(i / 30.0)].integerValue;
+        s = 50 + j; // About j months left
+    } else if (i < 30 * 12 + 15) {
+        s = 70; // About 1 year left
+    } else if (i < 365 * 2) {
+        s = 71; // Over 2 years left
+    } else {
+        NSInteger j = [NSString stringWithFormat:@"%ld", (long)floorf(i / 365.0)].integerValue;
+        s = 80 + j; // Over j years left
+    }
+    return [NSNumber numberWithInteger:s];
+}
+
 - (void)addCommonFontEff:(NSMutableAttributedString *)s shadowColor:(UIColor *)c {
     [s addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, s.length)];
 //    NSShadow *h = [[NSShadow alloc] init];
@@ -120,6 +152,7 @@
     NSNumber *n = [NSNumber numberWithInteger:d];
     [obj setValue:n forKey:@"daysLeft"];
     [obj setValue:[self resetTimeLeftMsg:[obj valueForKey:@"daysLeft"]] forKey:@"timeLeftMsg"];
+    [obj setValue:[self rankDaysLeft:[n integerValue]] forKey:@"timeLeftMsgRank"];
 }
 
 - (NSString *)resetTimeLeftMsg:(NSNumber *)daysLeft

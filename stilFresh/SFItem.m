@@ -14,6 +14,7 @@
 @dynamic bestBefore;
 @dynamic daysLeft;
 @dynamic timeLeftMsg;
+@dynamic timeLeftMsgRank;
 @dynamic freshness;
 @dynamic hasPic;
 @dynamic itemId;

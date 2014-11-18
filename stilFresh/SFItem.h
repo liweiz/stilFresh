@@ -15,6 +15,7 @@
 @property (nonatomic, retain) NSString * bestBefore;
 @property (nonatomic, retain) NSNumber * daysLeft;
 @property (nonatomic, retain) NSString * timeLeftMsg;
+@property (nonatomic, retain) NSNumber * timeLeftMsgRank;
 @property (nonatomic, retain) NSNumber * freshness;
 @property (nonatomic, retain) NSNumber * hasPic;
 @property (nonatomic, retain) NSString * itemId;

@@ -868,21 +868,21 @@
     CGFloat xToEdge = 20;
     switch (x) {
         case 0:
-            if ([self.listViewCtl.collectionView numberOfItemsInSection:0] == 0) {
+            if ([self.listViewCtl.collectionView numberOfSections] == 0) {
                 f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height);
                 s = @"SwipeToCreate";
                 t = @"Swipe to add";
             }
             break;
         case 1:
-            if ([self.listViewCtl.collectionView numberOfItemsInSection:0] > 0) {
+            if ([self.listViewCtl.collectionView numberOfSections] > 0) {
                 f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
                 s = @"SwipeToMenu";
                 t = @"Swipe to settings";
             }
             break;
         case 2:
-            if ([self.listViewCtl.collectionView numberOfItemsInSection:0] > 0) {
+            if ([self.listViewCtl.collectionView numberOfSections] > 0) {
                 f = CGRectMake(xToEdge, self.view.frame.size.height / 2, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
                 s = @"ColorInfo";
             }

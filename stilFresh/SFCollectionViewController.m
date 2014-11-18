@@ -131,8 +131,12 @@ static CGFloat const picGapToTop = 10;
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[section];
-    return [s numberOfObjects];
+    if ([[SFBox sharedBox].fResultsCtl.sections count] == 0) {
+        return 0;
+    } else {
+        id <NSFetchedResultsSectionInfo> s = [SFBox sharedBox].fResultsCtl.sections[section];
+        return [s numberOfObjects];
+    }
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
