@@ -303,7 +303,7 @@ static CGFloat const picGapToTop = 10;
             v.backgroundColor = [UIColor whiteColor];
             v.alpha = 1;
         }
-        v.frame = CGRectMake(v.frame.origin.x, v.frame.origin.y + gapToEdgeM, [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM, v.frame.size.height - gapToEdgeM * 2);
+        v.frame = CGRectMake(v.frame.origin.x, v.frame.origin.y + gapToEdgeM + 2, [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM, v.frame.size.height - gapToEdgeM * 2 - 4); // Adjusted the y and height to shrink it a bit to avoid a visual bug which shows s thin line on both vertical ends.
     }
 }
 

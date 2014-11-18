@@ -25,6 +25,7 @@
             _pic.backgroundColor = [UIColor clearColor];
             _pic.contentMode = UIViewContentModeScaleAspectFill;
             _pic.clipsToBounds = YES;
+            _pic.layer.cornerRadius = 3;
             [self.contentView addSubview:_pic];
         }
         if (!_text) {
