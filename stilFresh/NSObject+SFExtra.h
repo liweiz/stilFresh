@@ -31,6 +31,7 @@
 - (void)resetFreshness:(SFItem *)obj;
 - (NSString *)addHyphensToDateString:(NSString *)date;
 - (NSAttributedString *)convertDaysLeftToSemanticText:(NSInteger)i font:(UIFont *)f shadowColor:(UIColor *)c;
+- (NSString *)convertDaysLeftToSemanticText:(NSInteger)i;
 - (void)addCommonFontEff:(NSMutableAttributedString *)s shadowColor:(UIColor *)c;
 - (UIImage *)convertImageToGrayscale:(UIImage *)image;
 - (NSNumber *)rankDaysLeft:(NSInteger)i;

@@ -60,11 +60,11 @@
     } else {
         s = [NSString stringWithFormat:@"Over\n%ld years\nleft", (long)floorf(i / 365.0)];
     }
-    if ([s containsString:@"About"]) {
+    if ([self haveSubString:@"About" inString:s]) {
         r1 = NSMakeRange(0, 5);
-    } else if ([s containsString:@"Over"]){
+    } else if ([self haveSubString:@"Over" inString:s]){
         r1 = NSMakeRange(0, 4);
-    } else if ([s containsString:@"Best before date"]) {
+    } else if ([self haveSubString:@"Best before date" inString:s]) {
         r1 = NSMakeRange(0, 16);
     }
     if ([s containsString:@"left"]) {
@@ -86,6 +86,44 @@
         [self addCommonFontEff:r shadowColor:c];
     }
     return r;
+}
+
+- (BOOL)haveSubString:(NSString *)s inString:(NSString *)x {
+    if ([x rangeOfString:s].location == NSNotFound) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+- (NSString *)convertDaysLeftToSemanticText:(NSInteger)i {
+    NSString *s;
+    if (i < 1) {
+        s = @"No longer fresh";
+    } else if (i == 1) {
+        s = @"1 day left";
+    } else if (i < 7) {
+        s = [NSString stringWithFormat:@"%ld days left", (long)i];
+    } else if (i < 11) {
+        s = @"About 1 week left";
+    } else if (i < 25) {
+        s = [NSString stringWithFormat:@"About %ld weeks left", (long)(i / 7.0)];
+    } else if (i < 35) {
+        s = [NSString stringWithFormat:@"About 1 month left"];
+    } else if (i < 30 * 6 - 15) {
+        s = [NSString stringWithFormat:@"About %ld months left", (long)(i / 30.0)];
+    } else if (i < 30 * 6 + 15) {
+        s = [NSString stringWithFormat:@"About half year left"];
+    } else if (i < 30 * 12 - 15) {
+        s = [NSString stringWithFormat:@"About %ld months left", (long)(i / 30.0)];
+    } else if (i < 30 * 12 + 15) {
+        s = [NSString stringWithFormat:@"About 1 year left"];
+    } else if (i < 365 * 2) {
+        s = [NSString stringWithFormat:@"Over 1 year left"];
+    } else {
+        s = [NSString stringWithFormat:@"Over %ld years left", (long)floorf(i / 365.0)];
+    }
+    return s;
 }
 
 - (NSNumber *)rankDaysLeft:(NSInteger)i {
@@ -157,8 +195,7 @@
 
 - (NSString *)resetTimeLeftMsg:(NSNumber *)daysLeft
 {
-    NSAttributedString *s = [self convertDaysLeftToSemanticText:[daysLeft integerValue] font:nil shadowColor:nil];
-    return [s.string stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    return [self convertDaysLeftToSemanticText:[daysLeft integerValue]];
 }
 
 // Four scales correspond to four colors: 0: green0, 1: green1, 2: green2, 3: gray.

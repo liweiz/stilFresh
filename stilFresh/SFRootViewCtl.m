@@ -194,10 +194,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideDatePicker) name:@"dismiss" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPicDisposeHint) name:@"showPicDisposeHint" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(turnOffHint) name:@"turnOffHint" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCardsAndMenu) name:@"addCardsAndMenu" object:nil];
     
     // Create a CSV file in NSLibraryDirectory to store all the deleted items' itemIds to locate and delete their corresponding image files.
     [self setupCSVForDeletedItem];
+    
+    if ([SFBox sharedBox].hintIsOn) {
+        [self processHints:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)]];
+    }
 }
 
 - (void)turnOffHint
@@ -871,14 +874,14 @@
             if ([self.listViewCtl.collectionView numberOfSections] == 0) {
                 f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height);
                 s = @"SwipeToCreate";
-                t = @"Swipe to add";
+                t = @"Swipe right to add";
             }
             break;
         case 1:
             if ([self.listViewCtl.collectionView numberOfSections] > 0) {
                 f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
                 s = @"SwipeToMenu";
-                t = @"Swipe to settings";
+                t = @"Swipe left to settings";
             }
             break;
         case 2:

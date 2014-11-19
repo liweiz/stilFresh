@@ -20,10 +20,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [Crashlytics startWithAPIKey:@"d30dc014389e0e949766f2cd80d7559c4af53569"];
     // Override point for customization after application launch.
+    // http://oleb.net/blog/2014/02/nsuserdefaults-handling-default-values/
     NSDictionary *appDefaults = [NSDictionary
                                  dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"HintIsOn"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
-    
+    [[NSUserDefaults standardUserDefaults] synchronize];
     self.window = [[UIWindow alloc] initWithFrame:[SFBox sharedBox].appRect];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
@@ -52,6 +53,17 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    // http://stackoverflow.com/questions/8072984/hittest-fires-when-uikeyboard-is-tapped
+    for (UIWindow *testWindow in [UIApplication sharedApplication].windows) {
+        if (!testWindow.opaque && [NSStringFromClass(testWindow.class) hasPrefix:@"UIText"]) {
+            BOOL wasHidden = testWindow.hidden;
+            testWindow.hidden = YES;
+            if (!wasHidden) {
+                testWindow.hidden = NO;
+            }
+            break;
+        }
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
