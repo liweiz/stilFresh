@@ -34,11 +34,14 @@ extern CGFloat const gapToEdgeL;
 @property (assign, nonatomic) BOOL hintIsOn;
 @property (readonly, nonatomic) UIColor *placeholderFontColor;
 @property (readonly, nonatomic) UIColor *sfGreen0Highlighted;
+@property (readonly, nonatomic) UIColor *sfGreen0Lite;
 // There are two dimensions of infomation to indicate an item's freshness. 1. number of days left 2. percentage since the day it is purchased. 2 may be more make sense to indicate the freshness, however, days left is a clearer indicator to let us know the specific data to take action on. So we'd better let users have both info to know not only the freshness but also the actual data to act on. My solution is provide 3 scales of green to indicate the freshness and gray for those no longer within bestbefore.
 @property (readonly, nonatomic) UIColor *sfGreen0;
 @property (readonly, nonatomic) UIColor *sfGreen1;
 @property (readonly, nonatomic) UIColor *sfGreen2;
 @property (readonly, nonatomic) UIColor *sfGray;
+@property (readonly, nonatomic) UIColor *sfGrayLite;
+@property (readonly, nonatomic) UIFont *fontX;
 @property (readonly, nonatomic) UIFont *fontS;
 @property (readonly, nonatomic) UIFont *fontM;
 @property (readonly, nonatomic) UIFont *fontL;

@@ -60,7 +60,7 @@ static CGFloat const picGapToTop = 10;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.dynamicDaysLeftDisplayBase = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [SFBox sharedBox].appRect.size.width - self.collectionView.frame.size.width, self.collectionView.frame.size.height)];
-    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor clearColor];
+    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor whiteColor];
     self.dynamicDaysLeftDisplayBase.userInteractionEnabled = NO;
     
     self.maxLineHeight = [SFBox sharedBox].fontL.lineHeight;
@@ -282,11 +282,11 @@ static CGFloat const picGapToTop = 10;
             }
             UILabel *l = [self getDynamicDisplayWithFrame:f];
             if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
-                l.backgroundColor = [UIColor clearColor];
+//                l.backgroundColor = [UIColor clearColor];
                 l.text = [[[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] objects][0] valueForKey:@"timeLeftMsg"];
                 [self adjustOneFontSize:l];
             } else {
-                l.backgroundColor = [SFBox sharedBox].sfGreen0;
+//                l.backgroundColor = [SFBox sharedBox].sfGreen0;
                 l.alpha = 1;
             }
             [parentView addSubview:l];
@@ -299,8 +299,8 @@ static CGFloat const picGapToTop = 10;
     [self refreshDynamicDisplays:self.dynamicDaysLeftDisplaySeparatorViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:self.collectionView.contentInset.left width:self.collectionView.frame.size.width - self.collectionView.contentInset.left];
     for (UIView *v in self.dynamicDaysLeftDisplaySeparatorViews.allValues) {
         //  http://stackoverflow.com/questions/970475/how-to-compare-uicolors
-        if (![v.backgroundColor isEqual:[UIColor whiteColor]]) {
-            v.backgroundColor = [UIColor whiteColor];
+        if (![v.backgroundColor isEqual:[SFBox sharedBox].sfGreen0]) {
+            v.backgroundColor = [SFBox sharedBox].sfGreen0;
             v.alpha = 1;
         }
         v.frame = CGRectMake(v.frame.origin.x, v.frame.origin.y + gapToEdgeM + 2, [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM, v.frame.size.height - gapToEdgeM * 2 - 4); // Adjusted the y and height to shrink it a bit to avoid a visual bug which shows s thin line on both vertical ends.
@@ -334,13 +334,13 @@ static CGFloat const picGapToTop = 10;
     UILabel *l = [[UILabel alloc] initWithFrame:frame];
     l.textAlignment = NSTextAlignmentLeft;
     l.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-    l.font = [SFBox sharedBox].fontM;
+    l.font = [SFBox sharedBox].fontX;
     l.minimumScaleFactor = 10 / l.font.pointSize;
     l.lineBreakMode = NSLineBreakByWordWrapping;
     l.numberOfLines = 0;
 //    l.adjustsFontSizeToFitWidth = YES;
     l.alpha = 1;
-    l.textColor = [UIColor whiteColor]; //[UIColor colorWithWhite:0.5 alpha:0.5];
+    l.textColor = [SFBox sharedBox].sfGreen0; //[UIColor colorWithWhite:0.5 alpha:0.5];
     return l;
 }
 
@@ -419,12 +419,12 @@ static CGFloat const picGapToTop = 10;
 
 - (void)adjustAllFontSize:(NSArray *)labels {
     for (UILabel *l in labels) {
-        [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontM.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
+        [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontX.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
     }
 }
 
 - (void)adjustOneFontSize:(UILabel *)l {
-    [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontM.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
+    [self adjustFontSize:l maxFontSize:[SFBox sharedBox].fontX.pointSize maxHeight:self.maxLineHeight minHeight:self.minLineHeight];
 }
 
 - (void)adjustFontSize:(UILabel *)l maxFontSize:(CGFloat)s maxHeight:(CGFloat)maxH minHeight:(CGFloat)minH {
@@ -441,7 +441,7 @@ static CGFloat const picGapToTop = 10;
         }
     } else if (l.font.lineHeight < l.frame.size.height * self.lineHeightFrameHeightRatio && l.font.lineHeight < maxH) {
         if (l.frame.size.height * self.lineHeightFrameHeightRatio >= maxH) {
-            l.font = [SFBox sharedBox].fontM;
+            l.font = [SFBox sharedBox].fontX;
         } else {
             for (CGFloat i = s ; i > 0; i = i - 0.1) {
                 if ([UIFont fontWithName:l.font.fontName size:i].lineHeight <= l.frame.size.height * self.lineHeightFrameHeightRatio && [UIFont fontWithName:l.font.fontName size:i].lineHeight <= maxH) {

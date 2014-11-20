@@ -18,7 +18,7 @@
         if (!self.backgroundView) {
             self.backgroundView = [[UIView alloc] init];
             self.backgroundView.alpha = 1;
-            self.backgroundView.backgroundColor = [SFBox sharedBox].sfGreen0;
+            self.backgroundView.backgroundColor = [UIApplication sharedApplication].keyWindow.rootViewController.view.backgroundColor;
         }
         if (!_pic) {
             _pic = [[UIImageView alloc] init];
@@ -34,7 +34,7 @@
             _text.font = [SFBox sharedBox].fontM;
             _text.textAlignment = NSTextAlignmentLeft;
             _text.lineBreakMode = NSLineBreakByWordWrapping;
-            _text.textColor = [UIColor whiteColor];
+            _text.textColor = [SFBox sharedBox].sfGreen0;
             _text.numberOfLines = 3;
             [self.contentView addSubview:_text]; 
         }

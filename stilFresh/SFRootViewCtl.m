@@ -33,7 +33,7 @@
 {
     [UIApplication sharedApplication].keyWindow.backgroundColor = [UIColor blackColor];
     self.view = [[UIView alloc] initWithFrame:[SFBox sharedBox].appRect];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.98 alpha:1];
 }
 
 - (void)viewDidLoad {
@@ -87,12 +87,12 @@
     // AddBtn
     self.addBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.addBtn.frame = CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + gapToEdgeS, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height);
-    [self.addBtn setTitle:@"Done" forState:UIControlStateNormal];
-    [self.addBtn setTitle:@"Done" forState:UIControlStateHighlighted];
-    [self.addBtn setTitle:@"Done" forState:UIControlStateSelected];
-    [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [self.addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    NSMutableAttributedString *btnString = [[NSMutableAttributedString alloc] initWithString:@"Done"];
+    [btnString addAttribute:NSFontAttributeName value:[SFBox sharedBox].fontX range:NSMakeRange(0, btnString.length)];
+    [btnString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, btnString.length)];
+    [self.addBtn setAttributedTitle:btnString forState:UIControlStateNormal];
+    [self.addBtn setAttributedTitle:btnString forState:UIControlStateHighlighted];
+    [self.addBtn setAttributedTitle:btnString forState:UIControlStateSelected];
     self.addBtn.showsTouchWhenHighlighted = YES;
     [self configLayer:self.addBtn.layer box:[SFBox sharedBox] isClear:NO];
     self.addBtn.backgroundColor = [SFBox sharedBox].sfGreen0;
@@ -258,12 +258,10 @@
 - (void)changeSwitch:(UISwitch *)sender
 {
     if(sender.on){
-        NSLog(@"Switch is ON");
         self.dateAdded.hidden = YES;
         self.dateAddedLabel.hidden = NO;
         [self hideDatePicker];
     } else{
-        NSLog(@"Switch is OFF");
         self.dateAdded.hidden = NO;
         self.dateAddedLabel.hidden = YES;
         NSDateComponents *c = [[NSDateComponents alloc] init];
@@ -292,9 +290,9 @@
 
 - (void)resetInput
 {
-    self.bestBefore.text = @"Best before";
+    self.bestBefore.text = nil;
+    [self checkPlaceHolder];
     self.bestBeforeDate = nil;
-    self.bestBefore.textColor = [SFBox sharedBox].placeholderFontColor;
     self.notes.text = @"";
     self.dateAddedSwitch.on = YES;
     [self changeSwitch:self.dateAddedSwitch];
@@ -652,9 +650,9 @@
                                 }
                             } else {
                                 [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
-                                // Keep input info till fully successful submit.
-                                [self resetInput];
                             }
+                            // Keep input info till fully successful submit.
+                            [self resetInput];
                         } else {
                             errOccured = YES;
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"generalError" object:self];

@@ -52,9 +52,10 @@ CGFloat const gapToEdgeL = 15;
         [_sortSelection addObject:[NSNumber numberWithInteger:SFSortFreshnessD]];
         [_sortSelection addObject:[NSNumber numberWithInteger:SFSortTimeCreatedD]];
         _warningText = [[NSMutableString alloc] init];
-        _fontS = [UIFont fontWithName:@"HelveticaNeue-Medium" size:fontSizeS];
-        _fontM = [UIFont fontWithName:@"HelveticaNeue-Medium" size:fontSizeM];
-        _fontL = [UIFont fontWithName:@"HelveticaNeue-Medium" size:fontSizeL];
+        _fontX = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:fontSizeM];
+        _fontS = [UIFont fontWithName:@"AmericanTypewriter" size:fontSizeS];
+        _fontM = [UIFont fontWithName:@"AmericanTypewriter" size:fontSizeM];
+        _fontL = [UIFont fontWithName:@"AmericanTypewriter" size:fontSizeL];
         CGFloat alpha = 1;
         // http://stackoverflow.com/questions/10496114/uitextfield-placeholder-font-color-white-ios-5
         _placeholderFontColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.098/255.0 alpha:0.22];
@@ -63,6 +64,8 @@ CGFloat const gapToEdgeL = 15;
         _sfGreen2 = [UIColor colorWithRed:152 / 255.0 green:189 / 255.0 blue:93 / 255.0 alpha:alpha];
         _sfGray = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha];
         _sfGreen0Highlighted = [self.sfGreen0 colorWithAlphaComponent:0.1];
+        _sfGreen0Lite = [self.sfGreen0 colorWithAlphaComponent:0.4];
+        _sfGrayLite = [UIColor colorWithRed:130 / 255.0 green:131 / 255.0 blue:126 / 255.0 alpha:alpha * 0.7];
         _hintIsOn = [[NSUserDefaults standardUserDefaults] boolForKey:@"HintIsOn"];
         _collectionViewChanges = [NSMutableDictionary dictionaryWithCapacity:0];
     }
