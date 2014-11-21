@@ -582,6 +582,7 @@
             } else {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshDynamicDisplays" object:self];
             }
+            [self.listViewCtl.collectionView reloadItemsAtIndexPaths:self.listViewCtl.collectionView.indexPathsForVisibleItems];
         }
     }];
 }
