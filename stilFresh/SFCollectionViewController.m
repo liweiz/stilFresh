@@ -34,7 +34,7 @@
 static NSString * const reuseIdentifierCell = @"Bloc";
 static NSString * const reuseIdentifierHeader = @"HeaderView";
 static CGFloat const minFontSize = 10;
-static CGFloat const picGapToTop = 10;
+//static CGFloat const picGapToTop = 10;
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
     self = [super initWithCollectionViewLayout:layout];
@@ -57,10 +57,12 @@ static CGFloat const picGapToTop = 10;
     self.collectionView.contentInset = UIEdgeInsetsMake(0, self.collectionView.frame.size.width / 4, 0, gapToEdgeM);
 }
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.dynamicDaysLeftDisplayBase = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [SFBox sharedBox].appRect.size.width - self.collectionView.frame.size.width, self.collectionView.frame.size.height)];
-    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor whiteColor];
+    self.dynamicDaysLeftDisplayBase.backgroundColor = [UIColor clearColor];
     self.dynamicDaysLeftDisplayBase.userInteractionEnabled = NO;
     
     self.maxLineHeight = [SFBox sharedBox].fontL.lineHeight;
@@ -142,19 +144,6 @@ static CGFloat const picGapToTop = 10;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SFCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifierCell forIndexPath:indexPath];
     NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
-    if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
-        if ([[managedObject valueForKey:@"notes"] length] > 0) {
-            cell.text.frame = CGRectMake(gapToEdgeS, cell.frame.size.height - (self.collectionView.frame.size.height - 20) / 14, cell.frame.size.width - gapToEdgeS * 2, (self.collectionView.frame.size.height - 20) / 14);
-            cell.text.numberOfLines = 1;
-            cell.pic.frame = CGRectMake(cell.text.frame.origin.x, picGapToTop, cell.text.frame.size.width, cell.frame.size.height - picGapToTop - cell.text.frame.size.height);
-        } else {
-            cell.text.frame = CGRectMake(gapToEdgeS, 0, cell.frame.size.width - gapToEdgeS * 2, cell.frame.size.height);
-            cell.pic.frame = CGRectMake(cell.text.frame.origin.x, picGapToTop, cell.text.frame.size.width, cell.frame.size.height - picGapToTop * 2);
-        }
-    } else {
-        cell.text.numberOfLines = 3;
-        cell.text.frame = CGRectMake(gapToEdgeS, 0, cell.frame.size.width - gapToEdgeS * 2, cell.frame.size.height);
-    }
     // Make sure the layout is done before assigning any value from NSManagedObj.
     cell.statusCode = [[managedObject valueForKey:@"freshness"] integerValue];
     BOOL hasImg = NO;
@@ -177,11 +166,20 @@ static CGFloat const picGapToTop = 10;
                 cell.pic.image = [SFBox sharedBox].imgJustSaved;
             }
         }
+    } else {
+        cell.text.attributedText = [self string:[managedObject valueForKey:@"notes"] withBackgroundColor:[SFBox sharedBox].sfGreen0 font:[SFBox sharedBox].fontY];
     }
-    cell.contentView.backgroundColor = [UIColor clearColor]; // [self getStatusColor:cell.statusCode];
-    cell.text.text = [managedObject valueForKey:@"notes"];
     if (self.lineHeightFrameHeightRatio == 0) {
         self.lineHeightFrameHeightRatio = self.maxLineHeight / cell.frame.size.height;
+    }
+    if (indexPath.row + 1 == [self.collectionView numberOfItemsInSection:indexPath.section]) {
+        if (indexPath.row == 0) {
+            cell.layer.mask = cell.bothMask;
+        } else {
+            cell.layer.mask = cell.lowerMask;
+        }
+    } else if (indexPath.row == 0) {
+        cell.layer.mask = cell.upperMask;
     }
     return cell;
 }
@@ -214,28 +212,29 @@ static CGFloat const picGapToTop = 10;
 
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    CGFloat regularH = 10;
     if (section == 0) {
         // This is because we increaed the upper and bottom margins of each section's backgroundView.
-        return CGSizeMake(collectionView.frame.size.width, 20 + gapToEdgeM);
+        return UIEdgeInsetsMake(20, 0, regularH, 0);
     } else {
-        return CGSizeMake(collectionView.frame.size.width, gapToEdgeL * 2 - 8);
+        return UIEdgeInsetsMake(regularH, 0, regularH, 0);
     }
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat w = [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM;
-    NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
-    if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
-        if ([[managedObject valueForKey:@"notes"] length] > 0) {
-            return CGSizeMake(w, (self.view.frame.size.height - 20) / 4);
-        } else {
-            return CGSizeMake(w, (self.view.frame.size.height - 20) / 5);
-        }
-    } else {
-        return CGSizeMake(w, (self.view.frame.size.height - 20) / 7);
-    }
-}
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    CGFloat w = [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM;
+//    NSManagedObject *managedObject = [[SFBox sharedBox].fResultsCtl objectAtIndexPath:indexPath];
+//    if ([[managedObject valueForKey:@"hasPic"] boolValue]) {
+//        if ([[managedObject valueForKey:@"notes"] length] > 0) {
+//            return CGSizeMake(w, (self.view.frame.size.height - 20) / 4);
+//        } else {
+//            return CGSizeMake(w, (self.view.frame.size.height - 20) / 5);
+//        }
+//    } else {
+//        return CGSizeMake(w, (self.view.frame.size.height - 20) / 7);
+//    }
+//}
 
 #pragma mark - Dynamic Display
 
@@ -261,7 +260,7 @@ static CGFloat const picGapToTop = 10;
         if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
             l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view x:x width:w extraY:0];
         } else {
-            l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view x:x width:w extraY:gapToEdgeM];
+            l.frame = [self getDynamicDisplayFrameForSection:s.integerValue inCollectionView:view x:x width:w extraY:0];
         }
     }
     // Add new ones
@@ -278,15 +277,13 @@ static CGFloat const picGapToTop = 10;
             if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
                 f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:0];
             } else {
-                f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:gapToEdgeM];
+                f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:0];
             }
             UILabel *l = [self getDynamicDisplayWithFrame:f];
             if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
-//                l.backgroundColor = [UIColor clearColor];
                 l.text = [[[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] objects][0] valueForKey:@"timeLeftMsg"];
                 [self adjustOneFontSize:l];
             } else {
-//                l.backgroundColor = [SFBox sharedBox].sfGreen0;
                 l.alpha = 1;
             }
             [parentView addSubview:l];
@@ -299,22 +296,31 @@ static CGFloat const picGapToTop = 10;
     [self refreshDynamicDisplays:self.dynamicDaysLeftDisplaySeparatorViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:self.collectionView.contentInset.left width:self.collectionView.frame.size.width - self.collectionView.contentInset.left];
     for (UIView *v in self.dynamicDaysLeftDisplaySeparatorViews.allValues) {
         //  http://stackoverflow.com/questions/970475/how-to-compare-uicolors
-        if (![v.backgroundColor isEqual:[SFBox sharedBox].sfGreen0]) {
-            v.backgroundColor = [SFBox sharedBox].sfGreen0;
+        if (![v.backgroundColor isEqual:[UIColor clearColor]]) {
+            v.backgroundColor = [UIColor clearColor];
             v.alpha = 1;
         }
-        v.frame = CGRectMake(v.frame.origin.x, v.frame.origin.y + gapToEdgeM + 2, [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM, v.frame.size.height - gapToEdgeM * 2 - 4); // Adjusted the y and height to shrink it a bit to avoid a visual bug which shows s thin line on both vertical ends.
+        
+        v.frame = CGRectMake(v.frame.origin.x, v.frame.origin.y + gapToEdgeM + 10, [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM, v.frame.size.height - gapToEdgeM * 2 - 10 * 2); // Adjusted the y and height to shrink it a bit to avoid a visual bug which shows s thin line on both vertical ends.
+        
     }
 }
 
 - (void)refreshDynamicDisplayBackGroundViews {
-    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplayBackGroundViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:0 width:self.collectionView.frame.size.width];
+    [self refreshDynamicDisplays:self.dynamicDaysLeftDisplayBackGroundViews inCollectionView:self.collectionView onView:self.dynamicDaysLeftDisplayBase x:0 width:self.collectionView.contentInset.left + [(UICollectionViewFlowLayout *)self.collectionViewLayout itemSize].width];
     [self keepDynamicDisplayBackGroundViewsBack];
 }
 
 - (void)keepDynamicDisplayBackGroundViewsBack {
     for (UIView *v in self.dynamicDaysLeftDisplayBackGroundViews.allValues) {
         [v.superview sendSubviewToBack:v];
+        if (![v.backgroundColor isEqual:[UIColor whiteColor]]) {
+            v.backgroundColor = [UIColor whiteColor];
+            v.alpha = 1;
+        }
+        CAShapeLayer *bothMask = [CAShapeLayer layer];
+        bothMask.path = [UIBezierPath bezierPathWithRoundedRect:v.bounds byRoundingCorners:UIRectCornerBottomRight | UIRectCornerTopRight cornerRadii:CGSizeMake(15, 15)].CGPath;
+        v.layer.mask = bothMask;
     }
 }
 

@@ -15,5 +15,9 @@
 
 @property (assign, nonatomic) NSInteger statusCode;
 @property (strong, nonatomic) UIColor *statusColor;
+// For round corners.
+@property (strong, nonatomic) CAShapeLayer *upperMask;
+@property (strong, nonatomic) CAShapeLayer *lowerMask;
+@property (strong, nonatomic) CAShapeLayer *bothMask;
 
 @end

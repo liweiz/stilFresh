@@ -44,4 +44,6 @@
 
 - (UIColor *)getStatusColor:(NSInteger)statusCode;
 
+- (NSAttributedString *)string:(NSString *)s withBackgroundColor:(UIColor *)c font:(UIFont *)f;
+
 @end

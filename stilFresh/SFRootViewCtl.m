@@ -33,7 +33,7 @@
 {
     [UIApplication sharedApplication].keyWindow.backgroundColor = [UIColor blackColor];
     self.view = [[UIView alloc] initWithFrame:[SFBox sharedBox].appRect];
-    self.view.backgroundColor = [UIColor colorWithWhite:0.98 alpha:1];
+    self.view.backgroundColor = [SFBox sharedBox].sfBackWhite;
 }
 
 - (void)viewDidLoad {

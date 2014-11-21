@@ -14,9 +14,9 @@
 - (UICollectionViewFlowLayout *)getLayout {
     UICollectionViewFlowLayout *l = [[UICollectionViewFlowLayout alloc] init];
     l.minimumInteritemSpacing = 0;
-    l.minimumLineSpacing = 1;
-    CGFloat w = [SFBox sharedBox].appRect.size.width;
-    l.itemSize = CGSizeMake(w, w / 16 * 9);
+    l.minimumLineSpacing = 8;
+    CGFloat w = [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM;
+    l.itemSize = CGSizeMake(w, w / (goldenRatio + 1));
     l.scrollDirection = UICollectionViewScrollDirectionVertical;
     return l;
 }
@@ -85,6 +85,14 @@
     if (c) {
         [self addCommonFontEff:r shadowColor:c];
     }
+    return r;
+}
+
+- (NSAttributedString *)string:(NSString *)s withBackgroundColor:(UIColor *)c font:(UIFont *)f {
+    NSMutableAttributedString * r = [[NSMutableAttributedString alloc] initWithString:s];
+    NSRange a = NSMakeRange(0, s.length);
+    [r addAttribute:NSFontAttributeName value:f range:a];
+    [r addAttribute:NSBackgroundColorAttributeName value:c range:a];
     return r;
 }
 
