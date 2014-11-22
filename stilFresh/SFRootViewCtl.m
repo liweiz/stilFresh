@@ -88,7 +88,7 @@
     self.addBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.addBtn.frame = CGRectMake(self.bestBefore.frame.origin.x + self.bestBefore.frame.size.width + gapToEdgeS, self.bestBefore.frame.origin.y, 54, self.bestBefore.frame.size.height);
     NSMutableAttributedString *btnString = [[NSMutableAttributedString alloc] initWithString:@"Done"];
-    [btnString addAttribute:NSFontAttributeName value:[SFBox sharedBox].fontX range:NSMakeRange(0, btnString.length)];
+    [btnString addAttribute:NSFontAttributeName value:[SFBox sharedBox].fontZ range:NSMakeRange(0, btnString.length)];
     [btnString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, btnString.length)];
     [self.addBtn setAttributedTitle:btnString forState:UIControlStateNormal];
     [self.addBtn setAttributedTitle:btnString forState:UIControlStateHighlighted];
@@ -127,6 +127,7 @@
     self.dateAddedLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.notes.frame.origin.x, self.notes.frame.origin.y + self.notes.frame.size.height + gapToEdgeS, self.bestBefore.frame.size.width, self.bestBefore.frame.size.height)];
     [self configLayer:self.dateAddedLabel.layer box:[SFBox sharedBox] isClear:NO];
     self.dateAddedLabel.text = @"Purchased today";
+    self.dateAddedLabel.textColor = [SFBox sharedBox].darkText;
     self.dateAddedLabel.font = self.bestBefore.font;
     [self.inputView addSubview:self.dateAddedLabel];
     self.dateAddedSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.addBtn.frame.origin.x, self.dateAddedLabel.frame.origin.y + 7, self.addBtn.frame.size.width, self.addBtn.frame.size.height)];
@@ -248,7 +249,7 @@
         NSDate *dayAfter5 = [[NSCalendar currentCalendar] dateByAddingComponents:c toDate:[NSDate date] options:0];
         
         self.bestBeforeDate = dayAfter5;
-        self.bestBefore.textColor = [UIColor blackColor];
+        self.bestBefore.textColor = [SFBox sharedBox].darkText;
     }
     [self hightlightView:self.bestBefore];
     [self showDatePicker:self.bestBefore date:self.bestBeforeDate];
@@ -284,7 +285,7 @@
         self.bestBefore.text = @"Best before";
         self.bestBefore.textColor = [SFBox sharedBox].placeholderFontColor;
     } else {
-        self.bestBefore.textColor = [UIColor blackColor];
+        self.bestBefore.textColor = [SFBox sharedBox].darkText;
     }
 }
 
@@ -597,6 +598,7 @@
 // Save calendar date as a string. Reason:http://stackoverflow.com/questions/7054411/determining-day-components-of-an-nsdate-object-time-zone-issues
 - (void)saveItem
 {
+    self.addBtn.userInteractionEnabled = NO;
     BOOL errOccured = NO;
     SFItem *i = [NSEntityDescription insertNewObjectForEntityForName:@"SFItem" inManagedObjectContext:[SFBox sharedBox].ctx];
     
@@ -669,6 +671,7 @@
     if (errOccured) {
         [self showWarningWithName:[SFBox sharedBox].warningText];
     }
+    self.addBtn.userInteractionEnabled = YES;
 }
 
 

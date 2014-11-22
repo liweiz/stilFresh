@@ -31,7 +31,7 @@
         if (!self.backgroundView) {
             self.backgroundView = [[UIView alloc] init];
             self.backgroundView.alpha = 1;
-            self.backgroundView.backgroundColor = [UIColor whiteColor];
+            self.backgroundView.backgroundColor = [SFBox sharedBox].milkWhite;
         }
         if (!_pic) {
             _pic = [[UIImageView alloc] init];
@@ -68,7 +68,7 @@
 - (void)setup {
     self.layer.mask = nil;
     self.pic.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    self.text.frame = CGRectMake(gapToEdgeS, 0, self.frame.size.width - gapToEdgeS * 2, self.frame.size.height);
+    self.text.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 }
 
 @end

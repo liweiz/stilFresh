@@ -32,6 +32,8 @@ extern CGFloat const gapToEdgeL;
 @interface SFBox : NSObject <NSFetchedResultsControllerDelegate, NSFetchedResultsSectionInfo>
 
 @property (assign, nonatomic) BOOL hintIsOn;
+@property (readonly, nonatomic) UIColor *darkText;
+@property (readonly, nonatomic) UIColor *milkWhite;
 @property (readonly, nonatomic) UIColor *placeholderFontColor;
 @property (readonly, nonatomic) UIColor *sfGreen0Highlighted;
 @property (readonly, nonatomic) UIColor *sfGreen0Lite;
@@ -44,6 +46,7 @@ extern CGFloat const gapToEdgeL;
 @property (readonly, nonatomic) UIColor *sfBackWhite;
 @property (readonly, nonatomic) UIFont *fontX;
 @property (readonly, nonatomic) UIFont *fontY;
+@property (readonly, nonatomic) UIFont *fontZ;
 @property (readonly, nonatomic) UIFont *fontS;
 @property (readonly, nonatomic) UIFont *fontM;
 @property (readonly, nonatomic) UIFont *fontL;

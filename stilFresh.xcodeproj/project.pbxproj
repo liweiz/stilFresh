@@ -29,6 +29,7 @@
 		EEB864151A09777100BF756F /* SFCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB864141A09777100BF756F /* SFCollectionViewController.m */; };
 		EECAA75019E5A89200AAE177 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
+		EECFB9C81A2021EA006CD844 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EECFB9C71A2021EA006CD844 /* Launch Screen.xib */; };
 		EED0347C1A0A6682000C2590 /* SFCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EED0347B1A0A6682000C2590 /* SFCollectionViewCell.m */; };
 		EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = EED7ED7319FBF6680061BA43 /* SFMenu.m */; };
 		EED7ED7719FC7F950061BA43 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED7ED7619FC7F950061BA43 /* Crashlytics.framework */; };
@@ -89,6 +90,7 @@
 		EEB864141A09777100BF756F /* SFCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCollectionViewController.m; sourceTree = "<group>"; };
 		EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCamViewCtl.h; sourceTree = "<group>"; };
 		EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCamViewCtl.m; sourceTree = "<group>"; };
+		EECFB9C71A2021EA006CD844 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		EED0347A1A0A6682000C2590 /* SFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCollectionViewCell.h; sourceTree = "<group>"; };
 		EED0347B1A0A6682000C2590 /* SFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCollectionViewCell.m; sourceTree = "<group>"; };
 		EED7ED7219FBF6680061BA43 /* SFMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMenu.h; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				EE3EC79619DF98C400CA09F8 /* Images.xcassets */,
 				EE3EC78D19DF98C400CA09F8 /* stilFresh.xcdatamodeld */,
 				EE3EC78619DF98C400CA09F8 /* Supporting Files */,
+				EECFB9C71A2021EA006CD844 /* Launch Screen.xib */,
 			);
 			path = stilFresh;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 			files = (
 				EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */,
 				EECAA75019E5A89200AAE177 /* (null) in Resources */,
+				EECFB9C81A2021EA006CD844 /* Launch Screen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +515,7 @@
 			baseConfigurationReference = D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -530,6 +535,7 @@
 			baseConfigurationReference = C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (

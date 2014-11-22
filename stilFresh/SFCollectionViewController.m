@@ -314,8 +314,8 @@ static CGFloat const minFontSize = 10;
 - (void)keepDynamicDisplayBackGroundViewsBack {
     for (UIView *v in self.dynamicDaysLeftDisplayBackGroundViews.allValues) {
         [v.superview sendSubviewToBack:v];
-        if (![v.backgroundColor isEqual:[UIColor whiteColor]]) {
-            v.backgroundColor = [UIColor whiteColor];
+        if (![v.backgroundColor isEqual:[SFBox sharedBox].milkWhite]) {
+            v.backgroundColor = [SFBox sharedBox].milkWhite;
             v.alpha = 1;
         }
         CAShapeLayer *bothMask = [CAShapeLayer layer];
@@ -346,7 +346,7 @@ static CGFloat const minFontSize = 10;
     l.numberOfLines = 0;
 //    l.adjustsFontSizeToFitWidth = YES;
     l.alpha = 1;
-    l.textColor = [SFBox sharedBox].sfGreen0; //[UIColor colorWithWhite:0.5 alpha:0.5];
+    l.textColor = [SFBox sharedBox].darkText; //[UIColor colorWithWhite:0.5 alpha:0.5];
     return l;
 }
 
