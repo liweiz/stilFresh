@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D4C0270A11394244ACACEE02 /* libPods-stilFresh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */; };
+		EE0AE4771A219B6C003289FD /* product_ids.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE0AE4761A219B6C003289FD /* product_ids.plist */; };
+		EE0AE47A1A219CC1003289FD /* SFInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = EE0AE4791A219CC1003289FD /* SFInAppPurchase.m */; };
 		EE1547BF19E608E8004B6EDC /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EE1547BE19E608E8004B6EDC /* CHCSVParser.m */; };
 		EE18AD0F19F93CE30004C5C4 /* SFHintBase.m in Sources */ = {isa = PBXBuildFile; fileRef = EE18AD0E19F93CE30004C5C4 /* SFHintBase.m */; };
 		EE26665519FDF899009E11EA /* SFIntro.m in Sources */ = {isa = PBXBuildFile; fileRef = EE26665419FDF899009E11EA /* SFIntro.m */; };
@@ -31,6 +33,7 @@
 		EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEA90C19E0D7AC00694520 /* SFCamViewCtl.m */; };
 		EECFB9C81A2021EA006CD844 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EECFB9C71A2021EA006CD844 /* Launch Screen.xib */; };
 		EED0347C1A0A6682000C2590 /* SFCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EED0347B1A0A6682000C2590 /* SFCollectionViewCell.m */; };
+		EED4127F1A2392F7000D3E3E /* SFPopMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = EED4127E1A2392F7000D3E3E /* SFPopMsg.m */; };
 		EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = EED7ED7319FBF6680061BA43 /* SFMenu.m */; };
 		EED7ED7719FC7F950061BA43 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED7ED7619FC7F950061BA43 /* Crashlytics.framework */; };
 		EEECF10219EF005A000A90C3 /* SFTimeLineH.m in Sources */ = {isa = PBXBuildFile; fileRef = EEECF10119EF005A000A90C3 /* SFTimeLineH.m */; };
@@ -50,6 +53,9 @@
 		C7080798471979B14FCBF942 /* Pods-stilFresh.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stilFresh.release.xcconfig"; path = "Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh.release.xcconfig"; sourceTree = "<group>"; };
 		D3B7C6FB1F4683DA5D8BB1D4 /* Pods-stilFresh.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stilFresh.debug.xcconfig"; path = "Pods/Target Support Files/Pods-stilFresh/Pods-stilFresh.debug.xcconfig"; sourceTree = "<group>"; };
 		E819F93BFA1B417ABF1EA126 /* libPods-stilFresh.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stilFresh.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE0AE4761A219B6C003289FD /* product_ids.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = product_ids.plist; sourceTree = "<group>"; };
+		EE0AE4781A219CC1003289FD /* SFInAppPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFInAppPurchase.h; sourceTree = "<group>"; };
+		EE0AE4791A219CC1003289FD /* SFInAppPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFInAppPurchase.m; sourceTree = "<group>"; };
 		EE1547BD19E608E8004B6EDC /* CHCSVParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
 		EE1547BE19E608E8004B6EDC /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
 		EE18AD0D19F93CE30004C5C4 /* SFHintBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHintBase.h; sourceTree = "<group>"; };
@@ -93,6 +99,8 @@
 		EECFB9C71A2021EA006CD844 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		EED0347A1A0A6682000C2590 /* SFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCollectionViewCell.h; sourceTree = "<group>"; };
 		EED0347B1A0A6682000C2590 /* SFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFCollectionViewCell.m; sourceTree = "<group>"; };
+		EED4127D1A2392F7000D3E3E /* SFPopMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFPopMsg.h; sourceTree = "<group>"; };
+		EED4127E1A2392F7000D3E3E /* SFPopMsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFPopMsg.m; sourceTree = "<group>"; };
 		EED7ED7219FBF6680061BA43 /* SFMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMenu.h; sourceTree = "<group>"; };
 		EED7ED7319FBF6680061BA43 /* SFMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFMenu.m; sourceTree = "<group>"; };
 		EED7ED7619FC7F950061BA43 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -154,6 +162,10 @@
 				EED7ED7619FC7F950061BA43 /* Crashlytics.framework */,
 				EE3EC7AF19DF992B00CA09F8 /* AppDelegate.h */,
 				EE3EC7B019DF992B00CA09F8 /* AppDelegate.m */,
+				EED4127D1A2392F7000D3E3E /* SFPopMsg.h */,
+				EED4127E1A2392F7000D3E3E /* SFPopMsg.m */,
+				EE0AE4781A219CC1003289FD /* SFInAppPurchase.h */,
+				EE0AE4791A219CC1003289FD /* SFInAppPurchase.m */,
 				EED7ED7219FBF6680061BA43 /* SFMenu.h */,
 				EED7ED7319FBF6680061BA43 /* SFMenu.m */,
 				EECEA90B19E0D7AC00694520 /* SFCamViewCtl.h */,
@@ -198,6 +210,7 @@
 			children = (
 				EE3EC78719DF98C400CA09F8 /* Info.plist */,
 				EE3EC78819DF98C400CA09F8 /* main.m */,
+				EE0AE4761A219B6C003289FD /* product_ids.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -328,6 +341,7 @@
 				EE3EC79719DF98C400CA09F8 /* Images.xcassets in Resources */,
 				EECAA75019E5A89200AAE177 /* (null) in Resources */,
 				EECFB9C81A2021EA006CD844 /* Launch Screen.xib in Resources */,
+				EE0AE4771A219B6C003289FD /* product_ids.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,6 +408,7 @@
 				EE87B42619EC7FB80022DE0E /* SFCellCover.m in Sources */,
 				EE3EC7C419DF995100CA09F8 /* SFBox.m in Sources */,
 				EE3EC7C819DF995100CA09F8 /* SFTableViewController.m in Sources */,
+				EED4127F1A2392F7000D3E3E /* SFPopMsg.m in Sources */,
 				EE3EC7C719DF995100CA09F8 /* SFTableViewCell.m in Sources */,
 				EE3EC78F19DF98C400CA09F8 /* stilFresh.xcdatamodeld in Sources */,
 				EECEA90D19E0D7AC00694520 /* SFCamViewCtl.m in Sources */,
@@ -407,6 +422,7 @@
 				EE3EC7C919DF995100CA09F8 /* SFView.m in Sources */,
 				EE3EC7B119DF992B00CA09F8 /* AppDelegate.m in Sources */,
 				EE3EC7C319DF995100CA09F8 /* NSObject+SFExtra.m in Sources */,
+				EE0AE47A1A219CC1003289FD /* SFInAppPurchase.m in Sources */,
 				EE781A5E19F7FB5900BEB383 /* SFHintView.m in Sources */,
 				EED7ED7419FBF6680061BA43 /* SFMenu.m in Sources */,
 				EE26665519FDF899009E11EA /* SFIntro.m in Sources */,

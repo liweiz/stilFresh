@@ -6,6 +6,12 @@ source 'https://github.com/CocoaPods/Specs.git'
 target "stilFresh" do
 
 pod 'SDWebImage', '~>3.7'
+pod 'RMStore', '~> 0.6'
+pod 'RMStore/AppReceiptVerificator'
+pod 'RMStore/TransactionReceiptVerificator'
+pod 'RMStore/KeychainPersistence'
+pod 'RMStore/NSUserDefaultsPersistence'
+pod 'SIAlertView'
 
 end
 

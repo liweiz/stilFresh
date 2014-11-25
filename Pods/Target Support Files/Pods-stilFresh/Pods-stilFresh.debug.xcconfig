@@ -1,6 +1,7 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/SDWebImage"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/SDWebImage"
-OTHER_LDFLAGS = -ObjC -l"Pods-stilFresh-SDWebImage" -framework "ImageIO"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/OpenSSL" "${PODS_ROOT}/Headers/Public/OpenSSL/openssl" "${PODS_ROOT}/Headers/Public/RMStore" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/SIAlertView"
+LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/OpenSSL/lib" "$(PODS_ROOT)/OpenSSL/lib"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/OpenSSL" -isystem "${PODS_ROOT}/Headers/Public/OpenSSL/openssl" -isystem "${PODS_ROOT}/Headers/Public/RMStore" -isystem "${PODS_ROOT}/Headers/Public/SDWebImage" -isystem "${PODS_ROOT}/Headers/Public/SIAlertView"
+OTHER_LDFLAGS = -ObjC -l"Pods-stilFresh-OpenSSL" -l"Pods-stilFresh-RMStore" -l"Pods-stilFresh-SDWebImage" -l"Pods-stilFresh-SIAlertView" -l"crypto" -l"ssl" -framework "ImageIO" -framework "QuartzCore" -framework "Security" -framework "StoreKit"
 OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
 PODS_ROOT = ${SRCROOT}/Pods

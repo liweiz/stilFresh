@@ -21,8 +21,6 @@
         self.showsVerticalScrollIndicator = NO;
         self.backgroundColor = [UIColor whiteColor];
         self.alpha = 1;
-        
-        
     }
     return self;
 }

@@ -12,9 +12,11 @@
 #import "SFHintView.h"
 #import "SFHintBase.h"
 #import "SFBox.h"
-
+#import "SFPopMsg.h"
 
 @interface SFRootViewCtl ()
+
+@property (nonatomic, strong) SFPopMsg *alert;
 
 @end
 
@@ -25,6 +27,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        _alert = [[SFPopMsg alloc] init];
     }
     return self;
 }
@@ -442,54 +445,6 @@
     return [UIFont fontWithDescriptor:fontD size:0];
 }
 
-#pragma mark - warning display
-
-- (void)showWarning:(NSNotification *)note
-{
-    [self showWarningWithName:note.name];
-}
-
-- (void)showWarningWithName:(NSString *)notificationName
-{
-    // Clear the item inserted but not saved yet
-    for (SFItem *i in [SFBox sharedBox].ctx.insertedObjects) {
-        [[SFBox sharedBox].ctx deleteObject:i];
-    }
-    if (!self.warning) {
-        self.warning = [[UILabel alloc] init];
-        [self.view addSubview:self.warning];
-        self.warning.font = self.bestBefore.font;
-        self.warning.textColor = [UIColor whiteColor];
-        self.warning.textAlignment = NSTextAlignmentCenter;
-        self.warning.lineBreakMode = NSLineBreakByWordWrapping;
-        self.warning.numberOfLines = 0;
-        self.warning.backgroundColor = [SFBox sharedBox].sfGray;
-    }
-    CGFloat w = 220;
-    CGFloat h = 120;
-    self.warning.frame = CGRectMake((self.view.frame.size.width - w) * 0.5, (self.view.frame.size.height - h) * 0.5 - 30, w, h);
-    if ([notificationName isEqualToString:@"generalError"]) {
-        self.warning.text = @"Something went wrong, please try later.";
-    } else {
-        self.warning.text = [SFBox sharedBox].warningText;
-    }
-    self.warning.alpha = 1;
-    [self.view bringSubviewToFront:self.warning];
-    [UIView animateWithDuration:6 animations:^{
-        self.warning.alpha = 0;
-    } completion:^(BOOL finished){
-//        self.warning.text = nil;
-    }];
-}
-
-- (void)hideWarning
-{
-//    self.warning.text = nil;
-    if (self.warning.alpha == 1) {
-        self.warning.alpha = 0;
-    }
-}
-
 
 #pragma mark - List/cards Update Animation
 
@@ -669,7 +624,7 @@
         }
     }
     if (errOccured) {
-        [self showWarningWithName:[SFBox sharedBox].warningText];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"detailedError" object:nil];
     }
     self.addBtn.userInteractionEnabled = YES;
 }

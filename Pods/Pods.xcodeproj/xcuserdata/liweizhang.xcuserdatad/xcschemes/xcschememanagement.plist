@@ -4,7 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-stilFresh-OpenSSL.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-stilFresh-RMStore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-stilFresh-SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-stilFresh-SIAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -17,12 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>72A42BD81D75FF1668E0547C</key>
+		<key>28104D9BC029D0C958325298</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>858E0E7FBAC0F7AAE9A11F83</key>
+		<key>3E062BD4AF199F53EE56A130</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6A2D97F3B0136D77A4F7F194</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A1C5927A9287BAF99CA0460C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B2AA9550DC6E439E6E71DE42</key>
 		<dict>
 			<key>primary</key>
 			<true/>
