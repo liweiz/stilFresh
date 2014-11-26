@@ -28,6 +28,7 @@ extern CGFloat const fontSizeL;
 extern CGFloat const gapToEdgeS;
 extern CGFloat const gapToEdgeM;
 extern CGFloat const gapToEdgeL;
+extern CGFloat const gapToEdgeXL;
 
 @interface SFBox : NSObject <NSFetchedResultsControllerDelegate, NSFetchedResultsSectionInfo>
 

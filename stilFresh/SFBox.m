@@ -17,6 +17,7 @@ CGFloat const fontSizeL = 38;
 CGFloat const gapToEdgeS = 5;
 CGFloat const gapToEdgeM = 10;
 CGFloat const gapToEdgeL = 15;
+CGFloat const gapToEdgeXL = 20;
 
 @interface SFBox ()
 
