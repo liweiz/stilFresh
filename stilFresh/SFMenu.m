@@ -78,7 +78,7 @@
     datePoint0Intro.backgroundColor = [UIColor clearColor];
     datePoint0Intro.textColor = [SFBox sharedBox].darkText;
     datePoint0Intro.textAlignment = NSTextAlignmentRight;
-    datePoint0Intro.font = [SFBox sharedBox].fontM;
+    datePoint0Intro.font = [SFBox sharedBox].fontQ;
     datePoint0Intro.text = @"Date purchased";
     [base addSubview:datePoint0Intro];
     
@@ -91,7 +91,7 @@
     datePoint1Intro.backgroundColor = [UIColor clearColor];
     datePoint1Intro.textColor = [SFBox sharedBox].darkText;
     datePoint1Intro.textAlignment = NSTextAlignmentRight;
-    datePoint1Intro.font = [SFBox sharedBox].fontM;
+    datePoint1Intro.font = [SFBox sharedBox].fontQ;
     datePoint1Intro.text = @"Best before date";
     [base addSubview:datePoint1Intro];
     
@@ -118,7 +118,7 @@
     [base addSubview:l];
     l.textColor = [SFBox sharedBox].darkText;
     l.textAlignment = NSTextAlignmentLeft;
-    l.font = [SFBox sharedBox].fontM;
+    l.font = [SFBox sharedBox].fontQ;
     l.lineBreakMode = NSLineBreakByWordWrapping;
     l.numberOfLines = 0;
     l.text = @"Each color from top to bottom indicates appoximately 1/3 of the total progress toward best before date since the the date purchsed.";

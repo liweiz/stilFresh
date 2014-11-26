@@ -47,8 +47,8 @@
             _text.textAlignment = NSTextAlignmentLeft;
             _text.lineBreakMode = NSLineBreakByWordWrapping;
             _text.textColor = [UIColor whiteColor];
-            _text.numberOfLines = 3;
-            [self.contentView addSubview:_text]; 
+            _text.numberOfLines = 2;
+            [self.contentView addSubview:_text];
         }
         self.contentView.backgroundColor = [UIColor clearColor]; // [self getStatusColor:cell.statusCode];
         [self setup];

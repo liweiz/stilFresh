@@ -48,6 +48,7 @@ extern CGFloat const gapToEdgeXL;
 @property (readonly, nonatomic) UIFont *fontX;
 @property (readonly, nonatomic) UIFont *fontY;
 @property (readonly, nonatomic) UIFont *fontZ;
+@property (readonly, nonatomic) UIFont *fontQ;
 @property (readonly, nonatomic) UIFont *fontS;
 @property (readonly, nonatomic) UIFont *fontM;
 @property (readonly, nonatomic) UIFont *fontL;
