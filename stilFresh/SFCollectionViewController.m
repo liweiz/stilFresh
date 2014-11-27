@@ -276,18 +276,18 @@ static CGFloat const minFontSize = 10;
             CGRect f;
             if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
                 f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:0];
-            } else {
-                f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:0];
-            }
-            UILabel *l = [self getDynamicDisplayWithFrame:f];
-            if ([currentOnes isEqual:self.dynamicDaysLeftDisplay]) {
+                UILabel *l = [self getDynamicDisplayLabelWithFrame:f];
                 l.text = [[[SFBox sharedBox].fResultsCtl.sections[s1.integerValue] objects][0] valueForKey:@"timeLeftMsg"];
                 [self adjustOneFontSize:l];
+                [parentView addSubview:l];
+                [currentOnes setObject:l forKey:s1];
             } else {
-                l.alpha = 1;
+                // UILabel bug on iOS7: http://stackoverflow.com/questions/21065921/uilabel-have-a-weird-grey-top-line-border-in-ios7-how-can-i-remove-it
+                f = [self getDynamicDisplayFrameForSection:s1.integerValue inCollectionView:view x:x width:w extraY:0];
+                UIView *v = [[UIView alloc] initWithFrame:f];
+                [parentView addSubview:v];
+                [currentOnes setObject:v forKey:s1];
             }
-            [parentView addSubview:l];
-            [currentOnes setObject:l forKey:s1];
         }
     }
 }
@@ -298,11 +298,8 @@ static CGFloat const minFontSize = 10;
         //  http://stackoverflow.com/questions/970475/how-to-compare-uicolors
         if (![v.backgroundColor isEqual:[UIColor clearColor]]) {
             v.backgroundColor = [UIColor clearColor];
-            v.alpha = 1;
         }
-        
         v.frame = CGRectMake(v.frame.origin.x, v.frame.origin.y + gapToEdgeM + 10, [SFBox sharedBox].appRect.size.width * 3 / 4 - gapToEdgeM, v.frame.size.height - gapToEdgeM * 2 - 10 * 2); // Adjusted the y and height to shrink it a bit to avoid a visual bug which shows s thin line on both vertical ends.
-        
     }
 }
 
@@ -316,8 +313,8 @@ static CGFloat const minFontSize = 10;
         [v.superview sendSubviewToBack:v];
         if (![v.backgroundColor isEqual:[SFBox sharedBox].milkWhite]) {
             v.backgroundColor = [SFBox sharedBox].milkWhite;
-            v.alpha = 1;
         }
+        v.backgroundColor = [SFBox sharedBox].milkWhite;
         CAShapeLayer *bothMask = [CAShapeLayer layer];
         bothMask.path = [UIBezierPath bezierPathWithRoundedRect:v.bounds byRoundingCorners:UIRectCornerBottomRight | UIRectCornerTopRight cornerRadii:CGSizeMake(15, 15)].CGPath;
         v.layer.mask = bothMask;
@@ -336,7 +333,7 @@ static CGFloat const minFontSize = 10;
     return CGRectZero;
 }
 
-- (UILabel *)getDynamicDisplayWithFrame:(CGRect)frame {
+- (UILabel *)getDynamicDisplayLabelWithFrame:(CGRect)frame {
     UILabel *l = [[UILabel alloc] initWithFrame:frame];
     l.textAlignment = NSTextAlignmentLeft;
     l.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
@@ -344,9 +341,7 @@ static CGFloat const minFontSize = 10;
     l.minimumScaleFactor = 10 / l.font.pointSize;
     l.lineBreakMode = NSLineBreakByWordWrapping;
     l.numberOfLines = 0;
-//    l.adjustsFontSizeToFitWidth = YES;
-    l.alpha = 1;
-    l.textColor = [SFBox sharedBox].darkText; //[UIColor colorWithWhite:0.5 alpha:0.5];
+    l.textColor = [SFBox sharedBox].darkText;
     return l;
 }
 
