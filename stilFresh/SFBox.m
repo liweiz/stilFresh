@@ -153,7 +153,6 @@ CGFloat const gapToEdgeXL = 20;
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    NSLog(@"content: %@", controller.fetchedObjects);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"endTableChange" object:self];
     NSNotification *n = [NSNotification notificationWithName:@"collectionViewChanges" object:self userInfo:self.collectionViewChanges];
     [[NSNotificationCenter defaultCenter] postNotification:n];

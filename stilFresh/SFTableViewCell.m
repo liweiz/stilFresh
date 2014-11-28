@@ -87,17 +87,6 @@
             self.text.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             [self.contentView addSubview:self.text];
         }
-//        if (!self.number) {
-//            self.number = [[UILabel alloc] init];
-//            self.number.backgroundColor = [UIColor clearColor];
-//            self.number.textColor = [UIColor whiteColor];
-//            self.number.numberOfLines = 3;
-//            self.number.minimumScaleFactor = 1;
-//            self.number.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:[SFBox sharedBox].fontL.pointSize];
-//            self.number.lineBreakMode = NSLineBreakByWordWrapping;
-//            self.number.textAlignment = NSTextAlignmentLeft;
-//            [self.contentView addSubview:self.number];
-//        }
         if (!self.bottomLine) {
             // 0.5 here is to cover some extra space shown, we have not figured out the reason, but this can fix it anyway.
             self.bottomLine = [[UIView alloc] init];
@@ -111,13 +100,6 @@
     // In editing mode, contentView's x is 38.0, while in normal mode, it is 0.0. This can be calculated with NSLogging contentView and backgroundView. contentView's width changes to 282.0 as well, while backgroundView's width does not change.
     if (hasImg) {
         if (!self.isForCardView) {
-//            CGFloat ww;
-//            if (self.text.text.length == 0) {
-//                // Not able to use goldenRatio here, greater than cell width
-//                ww = self.frame.size.width * 0.95;
-//            } else {
-//                ww = self.frame.size.width * [SFBox sharedBox].goldenRatio / ([SFBox sharedBox].goldenRatio + 1);
-//            }
             self.pic.frame = CGRectMake(gapToEdgeM, 0, self.frame.size.width - gapToEdgeM, self.frame.size.height);
             [self.contentView addSubview:self.pic];
         }
@@ -135,25 +117,9 @@
     } else {
         self.text.backgroundColor = [UIColor clearColor];
         if (hasImg) {
-            self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic
-                                         .frame.size.width / 3 * 2, 0, self.pic
-                                         .frame.size.width / 3, self.contentView.frame.size.height);
-//            self.text.numberOfLines = 0;
-//            self.text.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-//            self.number.frame = CGRectMake(self.pic.frame.origin.x + gapToEdgeL, self.pic.frame.origin.y, self.pic.frame.size.width - gapToEdgeL * 2, self.pic.frame.size.height);
-//            self.number.numberOfLines = 3;
-//            self.number.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+            self.text.frame = CGRectMake(self.pic.frame.origin.x + self.pic.frame.size.width / 3 * 2, 0, self.pic.frame.size.width / 3, self.contentView.frame.size.height);
         } else {
-//            CGFloat g = (self.contentView.frame.size.height - self.number.font.lineHeight - self.text.font.lineHeight) / 2.3;
-//            CGFloat h1 = self.number.font.lineHeight + g * 2;
-//            CGFloat h2 = self.text.font.lineHeight + g * 2;
-//            self.number.frame = CGRectMake(gapToEdgeL, 0, self.contentView.frame.size.width - gapToEdgeL * 2, h1);
-//            self.number.numberOfLines = 1;
-//            self.number.baselineAdjustment = UIBaselineAdjustmentNone;
-            self.text.frame = CGRectMake(gapToEdgeL, 0, self.pic
-                                         .frame.size.width / 3, self.contentView.frame.size.height);
-//            self.text.numberOfLines = 1;
-//            self.text.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+            self.text.frame = CGRectMake(gapToEdgeL, 0, self.pic.frame.size.width / 3, self.contentView.frame.size.height);
         }
     }
     CGFloat h1 = 1;

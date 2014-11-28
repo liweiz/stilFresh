@@ -15,7 +15,6 @@ PODS:
   - SDWebImage (3.7.1):
     - SDWebImage/Core (= 3.7.1)
   - SDWebImage/Core (3.7.1)
-  - SIAlertView (1.3)
 
 DEPENDENCIES:
   - RMStore (~> 0.6)
@@ -24,12 +23,10 @@ DEPENDENCIES:
   - RMStore/NSUserDefaultsPersistence
   - RMStore/TransactionReceiptVerificator
   - SDWebImage (~> 3.7)
-  - SIAlertView
 
 SPEC CHECKSUMS:
   OpenSSL: 72a82aa51b056ae5833307a3fef9b571f38ce11c
   RMStore: e56d74f57a8e0ae0eaa04643d44f7686e646cfba
   SDWebImage: 116e88633b5b416ea0ca4b334a4ac59cf72dd38d
-  SIAlertView: d00609a1faa9d82f17b9f0b4eede64e84a577b10
 
 COCOAPODS: 0.35.0

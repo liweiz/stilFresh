@@ -560,7 +560,7 @@
     if (!self.camViewCtl.img && self.notes.text.length == 0) {
         // words or pic is a must.
         errOccured = YES;
-        [[SFBox sharedBox].warningText setString:@"A picture or a few words is helpful to remember what the item is."];
+        [[SFBox sharedBox].warningText setString:@"A photo or a few words is helpful for recording what the item is."];
     } else {
         // valid dayAdded is needed.
         if (!self.dateAddedSwitch.on) {
@@ -572,7 +572,7 @@
             // valid bestBefore
             if (!self.bestBeforeDate) {
                 errOccured = YES;
-                [[SFBox sharedBox].warningText setString:@"Please select date for best before."];
+                [[SFBox sharedBox].warningText setString:@"Please pick date for best before."];
             } else {
                 [i setValue:[self dateToString:self.bestBeforeDate] forKey:@"bestBefore"];
             }
@@ -586,13 +586,11 @@
                         [i setValue:[NSNumber numberWithBool:YES] forKey:@"hasPic"];
                         [SFBox sharedBox].imgJustSaved = nil;
                         [SFBox sharedBox].imgNameJustSaved = nil;
-//                        [SFBox sharedBox].imgJustSaved = [self convertImageToGrayscale:self.camViewCtl.img];
                         [SFBox sharedBox].imgJustSaved = self.camViewCtl.img;
                         [SFBox sharedBox].imgNameJustSaved = [i valueForKey:@"itemId"];
                     } else {
                         [i setValue:[NSNumber numberWithBool:NO] forKey:@"hasPic"];
                     }
-                    NSLog(@"obj to save: %@", i);
                     if (!errOccured) {
                         [i setValue:[NSDate date] forKey:@"timeStamp"];
                         if ([[SFBox sharedBox] saveToDb]) {
@@ -604,7 +602,7 @@
                                     self.camViewCtl.captureBtn.hidden = NO;
                                 } else {
                                     errOccured = YES;
-                                    [[SFBox sharedBox].warningText setString:@"Item added without picture. Not able to save picture this time, please try later."];
+                                    [[SFBox sharedBox].warningText setString:@"Item added without photo. Not able to save picture this time, please try later."];
                                 }
                             } else {
                                 [self.interfaceBase setContentOffset:CGPointMake(self.interfaceBase.contentSize.width * 2 / 4, 0) animated:YES];
@@ -618,7 +616,7 @@
                     }
                 } else {
                     errOccured = YES;
-                    [[SFBox sharedBox].warningText setString:@"Max: 144 characters"];
+                    [[SFBox sharedBox].warningText setString:@"Max: 70 characters"];
                 }
             }
         }
@@ -636,11 +634,8 @@
     // Save file name to Core Data. Don't store absolute paths.
     NSURL *libraryDirectory = [self getFileBaseUrl];
     NSURL *path = [NSURL URLWithString:name relativeToURL:libraryDirectory];
-    // Convert to grayscale image to avoid extra process later.
-//    UIImage *img0 = [self convertImageToGrayscale:img];
     // http://stackoverflow.com/questions/22454221/image-orientation-problems-when-reloading-images
     NSData *data = UIImageJPEGRepresentation(img, 0.6);
-    NSLog(@"picSize: %f MB", data.length / 1024 / 1024.0);
     return [data writeToURL:path atomically:YES];
 }
 
@@ -673,19 +668,8 @@
     NSURL *libraryDirectory = [self getFileBaseUrl];
     for (NSArray *i in a) {
         if (i[0]) {
-            NSLog(@"deletedId: %@", i[0]);
             NSURL *path = [NSURL URLWithString:i[0] relativeToURL:libraryDirectory];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:path.path]) {
-                NSLog(@"1 fileExistsAtPath: %@", path.path);
-            } else {
-                NSLog(@"1 file NOT existsAtPath: %@", path.path);
-            }
             [[NSFileManager defaultManager] removeItemAtURL:path error:nil];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:path.path]) {
-                NSLog(@"2 fileExistsAtPath: %@", path.path);
-            } else {
-                NSLog(@"2 file NOT existsAtPath: %@", path.path);
-            }
         }
     }
 }
@@ -719,8 +703,6 @@
 {
     NSURL *libraryDirectory = [self getFileBaseUrl];
     NSURL *path = [NSURL URLWithString:@"deletedItemIds.csv" relativeToURL:libraryDirectory];
-    NSLog(@"deletedItemIds.csv path: %@", path.path);
-    NSLog(@"file content length: %ld", (unsigned long)[[NSFileManager defaultManager] contentsAtPath:path.path].length);
     return [NSArray arrayWithContentsOfCSVURL:path];
 }
 
@@ -855,17 +837,17 @@
         case 4:
             f = CGRectMake(xToEdge, self.view.frame.size.height / 2, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
             s = @"SwipeToCapture";
-            t = @"Need a photo? Swipe to take one.";
+            t = @"Need a photo? Swipe right to take one.";
             break;
         case 5:
             f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height);
             s = @"SwipeToDispose";
-            t = @"Swipe up to delete. Or swipe back directly, it will be used when you submit.";
+            t = @"Swipe up to delete.\nSwipe back directly to use.";
             break;
         case 6:
             f = CGRectMake(xToEdge, 0, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);
             s = @"MoreInputInfo";
-            t = @"Pick the best before date and date purchased, if not today. Have a photo/some text. Save. That's it";
+            t = @"Pick the best before date\nPick the date purchased, if not today.\nHave a photo/a few words.\nDone.";
             break;
         case 7:
             f = CGRectMake(xToEdge, self.view.frame.size.height / 2, self.view.frame.size.width - xToEdge * 2, self.view.frame.size.height / 2);

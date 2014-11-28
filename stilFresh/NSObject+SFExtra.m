@@ -482,7 +482,6 @@
 - (UIImage *)convertImageToGrayscale:(UIImage *)image
 {
     // Create image rectangle with current image width/height
-    NSLog(@"img width: %f, height %f", image.size.width, image.size.height);
     CGRect imageRect;
     if (image.imageOrientation == UIImageOrientationLeft || image.imageOrientation == UIImageOrientationRight) {
         // For app only allows portrait usage like this one, this is the only possibility.

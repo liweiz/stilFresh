@@ -11,7 +11,6 @@ pod 'RMStore/AppReceiptVerificator'
 pod 'RMStore/TransactionReceiptVerificator'
 pod 'RMStore/KeychainPersistence'
 pod 'RMStore/NSUserDefaultsPersistence'
-pod 'SIAlertView'
 
 end
 

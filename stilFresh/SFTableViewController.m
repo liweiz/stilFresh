@@ -214,7 +214,6 @@
         if (!err) {
             NSURL *path = [NSURL URLWithString:[managedObject valueForKey:@"itemId"] relativeToURL:libraryDirectory];
             NSData *dImg = [NSData dataWithContentsOfURL:path];
-            NSLog(@"pic size on local db: %f MB", dImg.length / 1024.0 / 1024);
             if (dImg.length > 0) {
                 // Try reading from cache, if not available, async process to generate related ones will be underway so that we probably will have those next time.
                 [cell.pic sd_setImageWithURL:path];

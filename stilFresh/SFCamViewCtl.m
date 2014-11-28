@@ -72,7 +72,6 @@
         CGFloat gapToBottom = 20.0f;
         CGFloat side = 80.0f;
         self.captureBtn.frame = CGRectMake((self.view.frame.size.width - side) / 2.0f, self.view.frame.size.height -gapToBottom - side, side, side);
-        NSLog(@"btn: %f, %f, %f, %f", self.captureBtn.frame.origin.x, self.captureBtn.frame.origin.y, self.captureBtn.frame.size.height, self.captureBtn.frame.size.width);
         self.captureBtn.backgroundColor = [SFBox sharedBox].sfGreen0;
         self.captureBtn.layer.cornerRadius = side / 2.0f;
         [self.view addSubview:self.captureBtn];

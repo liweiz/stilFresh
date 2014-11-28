@@ -19,11 +19,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-stilFresh-SIAlertView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-stilFresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,27 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>28104D9BC029D0C958325298</key>
+		<key>0A159F27DE57F52883264FBF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3E062BD4AF199F53EE56A130</key>
+		<key>710291F93311B82DA297B908</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6A2D97F3B0136D77A4F7F194</key>
+		<key>734BE2EE41AF08A0DD2AB7DA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A1C5927A9287BAF99CA0460C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B2AA9550DC6E439E6E71DE42</key>
+		<key>83512EFF50BFE456C5199932</key>
 		<dict>
 			<key>primary</key>
 			<true/>
