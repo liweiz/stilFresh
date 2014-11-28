@@ -320,7 +320,7 @@
 
 - (NSString *)displayBBWithIntro:(NSString *)date
 {
-    return [[[@"Best before: " stringByAppendingString:[self displayDateString:date]] stringByAppendingString:@", "] stringByAppendingString:[date substringWithRange:NSMakeRange(0, 4)]];
+    return [[[@"Best before:\n" stringByAppendingString:[self displayDateString:date]] stringByAppendingString:@", "] stringByAppendingString:[date substringWithRange:NSMakeRange(0, 4)]];
 }
 
 - (NSString *)displayDateString:(NSString *)date
