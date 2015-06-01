@@ -1,4 +1,16 @@
 stilFresh
+
+I made this public since the app did not gain any traction.
+
+The final intro for the app is:
+
+A photo / a few words + best before date + date purchased = minimal food freshness tracker for you to take actions to cook fresher, eat fresher.
+
+And the name of the app was changed quickly to be "Freezer / Fridge Food Freshness Tracker".
+
+If you are interested, you can get it [here](https://itunes.apple.com/app/id933671952). 
+
+Original version:
 =========
 What is stilFresh?
 
