@@ -1,5 +1,3 @@
-stilFresh
-
 I made this public since the app did not gain any traction.
 
 The final intro for the app is:
@@ -12,6 +10,8 @@ If you are interested, you can get it [here](https://itunes.apple.com/app/id9336
 
 Original version:
 =========
+stilFresh
+
 What is stilFresh?
 
 Your freshness list 1 tap away.
